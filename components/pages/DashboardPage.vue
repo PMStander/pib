@@ -10,7 +10,7 @@
           Here's an overview of your account
         </p>
       </div>
-      
+
       <!-- Dashboard Grid -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Profile Card -->
@@ -28,7 +28,7 @@
               {{ user?.email || 'user@example.com' }}
             </p>
           </div>
-          
+
           <div class="space-y-2">
             <div class="flex justify-between">
               <span class="text-sm text-[rgb(var(--color-neumorphic-text))/70]">Email Verified</span>
@@ -36,7 +36,7 @@
                 {{ user?.emailVerified ? 'Yes' : 'No' }}
               </span>
             </div>
-            
+
             <div class="flex justify-between">
               <span class="text-sm text-[rgb(var(--color-neumorphic-text))/70]">Account Created</span>
               <span class="text-sm font-medium text-[rgb(var(--color-neumorphic-text))]">
@@ -44,7 +44,7 @@
               </span>
             </div>
           </div>
-          
+
           <div class="mt-6">
             <NeumorphicButton
               variant="convex"
@@ -56,10 +56,10 @@
             </NeumorphicButton>
           </div>
         </NeumorphicCard>
-        
+
         <!-- Workspaces Card -->
         <NeumorphicCard title="Your Workspaces" variant="flat" class="col-span-1">
-          <div v-if="workspaces.length === 0" class="text-center py-8">
+          <div v-if="!workspaces || workspaces.length === 0" class="text-center py-8">
             <svg class="w-12 h-12 mx-auto text-[rgb(var(--color-neumorphic-text))/30]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
             </svg>
@@ -67,10 +67,10 @@
               No workspaces yet
             </p>
           </div>
-          
+
           <div v-else class="space-y-4">
-            <div 
-              v-for="workspace in workspaces" 
+            <div
+              v-for="workspace in workspaces"
               :key="workspace.id"
               class="p-3 rounded-lg nm-flat"
             >
@@ -91,7 +91,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="mt-6">
             <NeumorphicButton
               variant="convex"
@@ -103,7 +103,7 @@
             </NeumorphicButton>
           </div>
         </NeumorphicCard>
-        
+
         <!-- Activity Card -->
         <NeumorphicCard title="Recent Activity" variant="flat" class="col-span-1">
           <div v-if="activities.length === 0" class="text-center py-8">
@@ -114,10 +114,10 @@
               No recent activity
             </p>
           </div>
-          
+
           <div v-else class="space-y-4">
-            <div 
-              v-for="(activity, index) in activities" 
+            <div
+              v-for="(activity, index) in activities"
               :key="index"
               class="flex items-start"
             >
@@ -136,7 +136,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="mt-6">
             <NeumorphicButton
               variant="flat"
@@ -148,36 +148,36 @@
           </div>
         </NeumorphicCard>
       </div>
-      
+
       <!-- Vector Search Test -->
       <div class="mt-12">
         <h2 class="text-xl font-bold text-[rgb(var(--color-neumorphic-text))] mb-6">
           AI-Powered Partner Matching
         </h2>
-        
+
         <VectorSearchTest />
       </div>
-      
+
       <!-- Component Showcase -->
       <div class="mt-12">
         <h2 class="text-xl font-bold text-[rgb(var(--color-neumorphic-text))] mb-6">
           Component Showcase
         </h2>
-        
+
         <NeumorphicCard variant="flat" class="mb-8">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 class="text-lg font-medium text-[rgb(var(--color-neumorphic-text))] mb-4">
                 Form Controls
               </h3>
-              
+
               <NeumorphicInput
                 v-model="showcaseInput"
                 label="Text Input"
                 placeholder="Enter some text"
                 hint="This is a hint text"
               />
-              
+
               <NeumorphicSelect
                 v-model="showcaseSelect"
                 label="Select Input"
@@ -188,7 +188,7 @@
                 <option value="option2">Option 2</option>
                 <option value="option3">Option 3</option>
               </NeumorphicSelect>
-              
+
               <div class="mb-4">
                 <label class="block mb-2 text-sm font-medium text-[rgb(var(--color-neumorphic-text))]">
                   Checkbox Group
@@ -204,7 +204,7 @@
                   />
                 </div>
               </div>
-              
+
               <div class="mb-4">
                 <label class="block mb-2 text-sm font-medium text-[rgb(var(--color-neumorphic-text))]">
                   Radio Group
@@ -225,18 +225,18 @@
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h3 class="text-lg font-medium text-[rgb(var(--color-neumorphic-text))] mb-4">
                 Advanced Controls
               </h3>
-              
+
               <NeumorphicDatePicker
                 v-model="showcaseDate"
                 label="Date Picker"
                 hint="Select a date"
               />
-              
+
               <NeumorphicSlider
                 v-model="showcaseSlider"
                 :min="0"
@@ -247,7 +247,7 @@
                 showMinMax
                 hint="Drag to adjust value"
               />
-              
+
               <div class="mb-4">
                 <label class="block mb-2 text-sm font-medium text-[rgb(var(--color-neumorphic-text))]">
                   Toggle Switch
@@ -257,7 +257,7 @@
                   label="Enable feature"
                 />
               </div>
-              
+
               <div class="mb-4">
                 <label class="block mb-2 text-sm font-medium text-[rgb(var(--color-neumorphic-text))]">
                   Buttons
@@ -269,10 +269,10 @@
                   <NeumorphicButton variant="pressed" color="danger">Pressed</NeumorphicButton>
                 </div>
               </div>
-              
+
               <div class="mt-4">
-                <NeumorphicButton 
-                  variant="convex" 
+                <NeumorphicButton
+                  variant="convex"
                   color="primary"
                   @click="showModal = true"
                 >
@@ -284,7 +284,7 @@
         </NeumorphicCard>
       </div>
     </div>
-    
+
     <!-- Modal Example -->
     <NeumorphicModal
       v-model="showModal"
@@ -296,7 +296,7 @@
           You can put any content inside this modal. It's a reusable component that can be used throughout the application.
         </p>
       </div>
-      
+
       <div class="flex justify-end space-x-3">
         <NeumorphicButton
           variant="flat"
@@ -304,7 +304,7 @@
         >
           Close
         </NeumorphicButton>
-        
+
         <NeumorphicButton
           variant="convex"
           color="primary"
@@ -318,7 +318,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import NeumorphicCard from '~/components/neumorphic/Card.vue';
 import NeumorphicButton from '~/components/neumorphic/Button.vue';
 import NeumorphicInput from '~/components/neumorphic/Input.vue';
@@ -343,18 +343,7 @@ const props = defineProps({
   },
   workspaces: {
     type: Array as () => Workspace[],
-    default: () => [
-      {
-        id: '1',
-        name: 'Personal Workspace',
-        description: 'Your personal workspace'
-      },
-      {
-        id: '2',
-        name: 'Team Project',
-        description: 'Collaborative workspace for the team'
-      }
-    ]
+    default: () => []
   },
   activities: {
     type: Array as () => Activity[],
@@ -383,6 +372,26 @@ const showcaseDate = ref(new Date());
 const showcaseSlider = ref(50);
 const showcaseToggle = ref(true);
 const showModal = ref(false);
+
+// Debug: Log workspaces when component mounts
+onMounted(() => {
+  console.log('DashboardPage.vue - Component mounted');
+  console.log('DashboardPage.vue - Workspaces prop:', props.workspaces);
+  console.log('DashboardPage.vue - Workspaces length:', props.workspaces.length);
+});
+
+// Debug: Watch for changes to workspaces prop
+watch(() => props.workspaces, (newWorkspaces) => {
+  console.log('DashboardPage.vue - Workspaces prop changed:', newWorkspaces);
+  console.log('DashboardPage.vue - New workspaces length:', newWorkspaces ? newWorkspaces.length : 0);
+
+  // Log each workspace for debugging
+  if (newWorkspaces && newWorkspaces.length > 0) {
+    newWorkspaces.forEach((workspace, index) => {
+      console.log(`DashboardPage.vue - Workspace ${index}:`, workspace);
+    });
+  }
+}, { deep: true, immediate: true });
 
 // Helper functions
 function formatDate(date: Date): string {

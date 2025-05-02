@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { useFirebase } from './useFirebase';
+import { useAppState } from './useAppState';
 
 // Define local types that match the camelCase field names in the schema
 interface LocalUser {
@@ -51,20 +52,29 @@ import {
   getUserProfiles as getConnectorUserProfiles,
   getUserWorkspaces as getConnectorUserWorkspaces,
   createWorkspace as createWorkspaceConnector,
-  createProfile as createProfileConnector
+  createProfile as createProfileConnector,
+  joinWorkspaceUser as joinWorkspaceUserConnector,
+  createUser as createUserConnector,
+  getUser as getUserConnector
 } from '@pib/connector';
 
 // Wrapper functions will be defined inside the composable to use the dataConnect instance
 
 export const useDataConnect = () => {
+  // Get Firebase instance
   const { auth, dataConnect } = useFirebase();
+
+  // Get app state
+  const appState = useAppState();
+
+  // Local state
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
-  // Current user profile
-  const currentUser = ref<LocalUser | null>(null);
-  const currentUserProfiles = ref<LocalProfile[]>([]);
-  const currentUserWorkspaces = ref<LocalWorkspace[]>([]);
+  // Use computed properties to access app state
+  const currentUser = computed(() => appState.currentUser.value);
+  const currentUserProfiles = computed(() => appState.userProfiles.value);
+  const currentUserWorkspaces = computed(() => appState.userWorkspaces.value);
 
   // Create wrapper functions with proper parameters using the dataConnect instance
   const getCurrentUser = async () => {
@@ -72,9 +82,16 @@ export const useDataConnect = () => {
       if (!dataConnect) {
         throw new Error('DataConnect is not initialized');
       }
-      return await getConnectorCurrentUser(dataConnect);
+      console.log('Fetching current user with DataConnect...');
+      const result = await getConnectorCurrentUser(dataConnect);
+      console.log('Current user data received:', result);
+      return result;
     } catch (err) {
       console.error('Error in getCurrentUser:', err);
+      // Log more detailed error information
+      if (err instanceof Error) {
+        console.error('getCurrentUser Error Details:', err.message, err.stack);
+      }
       throw err;
     }
   };
@@ -84,9 +101,16 @@ export const useDataConnect = () => {
       if (!dataConnect) {
         throw new Error('DataConnect is not initialized');
       }
-      return await getConnectorUserProfiles(dataConnect);
+      console.log('Fetching user profiles with DataConnect...');
+      const result = await getConnectorUserProfiles(dataConnect);
+      console.log('User profiles data received:', result);
+      return result;
     } catch (err) {
       console.error('Error in getUserProfiles:', err);
+      // Log more detailed error information
+      if (err instanceof Error) {
+        console.error('getUserProfiles Error Details:', err.message, err.stack);
+      }
       throw err;
     }
   };
@@ -96,9 +120,52 @@ export const useDataConnect = () => {
       if (!dataConnect) {
         throw new Error('DataConnect is not initialized');
       }
-      return await getConnectorUserWorkspaces(dataConnect);
+      if (!auth.currentUser) {
+        throw new Error('User is not authenticated');
+      }
+
+      console.log('Fetching workspaces for user ID:', auth.currentUser.uid);
+
+      // First try with the current user's ID
+      try {
+        const result = await getConnectorUserWorkspaces(dataConnect, {
+          userId: auth.currentUser.uid
+        });
+        console.log('Workspaces data received with userId parameter:', result);
+        return result;
+      } catch (idErr) {
+        console.warn('Error getting workspaces with userId, trying without parameters:', idErr);
+
+        // Log more detailed error information
+        if (idErr instanceof Error) {
+          console.warn('getUserWorkspaces Error Details (with userId):', idErr.message, idErr.stack);
+        }
+
+        // If that fails, try without parameters (some versions of the API might use auth.uid internally)
+        try {
+          console.log('Trying to fetch workspaces without userId parameter...');
+          const result = await getConnectorUserWorkspaces(dataConnect);
+          console.log('Workspaces data received without userId parameter:', result);
+          return result;
+        } catch (noParamErr) {
+          console.error('Error getting workspaces without parameters:', noParamErr);
+
+          // Log more detailed error information
+          if (noParamErr instanceof Error) {
+            console.error('getUserWorkspaces Error Details (without userId):', noParamErr.message, noParamErr.stack);
+          }
+
+          throw noParamErr;
+        }
+      }
     } catch (err) {
       console.error('Error in getUserWorkspaces:', err);
+
+      // Log more detailed error information
+      if (err instanceof Error) {
+        console.error('getUserWorkspaces Error Details (outer):', err.message, err.stack);
+      }
+
       throw err;
     }
   };
@@ -106,7 +173,7 @@ export const useDataConnect = () => {
   // Get current user data
   const fetchCurrentUser = async () => {
     if (!auth.currentUser) {
-      currentUser.value = null;
+      appState.setCurrentUser(null);
       return null;
     }
 
@@ -130,7 +197,7 @@ export const useDataConnect = () => {
             updatedAt: new Date((data as any).updatedAt)
           };
 
-          currentUser.value = userData;
+          appState.setCurrentUser(userData);
           return userData;
         }
       } catch (connectorErr) {
@@ -148,7 +215,7 @@ export const useDataConnect = () => {
         updatedAt: new Date()
       };
 
-      currentUser.value = userData;
+      appState.setCurrentUser(userData);
       return userData;
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch user data';
@@ -189,7 +256,7 @@ export const useDataConnect = () => {
             updatedAt: new Date((profile as any).updatedAt)
           }));
 
-          currentUserProfiles.value = profiles;
+          appState.setUserProfiles(profiles);
           return profiles;
         }
       } catch (connectorErr) {
@@ -211,7 +278,7 @@ export const useDataConnect = () => {
         updatedAt: new Date()
       }];
 
-      currentUserProfiles.value = profiles;
+      appState.setUserProfiles(profiles);
       return profiles;
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch user profiles';
@@ -234,39 +301,32 @@ export const useDataConnect = () => {
 
       // Use the DataConnect connector to fetch user workspaces
       try {
+        console.log('Fetching workspaces for user:', auth.currentUser.uid);
         const { data } = await getUserWorkspaces();
+        console.log('Workspace data received:', data);
 
-        if (data && Array.isArray(data)) {
-          // Convert the data to our Workspace type
-          // First get the workspaceIds from the workspace members
-          const workspaceIds = data.map((member: any) => member.workspaceId);
-
-          // Then fetch each workspace by ID
+        if (data && data.workspaceUsers && Array.isArray(data.workspaceUsers)) {
+          // The data should be an object with a workspaceUsers array
           const workspaces: LocalWorkspace[] = [];
 
-          for (const workspaceId of workspaceIds) {
-            try {
-              // This is a simplified approach - in a real implementation,
-              // we would batch these requests or use a more efficient query
-              const response = await fetch(`/api/workspaces/${workspaceId}`);
-              if (response.ok) {
-                const workspaceData = await response.json();
-                workspaces.push({
-                  id: workspaceData.id,
-                  name: workspaceData.name,
-                  description: workspaceData.description || null,
-                  logoUrl: workspaceData.logoUrl || null,
-                  createdBy: workspaceData.createdBy,
-                  createdAt: new Date(workspaceData.createdAt),
-                  updatedAt: new Date(workspaceData.updatedAt)
-                });
-              }
-            } catch (fetchErr) {
-              console.error(`Error fetching workspace ${workspaceId}:`, fetchErr);
+          // Extract workspace data from each workspace_user
+          for (const workspaceUser of data.workspaceUsers) {
+            if (workspaceUser.workspace) {
+              const workspace = workspaceUser.workspace;
+              workspaces.push({
+                id: workspace.id,
+                name: workspace.name,
+                description: workspace.description || null,
+                logoUrl: workspace.logoUrl || null,
+                createdBy: workspace.createdBy,
+                createdAt: new Date(workspace.createdAt),
+                updatedAt: new Date(workspace.updatedAt)
+              });
             }
           }
 
-          currentUserWorkspaces.value = workspaces;
+          console.log('Processed workspaces:', workspaces);
+          appState.setUserWorkspaces(workspaces);
           return workspaces;
         }
       } catch (connectorErr) {
@@ -276,7 +336,7 @@ export const useDataConnect = () => {
 
       // Fallback if DataConnect query fails or returns no data
       const workspaces: LocalWorkspace[] = [];
-      currentUserWorkspaces.value = workspaces;
+      appState.setUserWorkspaces(workspaces);
       return workspaces;
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch user workspaces';
@@ -318,7 +378,76 @@ export const useDataConnect = () => {
 
         console.log('Workspace created successfully:', workspaceData);
 
-        if (workspaceData) {
+        if (workspaceData && workspaceData.createWorkspace && workspaceData.createWorkspace.id) {
+          // Explicitly link the current user to the workspace
+          // This is a fallback in case the database trigger doesn't work
+          try {
+            // Ensure the user record exists in the database before trying to link
+            const userExists = await ensureUserExists();
+            if (!userExists) {
+              console.warn('Could not ensure user exists in database, skipping manual workspace linking');
+              return workspaceData;
+            }
+
+            // Add a longer delay to ensure database consistency
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            console.log('Linking user to workspace:', {
+              workspaceId: workspaceData.createWorkspace.id,
+              userId: auth.currentUser.uid,
+              role: 'owner'
+            });
+
+            // Implement retry mechanism for workspace-user linking
+            const maxRetries = 3;
+            let retryCount = 0;
+            let success = false;
+
+            while (!success && retryCount < maxRetries) {
+              try {
+                await joinWorkspaceUserConnector(dataConnect, {
+                  workspaceId: workspaceData.createWorkspace.id,
+                  userId: auth.currentUser.uid,
+                  role: 'owner'
+                });
+
+                console.log('User linked to workspace successfully');
+                success = true;
+              } catch (retryErr) {
+                // Check if this is a foreign key constraint error
+                const errorMessage = retryErr.toString();
+
+                // If it's a duplicate key error, consider it a success
+                if (errorMessage.includes('duplicate key value violates unique constraint')) {
+                  console.log('Workspace-user relationship already exists (duplicate key error)');
+                  success = true;
+                  break;
+                }
+
+                retryCount++;
+                console.error(`Error linking user to workspace (attempt ${retryCount}/${maxRetries}):`, retryErr);
+
+                if (retryCount < maxRetries) {
+                  // Wait longer between each retry
+                  const delay = 2000 * retryCount;
+                  console.log(`Waiting ${delay}ms before retry...`);
+                  await new Promise(resolve => setTimeout(resolve, delay));
+                }
+              }
+            }
+
+            if (!success) {
+              console.error('Failed to link user to workspace after multiple attempts');
+            }
+          } catch (joinErr) {
+            console.error('Error in workspace linking process:', joinErr);
+            // Log more detailed error information
+            if (joinErr instanceof Error) {
+              console.error('Workspace Linking Error Details:', joinErr.message, joinErr.stack);
+            }
+            // Continue even if this fails, as the database trigger should handle it
+          }
+
           // Refresh workspaces after creation
           await fetchUserWorkspaces();
           return workspaceData;
@@ -341,7 +470,7 @@ export const useDataConnect = () => {
       };
 
       // Add to current user workspaces
-      currentUserWorkspaces.value = [...currentUserWorkspaces.value, workspace];
+      appState.setUserWorkspaces([...currentUserWorkspaces.value, workspace]);
       return workspace;
     } catch (err: any) {
       error.value = err.message || 'Failed to create workspace';
@@ -415,7 +544,7 @@ export const useDataConnect = () => {
       };
 
       // Add to current user profiles
-      currentUserProfiles.value = [...currentUserProfiles.value, profile];
+      appState.setUserProfiles([...currentUserProfiles.value, profile]);
       return profile;
     } catch (err: any) {
       error.value = err.message || 'Failed to create profile';
@@ -459,26 +588,228 @@ export const useDataConnect = () => {
     }
   };
 
+  // Ensure user record exists in the database
+  const ensureUserExists = async () => {
+    if (!auth.currentUser) return false;
+
+    try {
+      // First, check if the user already exists in the database
+      try {
+        const { data: currentUserData } = await getConnectorCurrentUser(dataConnect);
+        if (currentUserData && currentUserData.currentUser) {
+          console.log('User record already exists in database');
+          return true;
+        }
+      } catch (checkErr) {
+        console.log('Error checking if user exists, will try to create:', checkErr);
+        // Continue to creation attempt
+      }
+
+      // If not, create the user record explicitly
+      console.log('Creating user record in database...');
+
+      // Try to create the user using the createUserConnector function
+      try {
+        // Ensure displayName is never empty/null to avoid SQL constraint violation
+        const displayName = auth.currentUser.displayName || 'User';
+
+        console.log('Creating user with DataConnect:', {
+          email: auth.currentUser.email || '',
+          displayName: displayName,
+          photoUrl: auth.currentUser.photoURL || ''
+        });
+
+        // The id will be set automatically from auth.uid
+        const { data: createUserData } = await createUserConnector(dataConnect, {
+          email: auth.currentUser.email || '',
+          displayName: displayName, // Always provide a non-empty value
+          photoUrl: auth.currentUser.photoURL || ''
+        });
+
+        if (createUserData && createUserData.createUser) {
+          console.log('User record created successfully in database');
+
+          // Add a delay to ensure the user record is fully created
+          await new Promise(resolve => setTimeout(resolve, 2000)); // Increased delay for better reliability
+          return true;
+        } else {
+          console.error('Failed to create user record in database');
+        }
+      } catch (createErr) {
+        // Check if this is a duplicate key error, which means the user already exists
+        const errorMessage = createErr.toString();
+        if (errorMessage.includes('duplicate key value violates unique constraint') ||
+            errorMessage.includes('user_pkey')) {
+          console.log('User already exists in database (duplicate key error)');
+          return true; // Consider this a success since the user exists
+        } else {
+          console.error('Error creating user record:', createErr);
+          // Log more detailed error information
+          if (createErr instanceof Error) {
+            console.error('Create User Error Details:', createErr.message, createErr.stack);
+          }
+        }
+      }
+
+      // If we get here, the user creation failed
+      // Let's try a different approach - create a profile for the user
+      // This might trigger the user creation in the database
+      try {
+        console.log('Attempting to create a profile to trigger user creation...');
+        // Ensure name is never empty/null
+        const profileName = auth.currentUser.displayName || 'Default Profile';
+
+        // Try again with a different approach
+        try {
+          console.log('Attempting to create user with a different approach...');
+
+          // Try creating the user again with a delay
+          await new Promise(resolve => setTimeout(resolve, 3000));
+
+          const { data: retryUserData } = await createUserConnector(dataConnect, {
+            email: auth.currentUser.email || '',
+            displayName: auth.currentUser.displayName || 'User',
+            photoUrl: auth.currentUser.photoURL || null
+          });
+
+          if (retryUserData && retryUserData.createUser) {
+            console.log('User created successfully with retry approach');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            return true;
+          }
+        } catch (retryErr) {
+          // Check if this is a duplicate key error, which means the user already exists
+          const errorMessage = retryErr.toString();
+          if (errorMessage.includes('duplicate key value violates unique constraint') ||
+              errorMessage.includes('user_pkey')) {
+            console.log('User already exists in database (duplicate key error during retry)');
+            return true; // Consider this a success since the user exists
+          } else {
+            console.error('Error with retry approach:', retryErr);
+          }
+        }
+
+        // If direct SQL fails, try creating a profile
+        const { data: profileData } = await createProfileConnector(dataConnect, {
+          name: profileName,
+          isDefault: true
+        });
+
+        if (profileData && profileData.createProfile) {
+          console.log('Profile created successfully, which should have triggered user creation');
+
+          // Add a delay to ensure the user record is fully created
+          await new Promise(resolve => setTimeout(resolve, 2000)); // Increased delay for better reliability
+          return true;
+        }
+      } catch (profileErr) {
+        console.error('Error creating profile:', profileErr);
+        // Log more detailed error information
+        if (profileErr instanceof Error) {
+          console.error('Create Profile Error Details:', profileErr.message, profileErr.stack);
+        }
+      }
+
+      // If all attempts fail, return false
+      return false;
+    } catch (err) {
+      console.error('Error ensuring user exists in database:', err);
+      return false;
+    }
+  };
+
   // Initialize user data after authentication
   const initUserData = async () => {
     if (!auth.currentUser) return;
 
+    console.log('Initializing user data for:', auth.currentUser.email);
+
+    // First, check if the user already exists in the database
+    try {
+      const { data: currentUserData } = await getCurrentUser();
+      if (currentUserData && currentUserData.user) {
+        console.log('User record already exists in database, skipping creation');
+        // User exists, proceed with initialization
+      } else {
+        // User doesn't exist, try to create it
+        // Ensure the user record exists in the database before proceeding
+        let userExists = false;
+        const maxRetries = 3;
+
+        // Retry user creation a few times if needed
+        for (let i = 0; i < maxRetries; i++) {
+          userExists = await ensureUserExists();
+          if (userExists) break;
+
+          console.log(`User creation attempt ${i+1}/${maxRetries} failed, retrying...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+    } catch (checkErr) {
+      console.log('Error checking if user exists, will try to create:', checkErr);
+
+      // Ensure the user record exists in the database before proceeding
+      let userExists = false;
+      const maxRetries = 3;
+
+      // Retry user creation a few times if needed
+      for (let i = 0; i < maxRetries; i++) {
+        userExists = await ensureUserExists();
+        if (userExists) break;
+
+        console.log(`User creation attempt ${i+1}/${maxRetries} failed, retrying...`);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+    }
+
+    // Check if user exists in database before proceeding
+    try {
+      const { data: checkUserData } = await getCurrentUser();
+      if (!checkUserData || !checkUserData.user) {
+        console.error('Could not ensure user exists in database after multiple attempts, aborting initialization');
+        return;
+      }
+    } catch (finalCheckErr) {
+      console.error('Final check for user existence failed, aborting initialization:', finalCheckErr);
+      return;
+    }
+
+    console.log('User record confirmed in database, proceeding with initialization');
+
     // Fetch user data from DataConnect
     const user = await fetchCurrentUser();
     const profiles = await fetchUserProfiles();
-    const workspaces = await fetchUserWorkspaces();
 
-    // If user doesn't have any workspaces, create a default one
-    if (workspaces.length === 0) {
-      console.log('No workspaces found, creating default workspace');
-      const userName = user?.displayName || profiles[0]?.name || 'My';
-      await createWorkspace({
-        name: `${userName}'s Workspace`,
-        description: 'Default workspace'
-      });
+    try {
+      // Add a delay before fetching workspaces to ensure database consistency
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      // Refresh workspaces list
-      await fetchUserWorkspaces();
+      const workspaces = await fetchUserWorkspaces();
+
+      // If user doesn't have any workspaces, create a default one
+      if (workspaces.length === 0) {
+        console.log('No workspaces found, creating default workspace');
+        // Use a non-empty name for the workspace
+        const userName = user?.displayName || profiles[0]?.name || 'My';
+
+        // Add a delay before creating workspace to ensure user record is fully propagated
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        await createWorkspace({
+          name: `${userName}'s Workspace`,
+          description: 'Default workspace'
+        });
+
+        // Refresh workspaces list
+        await fetchUserWorkspaces();
+      }
+    } catch (err) {
+      console.error('Error fetching workspaces during initialization:', err);
+      // Log more detailed error information
+      if (err instanceof Error) {
+        console.error('Workspace Initialization Error Details:', err.message, err.stack);
+      }
+      // Continue with initialization even if workspace fetching fails
     }
 
     return {

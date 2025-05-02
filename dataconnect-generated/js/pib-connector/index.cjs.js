@@ -1,4 +1,4 @@
-const { queryRef, executeQuery, mutationRef, executeMutation, validateArgs } = require('firebase/data-connect');
+const { getDataConnect, queryRef, executeQuery, mutationRef, executeMutation, validateArgs } = require('firebase/data-connect');
 
 const connectorConfig = {
   connector: 'pib',
@@ -7,482 +7,605 @@ const connectorConfig = {
 };
 exports.connectorConfig = connectorConfig;
 
-const createUserRef = (dcOrVars, vars) => {
+function createUserRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreateUser', inputVars);
 }
-createUserRef.operationName = 'CreateUser';
 exports.createUserRef = createUserRef;
-
 exports.createUser = function createUser(dcOrVars, vars) {
   return executeMutation(createUserRef(dcOrVars, vars));
 };
 
-const updateUserRef = (dcOrVars, vars) => {
+function updateUserRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateUser', inputVars);
 }
-updateUserRef.operationName = 'UpdateUser';
 exports.updateUserRef = updateUserRef;
-
 exports.updateUser = function updateUser(dcOrVars, vars) {
   return executeMutation(updateUserRef(dcOrVars, vars));
 };
 
-const createProfileRef = (dcOrVars, vars) => {
+function createProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreateProfile', inputVars);
 }
-createProfileRef.operationName = 'CreateProfile';
 exports.createProfileRef = createProfileRef;
-
 exports.createProfile = function createProfile(dcOrVars, vars) {
   return executeMutation(createProfileRef(dcOrVars, vars));
 };
 
-const createProfileWithBioRef = (dcOrVars, vars) => {
+function createProfileWithBioRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreateProfileWithBio', inputVars);
 }
-createProfileWithBioRef.operationName = 'CreateProfileWithBio';
 exports.createProfileWithBioRef = createProfileWithBioRef;
-
 exports.createProfileWithBio = function createProfileWithBio(dcOrVars, vars) {
   return executeMutation(createProfileWithBioRef(dcOrVars, vars));
 };
 
-const updateProfileRef = (dcOrVars, vars) => {
+function updateProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateProfile', inputVars);
 }
-updateProfileRef.operationName = 'UpdateProfile';
 exports.updateProfileRef = updateProfileRef;
-
 exports.updateProfile = function updateProfile(dcOrVars, vars) {
   return executeMutation(updateProfileRef(dcOrVars, vars));
 };
 
-const updateProfileWithBioRef = (dcOrVars, vars) => {
+function updateProfileWithBioRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateProfileWithBio', inputVars);
 }
-updateProfileWithBioRef.operationName = 'UpdateProfileWithBio';
 exports.updateProfileWithBioRef = updateProfileWithBioRef;
-
 exports.updateProfileWithBio = function updateProfileWithBio(dcOrVars, vars) {
   return executeMutation(updateProfileWithBioRef(dcOrVars, vars));
 };
 
-const deleteProfileRef = (dcOrVars, vars) => {
+function deleteProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'DeleteProfile', inputVars);
 }
-deleteProfileRef.operationName = 'DeleteProfile';
 exports.deleteProfileRef = deleteProfileRef;
-
 exports.deleteProfile = function deleteProfile(dcOrVars, vars) {
   return executeMutation(deleteProfileRef(dcOrVars, vars));
 };
 
-const createWorkspaceRef = (dcOrVars, vars) => {
+function createWorkspaceRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreateWorkspace', inputVars);
 }
-createWorkspaceRef.operationName = 'CreateWorkspace';
 exports.createWorkspaceRef = createWorkspaceRef;
-
 exports.createWorkspace = function createWorkspace(dcOrVars, vars) {
   return executeMutation(createWorkspaceRef(dcOrVars, vars));
 };
 
-const updateWorkspaceRef = (dcOrVars, vars) => {
+function updateWorkspaceRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateWorkspace', inputVars);
 }
-updateWorkspaceRef.operationName = 'UpdateWorkspace';
 exports.updateWorkspaceRef = updateWorkspaceRef;
-
 exports.updateWorkspace = function updateWorkspace(dcOrVars, vars) {
   return executeMutation(updateWorkspaceRef(dcOrVars, vars));
 };
 
-const deleteWorkspaceRef = (dcOrVars, vars) => {
+function deleteWorkspaceRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'DeleteWorkspace', inputVars);
 }
-deleteWorkspaceRef.operationName = 'DeleteWorkspace';
 exports.deleteWorkspaceRef = deleteWorkspaceRef;
-
 exports.deleteWorkspace = function deleteWorkspace(dcOrVars, vars) {
   return executeMutation(deleteWorkspaceRef(dcOrVars, vars));
 };
 
-const joinWorkspaceUserRef = (dcOrVars, vars) => {
+function joinWorkspaceUserRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'JoinWorkspaceUser', inputVars);
 }
-joinWorkspaceUserRef.operationName = 'JoinWorkspaceUser';
 exports.joinWorkspaceUserRef = joinWorkspaceUserRef;
-
 exports.joinWorkspaceUser = function joinWorkspaceUser(dcOrVars, vars) {
   return executeMutation(joinWorkspaceUserRef(dcOrVars, vars));
 };
 
-const addWorkspaceMemberRef = (dcOrVars, vars) => {
+function addWorkspaceMemberRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'AddWorkspaceMember', inputVars);
 }
-addWorkspaceMemberRef.operationName = 'AddWorkspaceMember';
 exports.addWorkspaceMemberRef = addWorkspaceMemberRef;
-
 exports.addWorkspaceMember = function addWorkspaceMember(dcOrVars, vars) {
   return executeMutation(addWorkspaceMemberRef(dcOrVars, vars));
 };
 
-const updateWorkspaceMemberRef = (dcOrVars, vars) => {
+function updateWorkspaceMemberRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateWorkspaceMember', inputVars);
 }
-updateWorkspaceMemberRef.operationName = 'UpdateWorkspaceMember';
 exports.updateWorkspaceMemberRef = updateWorkspaceMemberRef;
-
 exports.updateWorkspaceMember = function updateWorkspaceMember(dcOrVars, vars) {
   return executeMutation(updateWorkspaceMemberRef(dcOrVars, vars));
 };
 
-const removeWorkspaceMemberRef = (dcOrVars, vars) => {
+function removeWorkspaceMemberRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'RemoveWorkspaceMember', inputVars);
 }
-removeWorkspaceMemberRef.operationName = 'RemoveWorkspaceMember';
 exports.removeWorkspaceMemberRef = removeWorkspaceMemberRef;
-
 exports.removeWorkspaceMember = function removeWorkspaceMember(dcOrVars, vars) {
   return executeMutation(removeWorkspaceMemberRef(dcOrVars, vars));
 };
 
-const inviteToWorkspaceRef = (dcOrVars, vars) => {
+function inviteToWorkspaceRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'InviteToWorkspace', inputVars);
 }
-inviteToWorkspaceRef.operationName = 'InviteToWorkspace';
 exports.inviteToWorkspaceRef = inviteToWorkspaceRef;
-
 exports.inviteToWorkspace = function inviteToWorkspace(dcOrVars, vars) {
   return executeMutation(inviteToWorkspaceRef(dcOrVars, vars));
 };
 
-const acceptInvitationRef = (dcOrVars, vars) => {
+function acceptInvitationRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'AcceptInvitation', inputVars);
 }
-acceptInvitationRef.operationName = 'AcceptInvitation';
 exports.acceptInvitationRef = acceptInvitationRef;
-
 exports.acceptInvitation = function acceptInvitation(dcOrVars, vars) {
   return executeMutation(acceptInvitationRef(dcOrVars, vars));
 };
 
-const declineInvitationRef = (dcOrVars, vars) => {
+function declineInvitationRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'DeclineInvitation', inputVars);
 }
-declineInvitationRef.operationName = 'DeclineInvitation';
 exports.declineInvitationRef = declineInvitationRef;
-
 exports.declineInvitation = function declineInvitation(dcOrVars, vars) {
   return executeMutation(declineInvitationRef(dcOrVars, vars));
 };
 
-const createBusinessProfileRef = (dcOrVars, vars) => {
+function createBusinessProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreateBusinessProfile', inputVars);
 }
-createBusinessProfileRef.operationName = 'CreateBusinessProfile';
 exports.createBusinessProfileRef = createBusinessProfileRef;
-
 exports.createBusinessProfile = function createBusinessProfile(dcOrVars, vars) {
   return executeMutation(createBusinessProfileRef(dcOrVars, vars));
 };
 
-const createBusinessProfileWithDescriptionRef = (dcOrVars, vars) => {
+function createBusinessProfileWithDescriptionRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreateBusinessProfileWithDescription', inputVars);
 }
-createBusinessProfileWithDescriptionRef.operationName = 'CreateBusinessProfileWithDescription';
 exports.createBusinessProfileWithDescriptionRef = createBusinessProfileWithDescriptionRef;
-
 exports.createBusinessProfileWithDescription = function createBusinessProfileWithDescription(dcOrVars, vars) {
   return executeMutation(createBusinessProfileWithDescriptionRef(dcOrVars, vars));
 };
 
-const updateBusinessProfileRef = (dcOrVars, vars) => {
+function updateBusinessProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateBusinessProfile', inputVars);
 }
-updateBusinessProfileRef.operationName = 'UpdateBusinessProfile';
 exports.updateBusinessProfileRef = updateBusinessProfileRef;
-
 exports.updateBusinessProfile = function updateBusinessProfile(dcOrVars, vars) {
   return executeMutation(updateBusinessProfileRef(dcOrVars, vars));
 };
 
-const updateBusinessProfileWithDescriptionRef = (dcOrVars, vars) => {
+function updateBusinessProfileWithDescriptionRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdateBusinessProfileWithDescription', inputVars);
 }
-updateBusinessProfileWithDescriptionRef.operationName = 'UpdateBusinessProfileWithDescription';
 exports.updateBusinessProfileWithDescriptionRef = updateBusinessProfileWithDescriptionRef;
-
 exports.updateBusinessProfileWithDescription = function updateBusinessProfileWithDescription(dcOrVars, vars) {
   return executeMutation(updateBusinessProfileWithDescriptionRef(dcOrVars, vars));
 };
 
-const createPartnerPreferencesRef = (dcOrVars, vars) => {
+function createPartnerPreferencesRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreatePartnerPreferences', inputVars);
 }
-createPartnerPreferencesRef.operationName = 'CreatePartnerPreferences';
 exports.createPartnerPreferencesRef = createPartnerPreferencesRef;
-
 exports.createPartnerPreferences = function createPartnerPreferences(dcOrVars, vars) {
   return executeMutation(createPartnerPreferencesRef(dcOrVars, vars));
 };
 
-const createPartnerPreferencesWithEmbeddingRef = (dcOrVars, vars) => {
+function createPartnerPreferencesWithEmbeddingRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'CreatePartnerPreferencesWithEmbedding', inputVars);
 }
-createPartnerPreferencesWithEmbeddingRef.operationName = 'CreatePartnerPreferencesWithEmbedding';
 exports.createPartnerPreferencesWithEmbeddingRef = createPartnerPreferencesWithEmbeddingRef;
-
 exports.createPartnerPreferencesWithEmbedding = function createPartnerPreferencesWithEmbedding(dcOrVars, vars) {
   return executeMutation(createPartnerPreferencesWithEmbeddingRef(dcOrVars, vars));
 };
 
-const updatePartnerPreferencesRef = (dcOrVars, vars) => {
+function updatePartnerPreferencesRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdatePartnerPreferences', inputVars);
 }
-updatePartnerPreferencesRef.operationName = 'UpdatePartnerPreferences';
 exports.updatePartnerPreferencesRef = updatePartnerPreferencesRef;
-
 exports.updatePartnerPreferences = function updatePartnerPreferences(dcOrVars, vars) {
   return executeMutation(updatePartnerPreferencesRef(dcOrVars, vars));
 };
 
-const updatePartnerPreferencesWithEmbeddingRef = (dcOrVars, vars) => {
+function updatePartnerPreferencesWithEmbeddingRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return mutationRef(dcInstance, 'UpdatePartnerPreferencesWithEmbedding', inputVars);
 }
-updatePartnerPreferencesWithEmbeddingRef.operationName = 'UpdatePartnerPreferencesWithEmbedding';
 exports.updatePartnerPreferencesWithEmbeddingRef = updatePartnerPreferencesWithEmbeddingRef;
-
 exports.updatePartnerPreferencesWithEmbedding = function updatePartnerPreferencesWithEmbedding(dcOrVars, vars) {
   return executeMutation(updatePartnerPreferencesWithEmbeddingRef(dcOrVars, vars));
 };
 
-const getCurrentUserRef = (dc) => {
+function getAllUsersRef(dc) {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetAllUsers');
+}
+exports.getAllUsersRef = getAllUsersRef;
+exports.getAllUsers = function getAllUsers(dc) {
+  return executeQuery(getAllUsersRef(dc));
+};
+
+function getCurrentUserRef(dc) {
+  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetCurrentUser');
 }
-getCurrentUserRef.operationName = 'GetCurrentUser';
 exports.getCurrentUserRef = getCurrentUserRef;
-
 exports.getCurrentUser = function getCurrentUser(dc) {
   return executeQuery(getCurrentUserRef(dc));
 };
 
-const searchProfilesByBioRef = (dcOrVars, vars) => {
+function searchProfilesByBioRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'SearchProfilesByBio', inputVars);
 }
-searchProfilesByBioRef.operationName = 'SearchProfilesByBio';
 exports.searchProfilesByBioRef = searchProfilesByBioRef;
-
 exports.searchProfilesByBio = function searchProfilesByBio(dcOrVars, vars) {
   return executeQuery(searchProfilesByBioRef(dcOrVars, vars));
 };
 
-const searchBusinessProfilesByDescriptionRef = (dcOrVars, vars) => {
+function searchBusinessProfilesByDescriptionRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'SearchBusinessProfilesByDescription', inputVars);
 }
-searchBusinessProfilesByDescriptionRef.operationName = 'SearchBusinessProfilesByDescription';
 exports.searchBusinessProfilesByDescriptionRef = searchBusinessProfilesByDescriptionRef;
-
 exports.searchBusinessProfilesByDescription = function searchBusinessProfilesByDescription(dcOrVars, vars) {
   return executeQuery(searchBusinessProfilesByDescriptionRef(dcOrVars, vars));
 };
 
-const matchProfileToBusinessesRef = (dcOrVars, vars) => {
+function matchProfileToBusinessesRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'MatchProfileToBusinesses', inputVars);
 }
-matchProfileToBusinessesRef.operationName = 'MatchProfileToBusinesses';
 exports.matchProfileToBusinessesRef = matchProfileToBusinessesRef;
-
 exports.matchProfileToBusinesses = function matchProfileToBusinesses(dcOrVars, vars) {
   return executeQuery(matchProfileToBusinessesRef(dcOrVars, vars));
 };
 
-const matchBusinessToProfilesRef = (dcOrVars, vars) => {
+function businessProfilesBySimilarityRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'BusinessProfilesBySimilarity', inputVars);
+}
+exports.businessProfilesBySimilarityRef = businessProfilesBySimilarityRef;
+exports.businessProfilesBySimilarity = function businessProfilesBySimilarity(dcOrVars, vars) {
+  return executeQuery(businessProfilesBySimilarityRef(dcOrVars, vars));
+};
+
+function matchBusinessToProfilesRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'MatchBusinessToProfiles', inputVars);
 }
-matchBusinessToProfilesRef.operationName = 'MatchBusinessToProfiles';
 exports.matchBusinessToProfilesRef = matchBusinessToProfilesRef;
-
 exports.matchBusinessToProfiles = function matchBusinessToProfiles(dcOrVars, vars) {
   return executeQuery(matchBusinessToProfilesRef(dcOrVars, vars));
 };
 
-const searchPartnerPreferencesRef = (dcOrVars, vars) => {
+function profilesBySimilarityRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'ProfilesBySimilarity', inputVars);
+}
+exports.profilesBySimilarityRef = profilesBySimilarityRef;
+exports.profilesBySimilarity = function profilesBySimilarity(dcOrVars, vars) {
+  return executeQuery(profilesBySimilarityRef(dcOrVars, vars));
+};
+
+function searchPartnerPreferencesRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'SearchPartnerPreferences', inputVars);
 }
-searchPartnerPreferencesRef.operationName = 'SearchPartnerPreferences';
 exports.searchPartnerPreferencesRef = searchPartnerPreferencesRef;
-
 exports.searchPartnerPreferences = function searchPartnerPreferences(dcOrVars, vars) {
   return executeQuery(searchPartnerPreferencesRef(dcOrVars, vars));
 };
 
-const getUserRef = (dcOrVars, vars) => {
+function getUserRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetUser', inputVars);
 }
-getUserRef.operationName = 'GetUser';
 exports.getUserRef = getUserRef;
-
 exports.getUser = function getUser(dcOrVars, vars) {
   return executeQuery(getUserRef(dcOrVars, vars));
 };
 
-const getUserProfilesRef = (dc) => {
+function getUserProfilesRef(dc) {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetUserProfiles');
 }
-getUserProfilesRef.operationName = 'GetUserProfiles';
 exports.getUserProfilesRef = getUserProfilesRef;
-
 exports.getUserProfiles = function getUserProfiles(dc) {
   return executeQuery(getUserProfilesRef(dc));
 };
 
-const getUserWorkspacesRef = (dcOrVars, vars) => {
+function getUserWorkspacesRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetUserWorkspaces', inputVars);
 }
-getUserWorkspacesRef.operationName = 'GetUserWorkspaces';
 exports.getUserWorkspacesRef = getUserWorkspacesRef;
-
 exports.getUserWorkspaces = function getUserWorkspaces(dcOrVars, vars) {
   return executeQuery(getUserWorkspacesRef(dcOrVars, vars));
 };
 
-const getWorkspaceRef = (dcOrVars, vars) => {
+function getWorkspaceRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetWorkspace', inputVars);
 }
-getWorkspaceRef.operationName = 'GetWorkspace';
 exports.getWorkspaceRef = getWorkspaceRef;
-
 exports.getWorkspace = function getWorkspace(dcOrVars, vars) {
   return executeQuery(getWorkspaceRef(dcOrVars, vars));
 };
 
-const getWorkspaceMembersRef = (dcOrVars, vars) => {
+function getWorkspaceMembersRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetWorkspaceMembers', inputVars);
 }
-getWorkspaceMembersRef.operationName = 'GetWorkspaceMembers';
 exports.getWorkspaceMembersRef = getWorkspaceMembersRef;
-
 exports.getWorkspaceMembers = function getWorkspaceMembers(dcOrVars, vars) {
   return executeQuery(getWorkspaceMembersRef(dcOrVars, vars));
 };
 
-const getBusinessProfileRef = (dcOrVars, vars) => {
+function getBusinessProfileRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetBusinessProfile', inputVars);
 }
-getBusinessProfileRef.operationName = 'GetBusinessProfile';
 exports.getBusinessProfileRef = getBusinessProfileRef;
-
 exports.getBusinessProfile = function getBusinessProfile(dcOrVars, vars) {
   return executeQuery(getBusinessProfileRef(dcOrVars, vars));
 };
 
-const getPartnerPreferencesRef = (dcOrVars, vars) => {
+function getPartnerPreferencesRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetPartnerPreferences', inputVars);
 }
-getPartnerPreferencesRef.operationName = 'GetPartnerPreferences';
 exports.getPartnerPreferencesRef = getPartnerPreferencesRef;
-
 exports.getPartnerPreferences = function getPartnerPreferences(dcOrVars, vars) {
   return executeQuery(getPartnerPreferencesRef(dcOrVars, vars));
 };
 
-const getWorkspaceInvitationsRef = (dcOrVars, vars) => {
+function getWorkspaceInvitationsRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetWorkspaceInvitations', inputVars);
 }
-getWorkspaceInvitationsRef.operationName = 'GetWorkspaceInvitations';
 exports.getWorkspaceInvitationsRef = getWorkspaceInvitationsRef;
-
 exports.getWorkspaceInvitations = function getWorkspaceInvitations(dcOrVars, vars) {
   return executeQuery(getWorkspaceInvitationsRef(dcOrVars, vars));
 };
 
-const getPendingInvitationsRef = (dcOrVars, vars) => {
+function getPendingInvitationsRef(dcOrVars, vars) {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
-  dcInstance._useGeneratedSdk();
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
   return queryRef(dcInstance, 'GetPendingInvitations', inputVars);
 }
-getPendingInvitationsRef.operationName = 'GetPendingInvitations';
 exports.getPendingInvitationsRef = getPendingInvitationsRef;
-
 exports.getPendingInvitations = function getPendingInvitations(dcOrVars, vars) {
   return executeQuery(getPendingInvitationsRef(dcOrVars, vars));
 };
+

@@ -26,9 +26,13 @@ export const descriptionSchema = z.string()
   .optional();
 
 // Form schemas
+// For login, we just need a non-empty password
+export const loginPasswordSchema = z.string()
+  .min(1, 'Password is required');
+
 export const loginFormSchema = z.object({
   email: emailSchema,
-  password: passwordSchema,
+  password: loginPasswordSchema, // Use simpler password validation for login
   rememberMe: z.boolean().optional().default(false)
 });
 

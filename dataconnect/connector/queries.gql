@@ -61,13 +61,13 @@ query MatchProfileToBusinesses($profileId: UUID!, $limit: Int = 5) @auth(level: 
     id
     name
     bio
-    bioEmbedding
+    # Removed bioEmbedding field as vector type is not supported
   }
 }
 
-query BusinessProfilesBySimilarity($bioEmbedding: Vector!, $limit: Int = 5) @auth(level: USER) {
+query BusinessProfilesBySimilarity($bioText: String!, $limit: Int = 5) @auth(level: USER) {
   businessProfiles_descriptionEmbedding_similarity(
-    compare: $bioEmbedding,
+    compare_embed: {model: "textembedding-gecko@003", text: $bioText},
     method: COSINE,
     limit: $limit
   ) {
@@ -87,13 +87,13 @@ query MatchBusinessToProfiles($businessProfileId: UUID!, $limit: Int = 5) @auth(
     id
     name
     description
-    descriptionEmbedding
+    # Removed descriptionEmbedding field as vector type is not supported
   }
 }
 
-query ProfilesBySimilarity($descriptionEmbedding: Vector!, $limit: Int = 5) @auth(level: USER) {
+query ProfilesBySimilarity($descriptionText: String!, $limit: Int = 5) @auth(level: USER) {
   profiles_bioEmbedding_similarity(
-    compare: $descriptionEmbedding,
+    compare_embed: {model: "textembedding-gecko@003", text: $descriptionText},
     method: COSINE,
     limit: $limit
   ) {
@@ -176,15 +176,22 @@ query GetWorkspace($id: UUID!) @auth(level: USER) {
   }
 }
 
-# GetWorkspaceMembers (Reverted to fetch direct IDs)
+# GetWorkspaceMembers (Using proper relationship filtering)
 query GetWorkspaceMembers($workspaceId: UUID!) @auth(level: USER) {
-  workspaceMembers(where: {workspaceId: {eq: $workspaceId}}) {
+  workspaceMembers(where: {workspace: {id: {eq: $workspaceId}}}) {
     role
     joinedAt
-    # DataConnect doesn't generate nested user/profile here,
-    # fetch IDs and resolve client-side if needed.
-    userId 
-    profileId # Optional
+    user {
+      id
+      email
+      displayName
+      photoUrl
+    }
+    profile {
+      id
+      name
+      avatarUrl
+    }
   }
 }
 
@@ -230,7 +237,7 @@ query GetWorkspaceInvitations($workspaceId: UUID!) @auth(level: USER) {
   }
 }
 
-# GetPendingInvitations (Reverted to fetch direct IDs)
+# GetPendingInvitations
 query GetPendingInvitations($email: String!) @auth(level: USER) {
   workspaceInvitations(where: {
     _and: [
@@ -244,9 +251,9 @@ query GetPendingInvitations($email: String!) @auth(level: USER) {
     status
     createdAt
     expiresAt
-    # DataConnect doesn't generate nested workspace/inviter here,
-    # fetch IDs and resolve client-side if needed.
+    # We'll keep the direct IDs for now since we haven't updated the schema
+    # to use proper relationship objects for these fields
     workspaceId
-    invitedBy # User ID of the inviter
+    invitedBy
   }
 }

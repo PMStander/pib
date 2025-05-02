@@ -735,7 +735,7 @@ packages:
     resolution: {directory: dataconnect-generated/js/pib-connector, type: directory}
     engines: {node: ' >=18.0'}
     peerDependencies:
-      firebase: ^10.14.0 || ^11.3.0
+      firebase: ^10.14.0 || ^11.0.0
 
   '@google-cloud/firestore@7.11.0':
     resolution: {integrity: sha512-88uZ+jLsp1aVMj7gh3EKYH1aulTAMFAp8sH/v5a9w8q8iqSG27RiWLoxSAFr/XocZ9hGiWH1kEnBw+zl3xAgNA==}

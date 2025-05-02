@@ -17,8 +17,9 @@ import {
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
 
-// Import the useFirebase composable
+// Import composables
 import { useFirebase } from './useFirebase';
+import { useAppState } from './useAppState';
 
 // User type
 export interface User {
@@ -33,6 +34,9 @@ export interface User {
 export const useFirebaseAuth = () => {
   // Get Firebase auth instance from the useFirebase composable
   const { auth } = useFirebase();
+
+  // Get app state
+  const appState = useAppState();
 
   const user = ref<User | null>(null);
   const isAuthenticated = computed(() => !!user.value);
@@ -55,8 +59,12 @@ export const useFirebaseAuth = () => {
     isLoading.value = false;
     if (firebaseUser) {
       user.value = formatUser(firebaseUser);
+      appState.setAuthUser(firebaseUser);
     } else {
       user.value = null;
+      appState.setAuthUser(null);
+      // Clear user data when signing out
+      appState.clearUserData();
     }
   });
 
@@ -104,6 +112,9 @@ export const useFirebaseAuth = () => {
       error.value = null;
       await firebaseSignOut(auth);
       user.value = null;
+      // Clear app state
+      appState.setAuthUser(null);
+      appState.clearUserData();
     } catch (e: any) {
       error.value = translateFirebaseError(e.code);
       throw new Error(error.value);

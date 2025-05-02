@@ -6,6 +6,7 @@ mutation CreateUser(
 ) @auth(level: USER) {
   createUser: user_insert(
     data: {
+      id_expr: "auth.uid",
       email: $email,
       displayName: $displayName,
       photoUrl: $photoUrl
@@ -186,10 +187,11 @@ mutation AddWorkspaceMember(
 ) @auth(level: USER) {
   addWorkspaceMember: workspaceMember_insert(
     data: {
-      workspaceId: $workspaceId,
-      userId: $userId,
-      profileId: $profileId,
-      role: $role
+      workspace: { id: $workspaceId },
+      user: { id: $userId },
+      profile: { id: $profileId },
+      role: $role,
+      joinedAt_expr: "request.time"
     }
   )
 }
@@ -203,7 +205,7 @@ mutation UpdateWorkspaceMember(
   updateWorkspaceMember: workspaceMember_update(
     key: { workspaceId: $workspaceId, userId: $userId },
     data: {
-      profileId: $profileId,
+      profile: { id: $profileId },
       role: $role
     }
   )

@@ -57,6 +57,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
 import { useDataConnect } from '~/composables/useDataConnect';
+import { useAppState } from '~/composables/useAppState';
 import DashboardPage from '~/components/pages/DashboardPage.vue';
 
 const router = useRouter();
@@ -64,11 +65,15 @@ const router = useRouter();
 // Initialize Firebase Auth
 const { user, isAuthenticated, isLoading, signOut } = useFirebaseAuth();
 
-// Initialize DataConnect
+// Initialize DataConnect and AppState
 const dataConnect = useDataConnect();
+const appState = useAppState();
 
-// User workspaces
-const userWorkspaces = ref([]);
+// User workspaces - use computed to get the current workspaces from appState
+const userWorkspaces = computed(() => {
+  console.log('dashboard.vue - Computing userWorkspaces from appState:', appState.userWorkspaces.value);
+  return appState.userWorkspaces.value || [];
+});
 
 // User activities
 const userActivities = ref([
@@ -90,9 +95,9 @@ const userActivities = ref([
 const fetchUserData = async () => {
   if (isAuthenticated.value) {
     try {
-      // Fetch user workspaces
-      const workspaces = await dataConnect.fetchUserWorkspaces();
-      userWorkspaces.value = workspaces;
+      // Fetch user workspaces - this will update dataConnect.currentUserWorkspaces
+      await dataConnect.fetchUserWorkspaces();
+      console.log('dashboard.vue - Fetched workspaces, computed userWorkspaces:', userWorkspaces.value);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }

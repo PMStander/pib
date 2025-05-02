@@ -67,15 +67,16 @@ export const useFirebase = () => {
     }
 
     // Connect to Auth emulator
-    const authUrl = host.startsWith("localhost")
-      ? "http://localhost:9099"
-      : "http://127.0.0.1:9099"
-
     try {
-      connectAuthEmulator(auth, authUrl, { disableWarnings: true })
+      // Always use localhost for consistency
+      connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true })
       console.log("Connected to Auth Emulator")
     } catch (error) {
-      console.warn("Error connecting to Auth Emulator:", error)
+      console.error("Error connecting to Auth Emulator:", error)
+      // Log more detailed error information
+      if (error instanceof Error) {
+        console.error("Auth Emulator Error Details:", error.message, error.stack)
+      }
     }
 
     // Initialize and connect to DataConnect emulator
@@ -84,7 +85,11 @@ export const useFirebase = () => {
       connectDataConnectEmulator(dataConnect, "localhost", 9399)
       console.log("Connected to DataConnect Emulator")
     } catch (error) {
-      console.warn("Error connecting to DataConnect Emulator:", error)
+      console.error("Error connecting to DataConnect Emulator:", error)
+      // Log more detailed error information
+      if (error instanceof Error) {
+        console.error("DataConnect Emulator Error Details:", error.message, error.stack)
+      }
     }
   }
 

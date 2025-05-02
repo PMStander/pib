@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form @submit.prevent="handleFormSubmit">
     <NeumorphicInput
       :model-value="values.email"
       @update:model-value="(val) => setFieldValue('email', val)"
@@ -48,6 +48,7 @@
       color="primary"
       class="w-full"
       :disabled="isSubmitting || isAuthLoading"
+      @click="() => console.log('LoginForm - Submit button clicked directly')"
     >
       {{ isSubmitting || isAuthLoading ? 'Logging in...' : 'Log In' }}
     </NeumorphicButton>
@@ -66,6 +67,7 @@ import { ref } from 'vue';
 import { loginFormSchema } from '~/utils/validations/schemas';
 import { useZodForm } from '~/composables/useZodForm';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
+import { z } from 'zod';
 
 const props = defineProps({
   authError: {
@@ -92,8 +94,36 @@ const {
   rememberMe: false
 });
 
-// Handle form submission
+// Custom form submission handler
+const handleFormSubmit = () => {
+  console.log('LoginForm.vue - Form submit button clicked');
+  console.log('LoginForm.vue - Current form values:', values);
+  console.log('LoginForm.vue - Current form errors:', errors);
+
+  // Manually validate all fields
+  const validateAll = async () => {
+    try {
+      console.log('LoginForm.vue - Values object:', values);
+
+      // Match the approach used in SignupForm.vue
+      const result = await loginFormSchema.parseAsync({
+        email: values.email,
+        password: values.password,
+        rememberMe: values.rememberMe || false
+      });
+      console.log('LoginForm.vue - Manual validation passed:', result);
+      emit('submit', result);
+    } catch (error) {
+      console.error('LoginForm.vue - Manual validation failed:', error);
+    }
+  };
+
+  validateAll();
+};
+
+// Handle form submission with validation
 onSubmit(async (validData) => {
+  console.log('LoginForm.vue - Form submitted with valid data:', validData);
   emit('submit', validData);
 });
 </script>

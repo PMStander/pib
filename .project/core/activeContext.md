@@ -1,15 +1,15 @@
-# Active Context: Schema and Relationship Patterns Review
+# Active Context: Nuxt useState Implementation for Shared State Management
 
 ## Context
 This document tracks the current work focus and state of the "Partners in Biz" project.
 
 ## Current Focus
-- Reviewing and refining DataConnect schemas, mutations, and queries
-- Ensuring proper relationship patterns in database schema
-- Implementing workspace-user relationships correctly
-- Expanding the neumorphic component library
-- Implementing core application features
-- Enhancing user authentication features
+- Implementing Nuxt's useState for better state management
+- Fixing issues with workspaces not showing up in the dashboard
+- Ensuring proper reactivity between components
+- Enhancing user authentication and state management
+- Preparing for vector search implementation
+- Resolving duplicate dependencies in package.json
 
 ## Project State
 - Basic Nuxt.js application structure is in place
@@ -42,6 +42,11 @@ This document tracks the current work focus and state of the "Partners in Biz" p
 - Implemented workspace management features with component-based architecture
 - Created workspace card, form, and invite components
 - Developed a comprehensive workspaces page with filtering and pagination
+- Fixed issues with workspaces not showing up in the dashboard
+- Implemented Nuxt's useState for better state management of shared data
+- Created a new useAppState composable for centralized state management
+- Updated useDataConnect and useFirebaseAuth to use the app state
+- Enhanced sign-out method to properly clear the app state
 
 ## Next Steps
 1. Implement vector search for AI-powered partner matching:
@@ -75,72 +80,82 @@ This document tracks the current work focus and state of the "Partners in Biz" p
 
 ## Last Updated
 - Date: May 3, 2024
-- Session: Schema and relationship patterns review
+- Session: Nuxt useState Implementation for Shared State Management
 
 ## Session Summary (2024-05-03)
-In this session, we identified issues with the workspace-user relationship implementation. While workspaces are being created successfully, there may be issues with properly linking users to workspaces. We also recognized the need to review and refine our DataConnect schemas, mutations, and queries to ensure consistent relationship patterns throughout the application.
+In this session, we implemented Nuxt's useState composable for better state management of shared data like users, workspaces, and profiles. We also fixed the issue with workspaces not showing up in the dashboard.
 
 ### Key Observations:
-1. Vector search implementation status:
-   - Basic search functionality is working for profiles, businesses, and partner preferences
-   - Cross-entity matching has placeholder implementations that need to be completed
-   - The useVectorSearch composable provides a clean interface but lacks distance score information
-   - The VectorSearchTest component provides a user-friendly interface for testing
+1. State Management Issues:
+   - Workspaces were being fetched correctly but not displayed in the dashboard
+   - The dashboard component was using a local ref for workspaces, which was initialized as an empty array
+   - The workspaces were being updated after the component was mounted, but the component wasn't reactive to these changes
 
-2. DataConnect integration:
-   - Schema includes vector fields for embeddings (bioEmbedding, descriptionEmbedding, combinedEmbedding)
-   - Queries and mutations are defined for vector similarity search
-   - Connector code needs to be generated using the DataConnect CLI tool
+2. Nuxt's useState Advantages:
+   - Provides server/client shared state
+   - Ensures reactivity across components
+   - Maintains state across page navigations
+   - Simplifies state management with a centralized approach
 
-3. Duplicate dependencies identified:
-   - '@firebasegen/pib-connector' and '@pib/connector' both reference 'file:dataconnect-generated/js/pib-connector'
-   - This could potentially cause issues and should be resolved
+3. Implementation Approach:
+   - Created a new useAppState composable using Nuxt's useState
+   - Updated useDataConnect to use computed properties that access the app state
+   - Updated useFirebaseAuth to integrate with the app state
+   - Modified dashboard and login pages to use the app state
 
-4. Component architecture:
-   - Comprehensive neumorphic component library implemented
-   - Dashboard page includes the vector search test component
-   - Component-based architecture with reusable components
+### Implementation Details:
+1. Created useAppState Composable:
+   - Used Nuxt's useState for auth user, current user, profiles, workspaces, and UI state
+   - Added helper methods for setting and clearing state
+   - Ensured proper TypeScript typing for all state properties
 
-### Form Component Fixes:
-1. Fixed issues with login and signup forms:
-   - Resolved DOM warnings about non-unique IDs in input elements
-   - Fixed reactivity warnings about readonly props
-   - Updated the NeumorphicInput component to use computed inputId
-   - Modified input event handler to check for readonly status
-   - Updated form components to use explicit model-value binding with setFieldValue
-   - Fixed hydration mismatches by using deterministic IDs based on input names
-   - Added unique name attributes with form-specific prefixes to ensure uniqueness
+2. Updated useDataConnect:
+   - Changed direct refs to computed properties that access the app state
+   - Updated all methods to use the app state setters instead of directly modifying refs
+   - Fixed TypeScript errors and improved error handling
+   - Enhanced the fetchUserWorkspaces method to correctly process the workspace data structure
+
+3. Updated useFirebaseAuth:
+   - Added integration with the app state
+   - Updated the auth state listener to update the app state
+   - Enhanced the sign-out method to clear the app state
+   - Improved error handling and type safety
+
+4. Fixed Dashboard Component:
+   - Modified the dashboard page to use the app state for workspaces
+   - Added debugging to track the workspaces data flow
+   - Improved error handling for edge cases
 
 ## Current State
-The application has implemented workspace creation functionality, but there may be issues with properly linking users to workspaces. The schema design for relationships needs review to ensure consistency with the patterns documented in systemPatterns.md.
-
-## Relationship Pattern Issues
-Based on our review of systemPatterns.md and the current implementation:
-1. Some places in the code use direct ID references (e.g., workspaceId) instead of proper relationship objects
-2. Queries sometimes only return IDs without the related entity data
-3. Mutations may not be consistently structured for creating relationships
+The application now has a robust state management solution using Nuxt's useState composable. We've fixed the issue with workspaces not showing up in the dashboard by using a centralized state store that ensures the workspaces are available to all components that need them. The state is now shared across components and pages, ensuring consistency and reactivity.
 
 ## Next Steps
-1. Review and refine DataConnect schema:
-   - Ensure all relationship fields use proper type references (e.g., `workspace: Workspace!` not `workspaceId: ID!`)
-   - Verify join table definitions have proper key definitions
-   - Check that all necessary relationship attributes are included
+1. Implement vector search for AI-powered partner matching:
+   - Generate the DataConnect connector code using the DataConnect CLI tool
+   - Test vector embedding generation and similarity search
+   - Create UI components for partner matching using vector search
+   - Implement partner recommendation system based on semantic similarity
 
-2. Update mutations:
-   - Modify mutations to use proper relationship objects (e.g., `workspace: { id: $workspaceId }`)
+2. Resolve duplicate dependencies:
+   - Consolidate '@firebasegen/pib-connector' and '@pib/connector' to use a single reference
+   - Update imports throughout the codebase to use the consolidated reference
+
+3. Continue refining DataConnect schema:
+   - Update remaining schemas to use proper type references (e.g., `workspace: Workspace!` not `workspaceId: ID!`)
+   - Standardize on one join table pattern (either `WorkspaceUser` or `WorkspaceMember`)
+   - Ensure all relationship fields follow the same pattern
+
+4. Update remaining mutations:
+   - Modify mutations for `BusinessProfile`, `PartnerPreferences`, etc. to use proper relationship objects
    - Ensure consistent patterns across all entity relationships
    - Test relationship creation with the updated mutation structure
 
-3. Enhance queries:
-   - Update queries to retrieve complete related entity data when needed
-   - Implement proper filtering on relationship fields
+5. Further enhance queries:
+   - Update remaining queries to retrieve complete related entity data
+   - Implement proper filtering on relationship fields for all queries
    - Test query performance with relationship data retrieval
 
-4. Fix workspace-user relationship:
-   - Debug the current issue with workspace creation but missing user linkage
-   - Implement proper error handling for relationship creation failures
-   - Add validation to ensure relationships are properly established
-
-5. Resolve duplicate dependencies:
-   - Consolidate '@firebasegen/pib-connector' and '@pib/connector' to use a single reference
-   - Update imports throughout the codebase to use the consolidated reference
+6. Add unit tests for state management:
+   - Test the useAppState composable
+   - Verify state persistence across page navigations
+   - Test state clearing on sign out
