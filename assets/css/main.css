@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* Neumorphic color variables */
+:root {
+  --color-neumorphic-bg: 226 230 234; /* Light gray background */
+  --color-neumorphic-light: 255 255 255; /* Light shadow */
+  --color-neumorphic-dark: 209 213 219; /* Dark shadow */
+  --color-neumorphic-accent: 123 144 253; /* Accent color (blue) */
+  --color-neumorphic-accent-secondary: 250 171 112; /* Secondary accent (orange) */
+  --color-neumorphic-accent-tertiary: 229 62 62; /* Tertiary accent (red) */
+  --color-neumorphic-text: 55 65 81; /* Text color */
+}
+
+/* Neumorphic utility classes */
+@layer utilities {
+  /* Neumorphic flat effect */
+  .nm-flat {
+    @apply bg-[rgb(var(--color-neumorphic-bg))] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+  }
+
+  /* Neumorphic pressed effect */
+  .nm-pressed {
+    @apply bg-[rgb(var(--color-neumorphic-bg))] shadow-[inset_0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),inset_-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+  }
+
+  /* Neumorphic concave effect */
+  .nm-concave {
+    @apply bg-gradient-to-br from-[rgb(var(--color-neumorphic-dark)/0.5)] to-[rgb(var(--color-neumorphic-light)/0.5)] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+  }
+
+  /* Neumorphic convex effect */
+  .nm-convex {
+    @apply bg-gradient-to-br from-[rgb(var(--color-neumorphic-light)/0.5)] to-[rgb(var(--color-neumorphic-dark)/0.5)] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+  }
+}
