@@ -52,9 +52,9 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Workspaces Page Component -->
-      <WorkspacesPage 
+      <WorkspacesPage
         :workspaces="workspaces"
         :is-loading="isWorkspacesLoading"
         :current-user-id="user?.uid || ''"
@@ -66,7 +66,7 @@
         @send-invites="handleSendInvites"
       />
     </div>
-    
+
     <!-- Success Modal -->
     <NeumorphicModal
       v-model="showSuccessModal"
@@ -87,10 +87,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
 import { useDataConnect } from '~/composables/useDataConnect';
+import { useAppState } from '~/composables/useAppState';
 import WorkspacesPage from '~/components/pages/WorkspacesPage.vue';
 import NeumorphicCard from '~/components/neumorphic/Card.vue';
 import NeumorphicButton from '~/components/neumorphic/Button.vue';
@@ -101,11 +102,15 @@ const router = useRouter();
 // Initialize Firebase Auth
 const { user, isAuthenticated, isLoading, signOut } = useFirebaseAuth();
 
-// Initialize DataConnect
+// Initialize DataConnect and AppState
 const dataConnect = useDataConnect();
+const appState = useAppState();
 
-// Workspaces state
-const workspaces = ref([]);
+// Workspaces state - use computed to get the current workspaces from appState
+const workspaces = computed(() => {
+  console.log('workspaces/index.vue - Computing workspaces from appState:', appState.userWorkspaces.value);
+  return appState.userWorkspaces.value || [];
+});
 const isWorkspacesLoading = ref(false);
 
 // Success modal
@@ -115,49 +120,23 @@ const successMessage = ref('');
 // Fetch workspaces
 const fetchWorkspaces = async () => {
   if (!isAuthenticated.value) return;
-  
+
   try {
     isWorkspacesLoading.value = true;
-    
-    // This would typically fetch workspaces from the database
-    // For now, we'll use mock data
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    workspaces.value = [
-      {
-        id: '1',
-        name: 'Personal Workspace',
-        description: 'Your personal workspace for individual projects',
-        type: 'personal',
-        privacy: 'private',
-        role: 'Owner',
-        members: 1,
-        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-        ownerId: user.value?.uid
-      },
-      {
-        id: '2',
-        name: 'Web Development Team',
-        description: 'Collaborative workspace for web development projects',
-        type: 'project',
-        privacy: 'private',
-        role: 'Admin',
-        members: 5,
-        createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
-        ownerId: 'user123'
-      },
-      {
-        id: '3',
-        name: 'Marketing Agency',
-        description: 'Business workspace for marketing projects and clients',
-        type: 'business',
-        privacy: 'private',
-        role: 'Member',
-        members: 12,
-        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 days ago
-        ownerId: 'user456'
-      }
-    ];
+
+    // Fetch workspaces from DataConnect
+    await dataConnect.fetchUserWorkspaces();
+
+    // If no workspaces are found, use mock data as fallback
+    if (workspaces.value.length === 0) {
+      console.log('No workspaces found in DataConnect, using mock data');
+
+      // Create a default workspace
+      await dataConnect.createDefaultWorkspace(user.value?.displayName || 'My');
+
+      // Refresh workspaces
+      await dataConnect.fetchUserWorkspaces();
+    }
   } catch (error) {
     console.error('Failed to fetch workspaces:', error);
   } finally {
@@ -181,7 +160,7 @@ const handleCreateWorkspace = async (workspace) => {
     // This would typically create a workspace in the database
     // For now, we'll simulate it
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Add the new workspace to the list
     const newWorkspace = {
       ...workspace,
@@ -191,9 +170,9 @@ const handleCreateWorkspace = async (workspace) => {
       createdAt: new Date(),
       ownerId: user.value?.uid
     };
-    
+
     workspaces.value.unshift(newWorkspace);
-    
+
     // Show success message
     successMessage.value = `Workspace "${workspace.name}" created successfully!`;
     showSuccessModal.value = true;
@@ -208,7 +187,7 @@ const handleUpdateWorkspace = async (workspace) => {
     // This would typically update a workspace in the database
     // For now, we'll simulate it
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Update the workspace in the list
     const index = workspaces.value.findIndex(w => w.id === workspace.id);
     if (index !== -1) {
@@ -217,7 +196,7 @@ const handleUpdateWorkspace = async (workspace) => {
         ...workspace
       };
     }
-    
+
     // Show success message
     successMessage.value = `Workspace "${workspace.name}" updated successfully!`;
     showSuccessModal.value = true;
@@ -232,10 +211,10 @@ const handleDeleteWorkspace = async (workspace) => {
     // This would typically delete a workspace from the database
     // For now, we'll simulate it
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Remove the workspace from the list
     workspaces.value = workspaces.value.filter(w => w.id !== workspace.id);
-    
+
     // Show success message
     successMessage.value = `Workspace "${workspace.name}" deleted successfully!`;
     showSuccessModal.value = true;
@@ -250,10 +229,10 @@ const handleLeaveWorkspace = async (workspace) => {
     // This would typically remove the user from the workspace in the database
     // For now, we'll simulate it
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Remove the workspace from the list
     workspaces.value = workspaces.value.filter(w => w.id !== workspace.id);
-    
+
     // Show success message
     successMessage.value = `You have left the workspace "${workspace.name}".`;
     showSuccessModal.value = true;
@@ -273,7 +252,7 @@ const handleSendInvites = async (inviteData) => {
     // This would typically send invites to the specified emails
     // For now, we'll simulate it
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Show success message
     successMessage.value = `Invitations sent to ${inviteData.emails.length} email${inviteData.emails.length > 1 ? 's' : ''}.`;
     showSuccessModal.value = true;
@@ -285,7 +264,12 @@ const handleSendInvites = async (inviteData) => {
 // Fetch workspaces on mount
 onMounted(async () => {
   if (!isLoading.value && isAuthenticated.value) {
+    console.log('Fetching workspaces on mount...');
+    // First ensure we have the user data
+    await dataConnect.fetchCurrentUser();
+    // Then fetch workspaces
     await fetchWorkspaces();
+    console.log('Workspaces after fetch:', workspaces.value);
   }
 });
 </script>

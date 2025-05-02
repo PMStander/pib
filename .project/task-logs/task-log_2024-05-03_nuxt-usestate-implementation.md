@@ -11,15 +11,17 @@
   - pages/dashboard.vue
   - pages/login.vue
   - components/pages/DashboardPage.vue
+  - package.json
 
 ## Task Details
-- **Goal**: Implement Nuxt's useState composable for better state management of shared data like users, workspaces, and profiles.
+- **Goal**: Implement Nuxt's useState composable for better state management of shared data like users, workspaces, and profiles, and fix duplicate dependencies.
 - **Implementation**:
   1. Created a new useAppState composable using Nuxt's useState for server/client shared state
   2. Updated useDataConnect to use computed properties that access the app state
   3. Updated useFirebaseAuth to integrate with the app state
   4. Modified dashboard and login pages to use the app state
   5. Fixed the issue with workspaces not showing up in the dashboard
+  6. Removed duplicate Firebase connector dependency from package.json
 
 - **Challenges**:
   1. Ensuring proper reactivity between components
