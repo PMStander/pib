@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Neumorphic color variables */
+/* Neumorphic color variables - Light mode (default) */
 :root {
   --color-neumorphic-bg: 226 230 234; /* Light gray background */
   --color-neumorphic-light: 255 255 255; /* Light shadow */
@@ -11,27 +11,45 @@
   --color-neumorphic-accent-secondary: 250 171 112; /* Secondary accent (orange) */
   --color-neumorphic-accent-tertiary: 229 62 62; /* Tertiary accent (red) */
   --color-neumorphic-text: 55 65 81; /* Text color */
+  --color-neumorphic-shadow-opacity: 0.8; /* Shadow opacity for light mode */
+}
+
+/* Neumorphic color variables - Dark mode */
+.dark {
+  --color-neumorphic-bg: 32 36 45; /* Dark background */
+  --color-neumorphic-light: 45 50 60; /* Light shadow in dark mode */
+  --color-neumorphic-dark: 20 24 31; /* Dark shadow in dark mode */
+  --color-neumorphic-accent: 138 157 255; /* Brighter accent for dark mode */
+  --color-neumorphic-accent-secondary: 255 184 130; /* Brighter secondary accent */
+  --color-neumorphic-accent-tertiary: 248 113 113; /* Brighter tertiary accent */
+  --color-neumorphic-text: 229 231 235; /* Light text for dark mode */
+  --color-neumorphic-shadow-opacity: 0.6; /* Shadow opacity for dark mode */
 }
 
 /* Neumorphic utility classes */
 @layer utilities {
   /* Neumorphic flat effect */
   .nm-flat {
-    @apply bg-[rgb(var(--color-neumorphic-bg))] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+    @apply bg-[rgb(var(--color-neumorphic-bg))] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/var(--color-neumorphic-shadow-opacity)),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/var(--color-neumorphic-shadow-opacity))];
   }
 
   /* Neumorphic pressed effect */
   .nm-pressed {
-    @apply bg-[rgb(var(--color-neumorphic-bg))] shadow-[inset_0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),inset_-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+    @apply bg-[rgb(var(--color-neumorphic-bg))] shadow-[inset_0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/var(--color-neumorphic-shadow-opacity)),inset_-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/var(--color-neumorphic-shadow-opacity))];
   }
 
   /* Neumorphic concave effect */
   .nm-concave {
-    @apply bg-gradient-to-br from-[rgb(var(--color-neumorphic-dark)/0.5)] to-[rgb(var(--color-neumorphic-light)/0.5)] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+    @apply bg-gradient-to-br from-[rgb(var(--color-neumorphic-dark)/0.5)] to-[rgb(var(--color-neumorphic-light)/0.5)] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/var(--color-neumorphic-shadow-opacity)),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/var(--color-neumorphic-shadow-opacity))];
   }
 
   /* Neumorphic convex effect */
   .nm-convex {
-    @apply bg-gradient-to-br from-[rgb(var(--color-neumorphic-light)/0.5)] to-[rgb(var(--color-neumorphic-dark)/0.5)] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/0.8),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/0.8)];
+    @apply bg-gradient-to-br from-[rgb(var(--color-neumorphic-light)/0.5)] to-[rgb(var(--color-neumorphic-dark)/0.5)] shadow-[0.625rem_0.625rem_0.875rem_0_rgb(var(--color-neumorphic-dark)/var(--color-neumorphic-shadow-opacity)),-0.5rem_-0.5rem_1.125rem_0_rgb(var(--color-neumorphic-light)/var(--color-neumorphic-shadow-opacity))];
+  }
+
+  /* Dark mode transition */
+  .dark-mode-transition {
+    @apply transition-colors duration-300 ease-in-out;
   }
 }

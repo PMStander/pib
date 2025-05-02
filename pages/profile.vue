@@ -31,6 +31,13 @@
             <NeumorphicButton
               variant="flat"
               size="sm"
+              @click="router.push('/dashboard')"
+            >
+              Dashboard
+            </NeumorphicButton>
+            <NeumorphicButton
+              variant="flat"
+              size="sm"
               @click="handleSignOut"
             >
               Sign Out
@@ -38,66 +45,49 @@
           </div>
         </div>
       </div>
-
-      <!-- Dashboard Page Component -->
-      <DashboardPage
-        :user="user"
-        :workspaces="userWorkspaces"
-        :activities="userActivities"
-        @edit-profile="handleEditProfile"
-        @create-workspace="handleCreateWorkspace"
-        @view-all-activity="handleViewAllActivity"
+      
+      <!-- Profile Page Component -->
+      <ProfilePage 
+        :user="user" 
+        @delete-account="handleDeleteAccount"
       />
     </div>
+    
+    <!-- Delete Account Confirmation Modal -->
+    <NeumorphicModal
+      v-model="showDeleteConfirmation"
+      title="Account Deletion"
+      description="Your account has been scheduled for deletion. You will be signed out now."
+    >
+      <div class="flex justify-center">
+        <NeumorphicButton
+          variant="convex"
+          color="primary"
+          @click="finalizeDeleteAccount"
+        >
+          OK
+        </NeumorphicButton>
+      </div>
+    </NeumorphicModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
-import { useDataConnect } from '~/composables/useDataConnect';
-import DashboardPage from '~/components/pages/DashboardPage.vue';
+import ProfilePage from '~/components/pages/ProfilePage.vue';
+import NeumorphicCard from '~/components/neumorphic/Card.vue';
+import NeumorphicButton from '~/components/neumorphic/Button.vue';
+import NeumorphicModal from '~/components/neumorphic/Modal.vue';
 
 const router = useRouter();
 
 // Initialize Firebase Auth
 const { user, isAuthenticated, isLoading, signOut } = useFirebaseAuth();
 
-// Initialize DataConnect
-const dataConnect = useDataConnect();
-
-// User workspaces
-const userWorkspaces = ref([]);
-
-// User activities
-const userActivities = ref([
-  {
-    description: 'You logged in to your account',
-    date: new Date()
-  },
-  {
-    description: 'Your profile was updated',
-    date: new Date(Date.now() - 86400000) // 1 day ago
-  },
-  {
-    description: 'Your account was created',
-    date: new Date(Date.now() - 172800000) // 2 days ago
-  }
-]);
-
-// Fetch user data
-const fetchUserData = async () => {
-  if (isAuthenticated.value) {
-    try {
-      // Fetch user workspaces
-      const workspaces = await dataConnect.fetchUserWorkspaces();
-      userWorkspaces.value = workspaces;
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  }
-};
+// Delete account confirmation
+const showDeleteConfirmation = ref(false);
 
 // Handle sign out
 const handleSignOut = async () => {
@@ -109,31 +99,21 @@ const handleSignOut = async () => {
   }
 };
 
-// Handle edit profile
-const handleEditProfile = () => {
-  // This would navigate to a profile edit page
-  console.log('Edit profile clicked');
-  // router.push('/profile/edit');
+// Handle delete account
+const handleDeleteAccount = () => {
+  // Show confirmation modal
+  showDeleteConfirmation.value = true;
 };
 
-// Handle create workspace
-const handleCreateWorkspace = () => {
-  // This would open a modal or navigate to a workspace creation page
-  console.log('Create workspace clicked');
-  // router.push('/workspaces/create');
-};
-
-// Handle view all activity
-const handleViewAllActivity = () => {
-  // This would navigate to an activity log page
-  console.log('View all activity clicked');
-  // router.push('/activity');
-};
-
-// Fetch user data on mount
-onMounted(async () => {
-  if (!isLoading.value && isAuthenticated.value) {
-    await fetchUserData();
+// Finalize delete account
+const finalizeDeleteAccount = async () => {
+  try {
+    // In a real implementation, you would delete the user account here
+    // For now, we'll just sign out
+    await signOut();
+    router.push('/login');
+  } catch (error) {
+    console.error('Delete account failed:', error);
   }
-});
+};
 </script>

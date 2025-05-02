@@ -12,8 +12,10 @@ This document outlines the technology stack, setup, and dependencies for the "Pa
   - Neumorphic Design System (custom implementation)
 - **State Management**: Vue.js Composition API
 - **Routing**: Vue Router 4.5.1 (integrated with Nuxt.js)
-- **Form Validation**: Zod (planned)
+- **Form Validation**: Zod with vee-validate integration
 - **Utility Libraries**: VueUse 13.1.0
+- **Authentication**: Firebase Authentication
+- **Database**: Firebase Firestore (via DataConnect)
 
 ### Development Tools
 - **Package Manager**: pnpm
@@ -34,7 +36,13 @@ This document outlines the technology stack, setup, and dependencies for the "Pa
     "nuxt-icons": "^3.2.1",
     "tailwindcss": "^4.1.5",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "firebase": "^10.8.0",
+    "zod": "^3.22.4",
+    "vee-validate": "^4.12.5",
+    "@vee-validate/zod": "^4.12.5",
+    "@pib/connector": "file:dataconnect-generated/js/pib-connector",
+    "@firebasegen/pib-connector": "file:dataconnect-generated/js/pib-connector"
   }
 }
 ```
@@ -85,7 +93,15 @@ The application can be deployed using various methods:
 - Caching strategies for improved performance
 
 ## Security Considerations
-- Input validation for all user inputs
-- Authentication and authorization implementation
+- Input validation for all user inputs using Zod
+- Firebase Authentication with email verification
+- Role-based access control for workspaces
 - HTTPS for secure communication
 - XSS and CSRF protection
+- Secure password handling with Firebase Auth
+- Protected routes with authentication middleware
+
+## Last Updated
+- Date: May 2, 2024
+- By: Development Team
+- Changes: Updated dependencies, added Firebase Authentication, and DataConnect integration details

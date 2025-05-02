@@ -8,25 +8,31 @@
       {{ label }}
     </label>
     <div class="relative">
-      <input
+      <select
         :id="id"
-        :type="type"
         :value="modelValue"
         :name="name"
-        :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
         :class="[
-          'w-full px-4 py-2 bg-[rgb(var(--color-neumorphic-bg))] rounded-lg text-[rgb(var(--color-neumorphic-text))] transition-all duration-300 focus:outline-none',
+          'w-full px-4 py-2 bg-[rgb(var(--color-neumorphic-bg))] rounded-lg text-[rgb(var(--color-neumorphic-text))] transition-all duration-300 focus:outline-none appearance-none',
           'nm-pressed',
           error ? 'border border-[rgb(var(--color-neumorphic-accent-tertiary))]' : '',
           disabled ? 'opacity-50 cursor-not-allowed' : '',
           readonly ? 'opacity-70 cursor-default' : '',
           className
         ]"
-        @input="handleInput"
+        @change="handleChange"
         @blur="handleBlur"
-      />
+      >
+        <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
+        <slot></slot>
+      </select>
+      <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+        <svg class="w-5 h-5 text-[rgb(var(--color-neumorphic-text))]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
     </div>
     <p v-if="error" class="mt-1 text-sm text-[rgb(var(--color-neumorphic-accent-tertiary))]">
       {{ error }}
@@ -38,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useField } from 'vee-validate';
 
 const props = defineProps({
@@ -49,10 +55,6 @@ const props = defineProps({
   label: {
     type: String,
     default: ''
-  },
-  type: {
-    type: String,
-    default: 'text'
   },
   placeholder: {
     type: String,
@@ -94,11 +96,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'blur']);
 
-const inputId = computed(() => props.id || `input-${Math.random().toString(36).substring(2, 9)}`);
+const inputId = computed(() => props.id || `select-${Math.random().toString(36).substring(2, 9)}`);
 
 // If name is provided, integrate with vee-validate
 const fieldName = computed(() => props.name || '');
-const { errorMessage, value, handleBlur: fieldBlur, handleChange } = fieldName.value
+const { errorMessage, value, handleBlur: fieldBlur, handleChange: fieldHandleChange } = fieldName.value
   ? useField(fieldName.value, undefined, {
       validateOnValueUpdate: props.validateOn === 'input'
     })
@@ -107,13 +109,13 @@ const { errorMessage, value, handleBlur: fieldBlur, handleChange } = fieldName.v
 // Computed error message (from props or vee-validate)
 const errorMsg = computed(() => props.error || errorMessage.value);
 
-// Handle input changes
-const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement;
+// Handle change events
+const handleChange = (event: Event) => {
+  const target = event.target as HTMLSelectElement;
   emit('update:modelValue', target.value);
 
   if (fieldName.value) {
-    handleChange(target.value);
+    fieldHandleChange(target.value);
   }
 
   if (props.validateOn === 'input') {

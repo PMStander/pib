@@ -23,10 +23,13 @@ The application follows a modern web architecture based on the Nuxt.js framework
 
 ## Design Patterns
 
-### Component Pattern
+### Component-Based Architecture
 - Reusable UI components with clear responsibilities
 - Component composition for complex UI elements
 - Props and events for component communication
+- Page components that encapsulate page-level functionality
+- Form components that handle validation and submission
+- Feature-specific components organized by domain (e.g., workspace)
 
 ### Composition Pattern
 - Use of Vue.js Composition API for logic organization
@@ -48,6 +51,8 @@ The application follows a modern web architecture based on the Nuxt.js framework
 - Consistent color palette with light/dark shadow pairs
 - Multiple effect variants (flat, pressed, concave, convex)
 - Accessible and responsive neumorphic components
+- Dark mode support with appropriate shadow adjustments
+- Comprehensive component library (Button, Card, Input, Toggle, Checkbox, Radio, Select, Modal, DatePicker, Slider)
 
 ## Folder Structure
 ```
@@ -55,14 +60,19 @@ The application follows a modern web architecture based on the Nuxt.js framework
 ├── assets/              # Static assets (images, fonts, etc.)
 │   └── css/             # CSS files including Tailwind configuration
 ├── components/          # Reusable Vue components
-│   ├── ui/              # Generic UI components
-│   └── neumorphic/      # Neumorphic design system components
+│   ├── forms/           # Form components for different features
+│   ├── neumorphic/      # Neumorphic design system components
+│   ├── pages/           # Page-level components
+│   └── workspace/       # Workspace-specific components
 ├── composables/         # Shared composition functions
 ├── layouts/             # Page layouts
 ├── pages/               # Application pages and routes
+│   └── workspaces/      # Workspace-related pages
+├── plugins/             # Nuxt plugins
 ├── public/              # Public static files
 ├── server/              # Server-side code
 └── utils/               # Utility functions
+    └── validations/     # Validation schemas
 ```
 
 ## Coding Standards
@@ -76,3 +86,8 @@ The application follows a modern web architecture based on the Nuxt.js framework
 - Optimize asset loading and caching
 - Use server-side rendering for improved SEO and initial load performance
 - Implement code splitting to reduce bundle size
+
+## Last Updated
+- Date: May 2, 2024
+- By: Development Team
+- Changes: Updated folder structure and component-based architecture details

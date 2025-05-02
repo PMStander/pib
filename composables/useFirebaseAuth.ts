@@ -6,6 +6,14 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   updateProfile,
+  sendEmailVerification,
+  applyActionCode,
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  updateEmail,
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
 
@@ -116,6 +124,140 @@ export const useFirebaseAuth = () => {
     }
   };
 
+  // Send email verification
+  const sendVerificationEmail = async (): Promise<void> => {
+    try {
+      error.value = null;
+      isLoading.value = true;
+
+      if (!auth.currentUser) {
+        throw new Error('No user is currently signed in');
+      }
+
+      await sendEmailVerification(auth.currentUser);
+    } catch (e: any) {
+      error.value = translateFirebaseError(e.code);
+      throw new Error(error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  // Verify email with action code
+  const verifyEmail = async (actionCode: string): Promise<void> => {
+    try {
+      error.value = null;
+      isLoading.value = true;
+      await applyActionCode(auth, actionCode);
+
+      // Refresh the user to update emailVerified status
+      if (auth.currentUser) {
+        await auth.currentUser.reload();
+        if (auth.currentUser) {
+          user.value = formatUser(auth.currentUser);
+        }
+      }
+    } catch (e: any) {
+      error.value = translateFirebaseError(e.code);
+      throw new Error(error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  // Confirm password reset
+  const confirmPasswordReset = async (actionCode: string, newPassword: string): Promise<void> => {
+    try {
+      error.value = null;
+      isLoading.value = true;
+      await verifyPasswordResetCode(auth, actionCode);
+      await confirmPasswordReset(auth, actionCode, newPassword);
+    } catch (e: any) {
+      error.value = translateFirebaseError(e.code);
+      throw new Error(error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  // Update user profile
+  const updateUserProfile = async (displayName: string, photoURL?: string): Promise<void> => {
+    try {
+      error.value = null;
+      isLoading.value = true;
+
+      if (!auth.currentUser) {
+        throw new Error('No user is currently signed in');
+      }
+
+      await updateProfile(auth.currentUser, { displayName, photoURL: photoURL || null });
+
+      // Update local user state
+      if (auth.currentUser) {
+        user.value = formatUser(auth.currentUser);
+      }
+    } catch (e: any) {
+      error.value = translateFirebaseError(e.code);
+      throw new Error(error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  // Update user email
+  const updateUserEmail = async (newEmail: string, password: string): Promise<void> => {
+    try {
+      error.value = null;
+      isLoading.value = true;
+
+      if (!auth.currentUser || !auth.currentUser.email) {
+        throw new Error('No user is currently signed in or user has no email');
+      }
+
+      // Reauthenticate user before changing email
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+      await reauthenticateWithCredential(auth.currentUser, credential);
+
+      // Update email
+      await updateEmail(auth.currentUser, newEmail);
+
+      // Send verification email for new email
+      await sendEmailVerification(auth.currentUser);
+
+      // Update local user state
+      user.value = formatUser(auth.currentUser);
+    } catch (e: any) {
+      error.value = translateFirebaseError(e.code);
+      throw new Error(error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  // Update user password
+  const updateUserPassword = async (currentPassword: string, newPassword: string): Promise<void> => {
+    try {
+      error.value = null;
+      isLoading.value = true;
+
+      if (!auth.currentUser || !auth.currentUser.email) {
+        throw new Error('No user is currently signed in or user has no email');
+      }
+
+      // Reauthenticate user before changing password
+      const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword);
+      await reauthenticateWithCredential(auth.currentUser, credential);
+
+      // Update password
+      await updatePassword(auth.currentUser, newPassword);
+    } catch (e: any) {
+      error.value = translateFirebaseError(e.code);
+      throw new Error(error.value);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   // Translate Firebase error codes to user-friendly messages
   const translateFirebaseError = (code: string): string => {
     const errorMessages: Record<string, string> = {
@@ -127,7 +269,17 @@ export const useFirebaseAuth = () => {
       'auth/weak-password': 'Password is too weak. Please use a stronger password.',
       'auth/operation-not-allowed': 'This operation is not allowed. Please contact support.',
       'auth/too-many-requests': 'Too many unsuccessful login attempts. Please try again later.',
-      'auth/network-request-failed': 'A network error occurred. Please check your connection and try again.'
+      'auth/network-request-failed': 'A network error occurred. Please check your connection and try again.',
+      'auth/requires-recent-login': 'This operation requires recent authentication. Please log in again before retrying.',
+      'auth/email-already-exists': 'The email address is already in use by another account.',
+      'auth/invalid-action-code': 'The action code is invalid. This can happen if the code is malformed, expired, or has already been used.',
+      'auth/expired-action-code': 'The action code has expired. Please request a new one.',
+      'auth/invalid-verification-code': 'The verification code is invalid.',
+      'auth/invalid-verification-id': 'The verification ID is invalid.',
+      'auth/missing-verification-code': 'The verification code is missing.',
+      'auth/missing-verification-id': 'The verification ID is missing.',
+      'auth/quota-exceeded': 'The quota for this operation has been exceeded. Please try again later.',
+      'auth/unauthorized-domain': 'The domain of this URL is not authorized for OAuth operations.'
     };
 
     return errorMessages[code] || 'An unknown error occurred. Please try again.';
@@ -141,7 +293,13 @@ export const useFirebaseAuth = () => {
     signIn,
     signUp,
     signOut,
-    resetPassword
+    resetPassword,
+    sendVerificationEmail,
+    verifyEmail,
+    confirmPasswordReset,
+    updateUserProfile,
+    updateUserEmail,
+    updateUserPassword
   };
 };
 
