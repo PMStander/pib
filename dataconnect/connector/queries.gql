@@ -1,83 +1,150 @@
-# # Example queries for a simple movie app.
+# User queries
+query GetCurrentUser @auth(level: USER) {
+  user(key: {id_expr: "auth.uid"}) {
+    id
+    email
+    display_name
+    photo_url
+    created_at
+    updated_at
+  }
+}
 
-# # @auth() directives control who can call each operation.
-# # Anyone should be able to list all movies, so the auth level is set to PUBLIC
-# query ListMovies @auth(level: PUBLIC) {
-#   movies {
-#     id
-#     title
-#     imageUrl
-#     genre
-#   }
-# }
+query GetUser($id: String!) @auth(level: USER) {
+  user(key: {id: $id}) {
+    id
+    email
+    display_name
+    photo_url
+    created_at
+    updated_at
+  }
+}
 
-# # List all users, only admins should be able to list all users, so we use NO_ACCESS
-# query ListUsers @auth(level: NO_ACCESS) {
-#   users { id, username }
-# }
+query GetUserProfiles @auth(level: USER) {
+  profiles(where: {user_id: {eq_expr: "auth.uid"}}) {
+    id
+    user_id
+    name
+    bio
+    avatar_url
+    skills
+    interests
+    is_default
+    created_at
+    updated_at
+  }
+}
 
-# # Logged in user can list all their reviews and movie titles associated with the review 
-# # Since the query requires the uid of the current authenticated user, the auth level is set to USER
-# query ListUserReviews @auth(level: USER) {
-#   user(key: {id_expr: "auth.uid"}) {
-#     id
-#     username
-#     # <field>_on_<foreign_key_field> makes it easy to grab info from another table
-#     # Here, we use it to grab all the reviews written by the user.
-#     reviews: reviews_on_user {
-#       id
-#       rating
-#       reviewDate
-#       reviewText
-#       movie {
-#         id
-#         title
-#       }
-#     }
-#   }
-# }
+# Workspace queries
+query GetUserWorkspaces @auth(level: USER) {
+  workspace_members(where: {user_id: {eq_expr: "auth.uid"}}) {
+    workspace {
+      id
+      name
+      description
+      logo_url
+      created_by
+      created_at
+      updated_at
+    }
+  }
+}
 
-# # Get movie by id
-# query GetMovieById($id: UUID!) @auth(level: PUBLIC) {
-#   movie(id: $id) {
-#     id
-#     title
-#     imageUrl
-#     genre
-#     metadata: movieMetadata_on_movie {
-#       rating
-#       releaseYear
-#       description
-#     }
-#     reviews: reviews_on_movie {
-#       id
-#       reviewText
-#       reviewDate
-#       rating
-#       user {
-#         id
-#         username
-#       }
-#     }
-#   }
-# }
+query GetWorkspace($id: UUID!) @auth(level: USER) {
+  workspace(key: {id: $id}) {
+    id
+    name
+    description
+    logo_url
+    created_by
+    created_at
+    updated_at
+  }
+}
 
-# # Search for movies, actors, and reviews
-# query SearchMovie(
-#   $titleInput: String
-#   $genre: String
-# ) @auth(level: PUBLIC) {
-#   movies(
-#     where: {
-#       _and: [
-#         { genre: { eq: $genre } }
-#         { title: { contains: $titleInput } }
-#       ]
-#     }
-#   ) {
-#     id
-#     title
-#     genre
-#     imageUrl
-#   }
-# }
+query GetWorkspaceMembers($workspaceId: UUID!) @auth(level: USER) {
+  workspace_members(where: {workspace_id: {eq: $workspaceId}}) {
+    workspace_id
+    user_id
+    profile_id
+    role
+    joined_at
+    user {
+      id
+      email
+      display_name
+      photo_url
+    }
+    profile {
+      id
+      name
+      avatar_url
+    }
+  }
+}
+
+query GetBusinessProfile($workspaceId: UUID!) @auth(level: USER) {
+  business_profile(key: {workspace_id: $workspaceId}) {
+    id
+    workspace_id
+    name
+    industry
+    description
+    location
+    website
+    employee_count
+    created_at
+    updated_at
+  }
+}
+
+query GetPartnerPreferences($workspaceId: UUID!) @auth(level: USER) {
+  partner_preferences(key: {workspace_id: $workspaceId}) {
+    id
+    workspace_id
+    industries
+    locations
+    min_employee_count
+    max_employee_count
+    skills_needed
+    created_at
+    updated_at
+  }
+}
+
+query GetWorkspaceInvitations($workspaceId: UUID!) @auth(level: USER) {
+  workspace_invitations(where: {workspace_id: {eq: $workspaceId}}) {
+    id
+    workspace_id
+    email
+    role
+    invited_by
+    status
+    created_at
+    expires_at
+  }
+}
+
+query GetPendingInvitationsByEmail($email: String!) @auth(level: USER) {
+  workspace_invitations(where: {
+    _and: [
+      {email: {eq: $email}},
+      {status: {eq: "pending"}}
+    ]
+  }) {
+    id
+    workspace_id
+    email
+    role
+    invited_by
+    status
+    created_at
+    expires_at
+    workspace {
+      id
+      name
+      logo_url
+    }
+  }
+}

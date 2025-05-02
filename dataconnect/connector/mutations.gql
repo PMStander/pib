@@ -1,50 +1,240 @@
-# # Example mutations for a simple movie app
+# User mutations
+mutation UpdateUser(
+  $displayName: String,
+  $photoUrl: String
+) @auth(level: USER) {
+  updateUser(
+    id: "auth.uid",
+    display_name: $displayName,
+    photo_url: $photoUrl
+  )
+}
 
-# # Create a movie based on user input
-# mutation CreateMovie(
-#   $title: String!
-#   $genre: String!
-#   $imageUrl: String!
-# ) @auth(level: USER_EMAIL_VERIFIED) {
-#   movie_insert(
-#     data: {
-#       title: $title
-#       genre: $genre
-#       imageUrl: $imageUrl
-#     }
-#   )
-# }
+# Profile mutations
+mutation CreateProfile(
+  $name: String!,
+  $bio: String,
+  $avatarUrl: String,
+  $skills: [String],
+  $interests: [String],
+  $isDefault: Boolean
+) @auth(level: USER) {
+  profile_insert(
+    data: {
+      user_id_expr: "auth.uid",
+      name: $name,
+      bio: $bio,
+      avatar_url: $avatarUrl,
+      skills: $skills,
+      interests: $interests,
+      is_default: $isDefault
+    }
+  )
+}
 
-# # Upsert (update or insert) a user's username based on their auth.uid
-# mutation UpsertUser($username: String!) @auth(level: USER) {
-#   user_upsert(
-#     data: {
-#       id_expr: "auth.uid"
-#       username: $username
-#     }
-#   )
-# }
+mutation UpdateProfile(
+  $id: UUID!,
+  $name: String,
+  $bio: String,
+  $avatarUrl: String,
+  $skills: [String],
+  $interests: [String],
+  $isDefault: Boolean
+) @auth(level: USER) {
+  profile_update(
+    key: { id: $id },
+    data: {
+      name: $name,
+      bio: $bio,
+      avatar_url: $avatarUrl,
+      skills: $skills,
+      interests: $interests,
+      is_default: $isDefault,
+      updated_at_expr: "request.time"
+    }
+  )
+}
 
-# # Add a review for a movie
-# mutation AddReview(
-#   $movieId: UUID!
-#   $rating: Int!
-#   $reviewText: String!
-# ) @auth(level: USER) {
-#   review_upsert(
-#     data: {
-#       userId_expr: "auth.uid"
-#       movieId: $movieId
-#       rating: $rating
-#       reviewText: $reviewText
-#       # reviewDate defaults to today in the schema. No need to set it manually.
-#     }
-#   )
-# }
+mutation DeleteProfile($id: UUID!) @auth(level: USER) {
+  profile_delete(key: { id: $id })
+}
 
-# # Logged in user can delete their review for a movie
-# mutation DeleteReview(
-#   $movieId: UUID!
-# ) @auth(level: USER) {
-#   review_delete(key: { userId_expr: "auth.uid", movieId: $movieId })
-# }
+# Workspace mutations
+mutation CreateWorkspace(
+  $name: String!,
+  $description: String,
+  $logoUrl: String
+) @auth(level: USER) {
+  workspace_insert(
+    data: {
+      name: $name,
+      description: $description,
+      logo_url: $logoUrl,
+      created_by_expr: "auth.uid"
+    }
+  )
+}
+
+mutation UpdateWorkspace(
+  $id: UUID!,
+  $name: String,
+  $description: String,
+  $logoUrl: String
+) @auth(level: USER) {
+  workspace_update(
+    key: { id: $id },
+    data: {
+      name: $name,
+      description: $description,
+      logo_url: $logoUrl,
+      updated_at_expr: "request.time"
+    }
+  )
+}
+
+mutation DeleteWorkspace($id: UUID!) @auth(level: USER) {
+  workspace_delete(key: { id: $id })
+}
+
+# Workspace member mutations
+mutation AddWorkspaceMember(
+  $workspaceId: UUID!,
+  $userId: String!,
+  $profileId: UUID,
+  $role: String!
+) @auth(level: USER) {
+  workspace_member_insert(
+    data: {
+      workspace_id: $workspaceId,
+      user_id: $userId,
+      profile_id: $profileId,
+      role: $role
+    }
+  )
+}
+
+mutation UpdateWorkspaceMember(
+  $workspaceId: UUID!,
+  $userId: String!,
+  $profileId: UUID,
+  $role: String
+) @auth(level: USER) {
+  workspace_member_update(
+    key: { workspace_id: $workspaceId, user_id: $userId },
+    data: {
+      profile_id: $profileId,
+      role: $role
+    }
+  )
+}
+
+mutation RemoveWorkspaceMember(
+  $workspaceId: UUID!,
+  $userId: String!
+) @auth(level: USER) {
+  workspace_member_delete(key: { workspace_id: $workspaceId, user_id: $userId })
+}
+
+# Invitation mutations
+mutation InviteToWorkspace(
+  $workspaceId: UUID!,
+  $email: String!,
+  $role: String!
+) @auth(level: USER) {
+  workspace_invitation_insert(
+    data: {
+      workspace_id: $workspaceId,
+      email: $email,
+      role: $role,
+      invited_by_expr: "auth.uid",
+      status: "pending",
+      expires_at_expr: "dateAdd(request.time, 7, 'day')"
+    }
+  )
+}
+
+mutation AcceptInvitation($invitationId: UUID!) @auth(level: USER) {
+  workspace_invitation_update(
+    key: { id: $invitationId },
+    data: {
+      status: "accepted"
+    }
+  )
+}
+
+mutation DeclineInvitation($invitationId: UUID!) @auth(level: USER) {
+  workspace_invitation_update(
+    key: { id: $invitationId },
+    data: {
+      status: "declined"
+    }
+  )
+}
+
+# Business profile mutations
+mutation CreateBusinessProfile(
+  $workspaceId: UUID!,
+  $name: String!,
+  $industry: String,
+  $description: String,
+  $location: String,
+  $website: String,
+  $employeeCount: Int
+) @auth(level: USER) {
+  business_profile_insert(
+    data: {
+      workspace_id: $workspaceId,
+      name: $name,
+      industry: $industry,
+      description: $description,
+      location: $location,
+      website: $website,
+      employee_count: $employeeCount
+    }
+  )
+}
+
+mutation UpdateBusinessProfile(
+  $id: UUID!,
+  $name: String,
+  $industry: String,
+  $description: String,
+  $location: String,
+  $website: String,
+  $employeeCount: Int
+) @auth(level: USER) {
+  business_profile_update(
+    key: { id: $id },
+    data: {
+      name: $name,
+      industry: $industry,
+      description: $description,
+      location: $location,
+      website: $website,
+      employee_count: $employeeCount,
+      updated_at_expr: "request.time"
+    }
+  )
+}
+
+# Partner preferences mutations
+mutation UpdatePartnerPreferences(
+  $workspaceId: UUID!,
+  $industries: [String],
+  $locations: [String],
+  $minEmployeeCount: Int,
+  $maxEmployeeCount: Int,
+  $skillsNeeded: [String]
+) @auth(level: USER) {
+  partner_preferences_upsert(
+    data: {
+      workspace_id: $workspaceId,
+      industries: $industries,
+      locations: $locations,
+      min_employee_count: $minEmployeeCount,
+      max_employee_count: $maxEmployeeCount,
+      skills_needed: $skillsNeeded,
+      updated_at_expr: "request.time"
+    }
+  )
+}

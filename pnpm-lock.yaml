@@ -11,15 +11,15 @@ importers:
 
   .:
     dependencies:
-      '@firebasegen/default-connector':
-        specifier: link:dataconnect-generated/js/default-connector
-        version: link:dataconnect-generated/js/default-connector
       '@nuxtjs/color-mode':
         specifier: ^3.5.2
         version: 3.5.2(magicast@0.3.5)
       '@nuxtjs/device':
         specifier: ^3.2.4
         version: 3.2.4
+      '@pib/connector':
+        specifier: file:dataconnect-generated/js/pib-connector
+        version: file:dataconnect-generated/js/pib-connector(firebase@11.6.1)
       '@tailwindcss/vite':
         specifier: ^4.1.5
         version: 4.1.5(vite@6.3.4(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(yaml@2.7.1))
@@ -1043,6 +1043,12 @@ packages:
   '@parcel/watcher@2.5.1':
     resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
     engines: {node: '>= 10.0.0'}
+
+  '@pib/connector@file:dataconnect-generated/js/pib-connector':
+    resolution: {directory: dataconnect-generated/js/pib-connector, type: directory}
+    engines: {node: ' >=18.0'}
+    peerDependencies:
+      firebase: ^10.14.0 || ^11.3.0
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -5770,6 +5776,10 @@ snapshots:
       '@parcel/watcher-win32-arm64': 2.5.1
       '@parcel/watcher-win32-ia32': 2.5.1
       '@parcel/watcher-win32-x64': 2.5.1
+
+  '@pib/connector@file:dataconnect-generated/js/pib-connector(firebase@11.6.1)':
+    dependencies:
+      firebase: 11.6.1
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
