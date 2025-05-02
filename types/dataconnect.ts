@@ -8,6 +8,7 @@ export interface User {
   photoUrl: string | null;
   createdAt: Date;
   updatedAt: Date;
+  emailVerified?: boolean;
 
   // Legacy fields for backward compatibility
   display_name?: string | null;
@@ -149,4 +150,20 @@ export interface WorkspaceWithRelationships extends Workspace {
 export interface ProfileWithRelationships extends Profile {
   user?: User;
   workspaces?: WorkspaceMember[];
+}
+
+// Search Result type for vector search
+export interface SearchResult<T> {
+  item: T;
+  distance: number;
+}
+
+// Activity type for user activities
+export interface Activity {
+  description: string;
+  date: Date;
+  type?: string;
+  userId?: string;
+  workspaceId?: string;
+  relatedEntityId?: string;
 }

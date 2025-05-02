@@ -9,6 +9,8 @@ import {
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore"
 import { connectStorageEmulator, getStorage } from "firebase/storage"
 import { getMessaging } from "firebase/messaging"
+import { connectDataConnectEmulator, getDataConnect } from "firebase/data-connect"
+import { connectorConfig } from "@pib/connector"
 
 export const useFirebase = () => {
   const config = useRuntimeConfig()
@@ -19,18 +21,19 @@ export const useFirebase = () => {
   const firebaseApp = initializeApp(firebaseConfig)
   const auth = getAuth(firebaseApp)
   const firestore = getFirestore(firebaseApp)
-  
-  // Initialize storage and messaging only on client side
+
+  // Initialize storage, messaging, and dataConnect
   let storage = null
   let messaging = null
   let vertexAI = null
   let model = null
+  let dataConnect = null
 
   // Check if we're in the browser
   if (process.client) {
     // Initialize storage
     storage = getStorage(firebaseApp)
-    
+
     // Initialize messaging if supported
     try {
       messaging = getMessaging(firebaseApp)
@@ -51,10 +54,10 @@ export const useFirebase = () => {
 
   // Connect to Firestore emulator in development
   if (isDev) {
-    const host = 
-      (firestore.toJSON() as { settings?: { host?: string } }).settings?.host ?? 
+    const host =
+      (firestore.toJSON() as { settings?: { host?: string } }).settings?.host ??
       ""
-    
+
     if (!host.startsWith("localhost")) {
       try {
         connectFirestoreEmulator(firestore, "localhost", 8080)
@@ -67,12 +70,21 @@ export const useFirebase = () => {
     const authUrl = host.startsWith("localhost")
       ? "http://localhost:9099"
       : "http://127.0.0.1:9099"
-    
+
     try {
       connectAuthEmulator(auth, authUrl, { disableWarnings: true })
       console.log("Connected to Auth Emulator")
     } catch (error) {
       console.warn("Error connecting to Auth Emulator:", error)
+    }
+
+    // Initialize and connect to DataConnect emulator
+    try {
+      dataConnect = getDataConnect(connectorConfig)
+      connectDataConnectEmulator(dataConnect, "localhost", 9399)
+      console.log("Connected to DataConnect Emulator")
+    } catch (error) {
+      console.warn("Error connecting to DataConnect Emulator:", error)
     }
   }
 
@@ -91,6 +103,7 @@ export const useFirebase = () => {
     messaging,
     vertexAI,
     model,
+    dataConnect,
     onAuthStateChanged,
   }
 }

@@ -149,6 +149,15 @@
         </NeumorphicCard>
       </div>
       
+      <!-- Vector Search Test -->
+      <div class="mt-12">
+        <h2 class="text-xl font-bold text-[rgb(var(--color-neumorphic-text))] mb-6">
+          AI-Powered Partner Matching
+        </h2>
+        
+        <VectorSearchTest />
+      </div>
+      
       <!-- Component Showcase -->
       <div class="mt-12">
         <h2 class="text-xl font-bold text-[rgb(var(--color-neumorphic-text))] mb-6">
@@ -320,10 +329,12 @@ import NeumorphicToggle from '~/components/neumorphic/Toggle.vue';
 import NeumorphicDatePicker from '~/components/neumorphic/DatePicker.vue';
 import NeumorphicSlider from '~/components/neumorphic/Slider.vue';
 import NeumorphicModal from '~/components/neumorphic/Modal.vue';
+import VectorSearchTest from '~/components/vector-search/VectorSearchTest.vue';
+import type { User, Workspace, Activity } from '~/types/dataconnect';
 
 const props = defineProps({
   user: {
-    type: Object,
+    type: Object as () => User,
     default: () => ({
       displayName: 'John Doe',
       email: 'john.doe@example.com',
@@ -331,7 +342,7 @@ const props = defineProps({
     })
   },
   workspaces: {
-    type: Array,
+    type: Array as () => Workspace[],
     default: () => [
       {
         id: '1',
@@ -346,7 +357,7 @@ const props = defineProps({
     ]
   },
   activities: {
-    type: Array,
+    type: Array as () => Activity[],
     default: () => [
       {
         description: 'You created a new workspace',

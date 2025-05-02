@@ -5,6 +5,10 @@
 - [**Queries**](#queries)
   - [*GetCurrentUser*](#getcurrentuser)
   - [*SearchProfilesByBio*](#searchprofilesbybio)
+  - [*SearchBusinessProfilesByDescription*](#searchbusinessprofilesbydescription)
+  - [*MatchProfileToBusinesses*](#matchprofiletobusinesses)
+  - [*MatchBusinessToProfiles*](#matchbusinesstoprofiles)
+  - [*SearchPartnerPreferences*](#searchpartnerpreferences)
   - [*GetUser*](#getuser)
   - [*GetUserProfiles*](#getuserprofiles)
   - [*GetUserWorkspaces*](#getuserworkspaces)
@@ -13,8 +17,9 @@
   - [*GetBusinessProfile*](#getbusinessprofile)
   - [*GetPartnerPreferences*](#getpartnerpreferences)
   - [*GetWorkspaceInvitations*](#getworkspaceinvitations)
-  - [*GetPendingInvitationsByEmail*](#getpendinginvitationsbyemail)
+  - [*GetPendingInvitations*](#getpendinginvitations)
 - [**Mutations**](#mutations)
+  - [*CreateUser*](#createuser)
   - [*UpdateUser*](#updateuser)
   - [*CreateProfile*](#createprofile)
   - [*CreateProfileWithBio*](#createprofilewithbio)
@@ -24,6 +29,7 @@
   - [*CreateWorkspace*](#createworkspace)
   - [*UpdateWorkspace*](#updateworkspace)
   - [*DeleteWorkspace*](#deleteworkspace)
+  - [*JoinWorkspaceUser*](#joinworkspaceuser)
   - [*AddWorkspaceMember*](#addworkspacemember)
   - [*UpdateWorkspaceMember*](#updateworkspacemember)
   - [*RemoveWorkspaceMember*](#removeworkspacemember)
@@ -241,9 +247,6 @@ export interface SearchProfilesByBioData {
     skills?: string[] | null;
     interests?: string[] | null;
     avatarUrl?: string | null;
-    _metadata?: {
-      distance?: number | null;
-    };
   } & Profile_Key)[];
 }
 ```
@@ -309,6 +312,479 @@ console.log(data.profiles_bioEmbedding_similarity);
 executeQuery(ref).then((response) => {
   const data = response.data;
   console.log(data.profiles_bioEmbedding_similarity);
+});
+```
+
+## SearchBusinessProfilesByDescription
+You can execute the `SearchBusinessProfilesByDescription` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+searchBusinessProfilesByDescription(vars: SearchBusinessProfilesByDescriptionVariables): QueryPromise<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+
+interface SearchBusinessProfilesByDescriptionRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: SearchBusinessProfilesByDescriptionVariables): QueryRef<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+}
+export const searchBusinessProfilesByDescriptionRef: SearchBusinessProfilesByDescriptionRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+searchBusinessProfilesByDescription(dc: DataConnect, vars: SearchBusinessProfilesByDescriptionVariables): QueryPromise<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+
+interface SearchBusinessProfilesByDescriptionRef {
+  ...
+  (dc: DataConnect, vars: SearchBusinessProfilesByDescriptionVariables): QueryRef<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+}
+export const searchBusinessProfilesByDescriptionRef: SearchBusinessProfilesByDescriptionRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the searchBusinessProfilesByDescriptionRef:
+```typescript
+const name = searchBusinessProfilesByDescriptionRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `SearchBusinessProfilesByDescription` query requires an argument of type `SearchBusinessProfilesByDescriptionVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface SearchBusinessProfilesByDescriptionVariables {
+  searchText: string;
+  limit?: number | null;
+}
+```
+### Return Type
+Recall that executing the `SearchBusinessProfilesByDescription` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `SearchBusinessProfilesByDescriptionData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface SearchBusinessProfilesByDescriptionData {
+  businessProfiles_descriptionEmbedding_similarity: ({
+    id: UUIDString;
+    workspaceId: UUIDString;
+    name: string;
+    industry?: string | null;
+    description?: string | null;
+    location?: string | null;
+    website?: string | null;
+    employeeCount?: number | null;
+  } & BusinessProfile_Key)[];
+}
+```
+### Using `SearchBusinessProfilesByDescription`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, searchBusinessProfilesByDescription, SearchBusinessProfilesByDescriptionVariables } from '@firebasegen/pib-connector';
+
+// The `SearchBusinessProfilesByDescription` query requires an argument of type `SearchBusinessProfilesByDescriptionVariables`:
+const searchBusinessProfilesByDescriptionVars: SearchBusinessProfilesByDescriptionVariables = {
+  searchText: ..., 
+  limit: ..., // optional
+};
+
+// Call the `searchBusinessProfilesByDescription()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await searchBusinessProfilesByDescription(searchBusinessProfilesByDescriptionVars);
+// Variables can be defined inline as well.
+const { data } = await searchBusinessProfilesByDescription({ searchText: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await searchBusinessProfilesByDescription(dataConnect, searchBusinessProfilesByDescriptionVars);
+
+console.log(data.businessProfiles_descriptionEmbedding_similarity);
+
+// Or, you can use the `Promise` API.
+searchBusinessProfilesByDescription(searchBusinessProfilesByDescriptionVars).then((response) => {
+  const data = response.data;
+  console.log(data.businessProfiles_descriptionEmbedding_similarity);
+});
+```
+
+### Using `SearchBusinessProfilesByDescription`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, searchBusinessProfilesByDescriptionRef, SearchBusinessProfilesByDescriptionVariables } from '@firebasegen/pib-connector';
+
+// The `SearchBusinessProfilesByDescription` query requires an argument of type `SearchBusinessProfilesByDescriptionVariables`:
+const searchBusinessProfilesByDescriptionVars: SearchBusinessProfilesByDescriptionVariables = {
+  searchText: ..., 
+  limit: ..., // optional
+};
+
+// Call the `searchBusinessProfilesByDescriptionRef()` function to get a reference to the query.
+const ref = searchBusinessProfilesByDescriptionRef(searchBusinessProfilesByDescriptionVars);
+// Variables can be defined inline as well.
+const ref = searchBusinessProfilesByDescriptionRef({ searchText: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = searchBusinessProfilesByDescriptionRef(dataConnect, searchBusinessProfilesByDescriptionVars);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.businessProfiles_descriptionEmbedding_similarity);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.businessProfiles_descriptionEmbedding_similarity);
+});
+```
+
+## MatchProfileToBusinesses
+You can execute the `MatchProfileToBusinesses` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+matchProfileToBusinesses(vars: MatchProfileToBusinessesVariables): QueryPromise<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+
+interface MatchProfileToBusinessesRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: MatchProfileToBusinessesVariables): QueryRef<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+}
+export const matchProfileToBusinessesRef: MatchProfileToBusinessesRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+matchProfileToBusinesses(dc: DataConnect, vars: MatchProfileToBusinessesVariables): QueryPromise<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+
+interface MatchProfileToBusinessesRef {
+  ...
+  (dc: DataConnect, vars: MatchProfileToBusinessesVariables): QueryRef<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+}
+export const matchProfileToBusinessesRef: MatchProfileToBusinessesRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the matchProfileToBusinessesRef:
+```typescript
+const name = matchProfileToBusinessesRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `MatchProfileToBusinesses` query requires an argument of type `MatchProfileToBusinessesVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface MatchProfileToBusinessesVariables {
+  profileId: UUIDString;
+  limit?: number | null;
+}
+```
+### Return Type
+Recall that executing the `MatchProfileToBusinesses` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `MatchProfileToBusinessesData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface MatchProfileToBusinessesData {
+  profile?: {
+    id: UUIDString;
+    name: string;
+    bio?: string | null;
+  } & Profile_Key;
+}
+```
+### Using `MatchProfileToBusinesses`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, matchProfileToBusinesses, MatchProfileToBusinessesVariables } from '@firebasegen/pib-connector';
+
+// The `MatchProfileToBusinesses` query requires an argument of type `MatchProfileToBusinessesVariables`:
+const matchProfileToBusinessesVars: MatchProfileToBusinessesVariables = {
+  profileId: ..., 
+  limit: ..., // optional
+};
+
+// Call the `matchProfileToBusinesses()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await matchProfileToBusinesses(matchProfileToBusinessesVars);
+// Variables can be defined inline as well.
+const { data } = await matchProfileToBusinesses({ profileId: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await matchProfileToBusinesses(dataConnect, matchProfileToBusinessesVars);
+
+console.log(data.profile);
+
+// Or, you can use the `Promise` API.
+matchProfileToBusinesses(matchProfileToBusinessesVars).then((response) => {
+  const data = response.data;
+  console.log(data.profile);
+});
+```
+
+### Using `MatchProfileToBusinesses`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, matchProfileToBusinessesRef, MatchProfileToBusinessesVariables } from '@firebasegen/pib-connector';
+
+// The `MatchProfileToBusinesses` query requires an argument of type `MatchProfileToBusinessesVariables`:
+const matchProfileToBusinessesVars: MatchProfileToBusinessesVariables = {
+  profileId: ..., 
+  limit: ..., // optional
+};
+
+// Call the `matchProfileToBusinessesRef()` function to get a reference to the query.
+const ref = matchProfileToBusinessesRef(matchProfileToBusinessesVars);
+// Variables can be defined inline as well.
+const ref = matchProfileToBusinessesRef({ profileId: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = matchProfileToBusinessesRef(dataConnect, matchProfileToBusinessesVars);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.profile);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.profile);
+});
+```
+
+## MatchBusinessToProfiles
+You can execute the `MatchBusinessToProfiles` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+matchBusinessToProfiles(vars: MatchBusinessToProfilesVariables): QueryPromise<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+
+interface MatchBusinessToProfilesRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: MatchBusinessToProfilesVariables): QueryRef<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+}
+export const matchBusinessToProfilesRef: MatchBusinessToProfilesRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+matchBusinessToProfiles(dc: DataConnect, vars: MatchBusinessToProfilesVariables): QueryPromise<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+
+interface MatchBusinessToProfilesRef {
+  ...
+  (dc: DataConnect, vars: MatchBusinessToProfilesVariables): QueryRef<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+}
+export const matchBusinessToProfilesRef: MatchBusinessToProfilesRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the matchBusinessToProfilesRef:
+```typescript
+const name = matchBusinessToProfilesRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `MatchBusinessToProfiles` query requires an argument of type `MatchBusinessToProfilesVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface MatchBusinessToProfilesVariables {
+  businessProfileId: UUIDString;
+  limit?: number | null;
+}
+```
+### Return Type
+Recall that executing the `MatchBusinessToProfiles` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `MatchBusinessToProfilesData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface MatchBusinessToProfilesData {
+  businessProfile?: {
+    id: UUIDString;
+    name: string;
+    description?: string | null;
+  } & BusinessProfile_Key;
+}
+```
+### Using `MatchBusinessToProfiles`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, matchBusinessToProfiles, MatchBusinessToProfilesVariables } from '@firebasegen/pib-connector';
+
+// The `MatchBusinessToProfiles` query requires an argument of type `MatchBusinessToProfilesVariables`:
+const matchBusinessToProfilesVars: MatchBusinessToProfilesVariables = {
+  businessProfileId: ..., 
+  limit: ..., // optional
+};
+
+// Call the `matchBusinessToProfiles()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await matchBusinessToProfiles(matchBusinessToProfilesVars);
+// Variables can be defined inline as well.
+const { data } = await matchBusinessToProfiles({ businessProfileId: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await matchBusinessToProfiles(dataConnect, matchBusinessToProfilesVars);
+
+console.log(data.businessProfile);
+
+// Or, you can use the `Promise` API.
+matchBusinessToProfiles(matchBusinessToProfilesVars).then((response) => {
+  const data = response.data;
+  console.log(data.businessProfile);
+});
+```
+
+### Using `MatchBusinessToProfiles`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, matchBusinessToProfilesRef, MatchBusinessToProfilesVariables } from '@firebasegen/pib-connector';
+
+// The `MatchBusinessToProfiles` query requires an argument of type `MatchBusinessToProfilesVariables`:
+const matchBusinessToProfilesVars: MatchBusinessToProfilesVariables = {
+  businessProfileId: ..., 
+  limit: ..., // optional
+};
+
+// Call the `matchBusinessToProfilesRef()` function to get a reference to the query.
+const ref = matchBusinessToProfilesRef(matchBusinessToProfilesVars);
+// Variables can be defined inline as well.
+const ref = matchBusinessToProfilesRef({ businessProfileId: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = matchBusinessToProfilesRef(dataConnect, matchBusinessToProfilesVars);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.businessProfile);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.businessProfile);
+});
+```
+
+## SearchPartnerPreferences
+You can execute the `SearchPartnerPreferences` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+searchPartnerPreferences(vars: SearchPartnerPreferencesVariables): QueryPromise<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+
+interface SearchPartnerPreferencesRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: SearchPartnerPreferencesVariables): QueryRef<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+}
+export const searchPartnerPreferencesRef: SearchPartnerPreferencesRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+searchPartnerPreferences(dc: DataConnect, vars: SearchPartnerPreferencesVariables): QueryPromise<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+
+interface SearchPartnerPreferencesRef {
+  ...
+  (dc: DataConnect, vars: SearchPartnerPreferencesVariables): QueryRef<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+}
+export const searchPartnerPreferencesRef: SearchPartnerPreferencesRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the searchPartnerPreferencesRef:
+```typescript
+const name = searchPartnerPreferencesRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `SearchPartnerPreferences` query requires an argument of type `SearchPartnerPreferencesVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface SearchPartnerPreferencesVariables {
+  searchText: string;
+  limit?: number | null;
+}
+```
+### Return Type
+Recall that executing the `SearchPartnerPreferences` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `SearchPartnerPreferencesData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface SearchPartnerPreferencesData {
+  partnerPreferencess_combinedEmbedding_similarity: ({
+    id: UUIDString;
+    workspaceId: UUIDString;
+    industries?: string[] | null;
+    locations?: string[] | null;
+    minEmployeeCount?: number | null;
+    maxEmployeeCount?: number | null;
+    skillsNeeded?: string[] | null;
+  } & PartnerPreferences_Key)[];
+}
+```
+### Using `SearchPartnerPreferences`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, searchPartnerPreferences, SearchPartnerPreferencesVariables } from '@firebasegen/pib-connector';
+
+// The `SearchPartnerPreferences` query requires an argument of type `SearchPartnerPreferencesVariables`:
+const searchPartnerPreferencesVars: SearchPartnerPreferencesVariables = {
+  searchText: ..., 
+  limit: ..., // optional
+};
+
+// Call the `searchPartnerPreferences()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await searchPartnerPreferences(searchPartnerPreferencesVars);
+// Variables can be defined inline as well.
+const { data } = await searchPartnerPreferences({ searchText: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await searchPartnerPreferences(dataConnect, searchPartnerPreferencesVars);
+
+console.log(data.partnerPreferencess_combinedEmbedding_similarity);
+
+// Or, you can use the `Promise` API.
+searchPartnerPreferences(searchPartnerPreferencesVars).then((response) => {
+  const data = response.data;
+  console.log(data.partnerPreferencess_combinedEmbedding_similarity);
+});
+```
+
+### Using `SearchPartnerPreferences`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, searchPartnerPreferencesRef, SearchPartnerPreferencesVariables } from '@firebasegen/pib-connector';
+
+// The `SearchPartnerPreferences` query requires an argument of type `SearchPartnerPreferencesVariables`:
+const searchPartnerPreferencesVars: SearchPartnerPreferencesVariables = {
+  searchText: ..., 
+  limit: ..., // optional
+};
+
+// Call the `searchPartnerPreferencesRef()` function to get a reference to the query.
+const ref = searchPartnerPreferencesRef(searchPartnerPreferencesVars);
+// Variables can be defined inline as well.
+const ref = searchPartnerPreferencesRef({ searchText: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = searchPartnerPreferencesRef(dataConnect, searchPartnerPreferencesVars);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.partnerPreferencess_combinedEmbedding_similarity);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.partnerPreferencess_combinedEmbedding_similarity);
 });
 ```
 
@@ -533,22 +1009,22 @@ executeQuery(ref).then((response) => {
 ## GetUserWorkspaces
 You can execute the `GetUserWorkspaces` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
 ```typescript
-getUserWorkspaces(): QueryPromise<GetUserWorkspacesData, undefined>;
+getUserWorkspaces(vars: GetUserWorkspacesVariables): QueryPromise<GetUserWorkspacesData, GetUserWorkspacesVariables>;
 
 interface GetUserWorkspacesRef {
   ...
   /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetUserWorkspacesData, undefined>;
+  (vars: GetUserWorkspacesVariables): QueryRef<GetUserWorkspacesData, GetUserWorkspacesVariables>;
 }
 export const getUserWorkspacesRef: GetUserWorkspacesRef;
 ```
 You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
 ```typescript
-getUserWorkspaces(dc: DataConnect): QueryPromise<GetUserWorkspacesData, undefined>;
+getUserWorkspaces(dc: DataConnect, vars: GetUserWorkspacesVariables): QueryPromise<GetUserWorkspacesData, GetUserWorkspacesVariables>;
 
 interface GetUserWorkspacesRef {
   ...
-  (dc: DataConnect): QueryRef<GetUserWorkspacesData, undefined>;
+  (dc: DataConnect, vars: GetUserWorkspacesVariables): QueryRef<GetUserWorkspacesData, GetUserWorkspacesVariables>;
 }
 export const getUserWorkspacesRef: GetUserWorkspacesRef;
 ```
@@ -560,15 +1036,29 @@ console.log(name);
 ```
 
 ### Variables
-The `GetUserWorkspaces` query has no variables.
+The `GetUserWorkspaces` query requires an argument of type `GetUserWorkspacesVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface GetUserWorkspacesVariables {
+  userId: string;
+}
+```
 ### Return Type
 Recall that executing the `GetUserWorkspaces` query returns a `QueryPromise` that resolves to an object with a `data` property.
 
 The `data` property is an object of type `GetUserWorkspacesData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
 ```typescript
 export interface GetUserWorkspacesData {
-  workspaceMembers: ({
-    workspaceId: UUIDString;
+  workspaceUsers: ({
+    workspace: {
+      id: UUIDString;
+      name: string;
+      description?: string | null;
+      logoUrl?: string | null;
+      createdBy: string;
+      createdAt: TimestampString;
+      updatedAt: TimestampString;
+    } & Workspace_Key;
   })[];
 }
 ```
@@ -576,23 +1066,29 @@ export interface GetUserWorkspacesData {
 
 ```typescript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, getUserWorkspaces } from '@firebasegen/pib-connector';
+import { connectorConfig, getUserWorkspaces, GetUserWorkspacesVariables } from '@firebasegen/pib-connector';
 
+// The `GetUserWorkspaces` query requires an argument of type `GetUserWorkspacesVariables`:
+const getUserWorkspacesVars: GetUserWorkspacesVariables = {
+  userId: ..., 
+};
 
 // Call the `getUserWorkspaces()` function to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await getUserWorkspaces();
+const { data } = await getUserWorkspaces(getUserWorkspacesVars);
+// Variables can be defined inline as well.
+const { data } = await getUserWorkspaces({ userId: ..., });
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
-const { data } = await getUserWorkspaces(dataConnect);
+const { data } = await getUserWorkspaces(dataConnect, getUserWorkspacesVars);
 
-console.log(data.workspaceMembers);
+console.log(data.workspaceUsers);
 
 // Or, you can use the `Promise` API.
-getUserWorkspaces().then((response) => {
+getUserWorkspaces(getUserWorkspacesVars).then((response) => {
   const data = response.data;
-  console.log(data.workspaceMembers);
+  console.log(data.workspaceUsers);
 });
 ```
 
@@ -600,26 +1096,32 @@ getUserWorkspaces().then((response) => {
 
 ```typescript
 import { getDataConnect, executeQuery } from 'firebase/data-connect';
-import { connectorConfig, getUserWorkspacesRef } from '@firebasegen/pib-connector';
+import { connectorConfig, getUserWorkspacesRef, GetUserWorkspacesVariables } from '@firebasegen/pib-connector';
 
+// The `GetUserWorkspaces` query requires an argument of type `GetUserWorkspacesVariables`:
+const getUserWorkspacesVars: GetUserWorkspacesVariables = {
+  userId: ..., 
+};
 
 // Call the `getUserWorkspacesRef()` function to get a reference to the query.
-const ref = getUserWorkspacesRef();
+const ref = getUserWorkspacesRef(getUserWorkspacesVars);
+// Variables can be defined inline as well.
+const ref = getUserWorkspacesRef({ userId: ..., });
 
 // You can also pass in a `DataConnect` instance to the `QueryRef` function.
 const dataConnect = getDataConnect(connectorConfig);
-const ref = getUserWorkspacesRef(dataConnect);
+const ref = getUserWorkspacesRef(dataConnect, getUserWorkspacesVars);
 
 // Call `executeQuery()` on the reference to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
 const { data } = await executeQuery(ref);
 
-console.log(data.workspaceMembers);
+console.log(data.workspaceUsers);
 
 // Or, you can use the `Promise` API.
 executeQuery(ref).then((response) => {
   const data = response.data;
-  console.log(data.workspaceMembers);
+  console.log(data.workspaceUsers);
 });
 ```
 
@@ -784,12 +1286,11 @@ The `data` property is an object of type `GetWorkspaceMembersData`, which is def
 ```typescript
 export interface GetWorkspaceMembersData {
   workspaceMembers: ({
-    workspaceId: UUIDString;
-    userId: string;
-    profileId?: UUIDString | null;
     role: string;
     joinedAt: TimestampString;
-  } & WorkspaceMember_Key)[];
+    userId: string;
+    profileId?: UUIDString | null;
+  })[];
 }
 ```
 ### Using `GetWorkspaceMembers`'s action shortcut function
@@ -1212,110 +1713,110 @@ executeQuery(ref).then((response) => {
 });
 ```
 
-## GetPendingInvitationsByEmail
-You can execute the `GetPendingInvitationsByEmail` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+## GetPendingInvitations
+You can execute the `GetPendingInvitations` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
 ```typescript
-getPendingInvitationsByEmail(vars: GetPendingInvitationsByEmailVariables): QueryPromise<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+getPendingInvitations(vars: GetPendingInvitationsVariables): QueryPromise<GetPendingInvitationsData, GetPendingInvitationsVariables>;
 
-interface GetPendingInvitationsByEmailRef {
+interface GetPendingInvitationsRef {
   ...
   /* Allow users to create refs without passing in DataConnect */
-  (vars: GetPendingInvitationsByEmailVariables): QueryRef<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+  (vars: GetPendingInvitationsVariables): QueryRef<GetPendingInvitationsData, GetPendingInvitationsVariables>;
 }
-export const getPendingInvitationsByEmailRef: GetPendingInvitationsByEmailRef;
+export const getPendingInvitationsRef: GetPendingInvitationsRef;
 ```
 You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
 ```typescript
-getPendingInvitationsByEmail(dc: DataConnect, vars: GetPendingInvitationsByEmailVariables): QueryPromise<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+getPendingInvitations(dc: DataConnect, vars: GetPendingInvitationsVariables): QueryPromise<GetPendingInvitationsData, GetPendingInvitationsVariables>;
 
-interface GetPendingInvitationsByEmailRef {
+interface GetPendingInvitationsRef {
   ...
-  (dc: DataConnect, vars: GetPendingInvitationsByEmailVariables): QueryRef<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+  (dc: DataConnect, vars: GetPendingInvitationsVariables): QueryRef<GetPendingInvitationsData, GetPendingInvitationsVariables>;
 }
-export const getPendingInvitationsByEmailRef: GetPendingInvitationsByEmailRef;
+export const getPendingInvitationsRef: GetPendingInvitationsRef;
 ```
 
-If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the getPendingInvitationsByEmailRef:
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the getPendingInvitationsRef:
 ```typescript
-const name = getPendingInvitationsByEmailRef.operationName;
+const name = getPendingInvitationsRef.operationName;
 console.log(name);
 ```
 
 ### Variables
-The `GetPendingInvitationsByEmail` query requires an argument of type `GetPendingInvitationsByEmailVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+The `GetPendingInvitations` query requires an argument of type `GetPendingInvitationsVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
 
 ```typescript
-export interface GetPendingInvitationsByEmailVariables {
+export interface GetPendingInvitationsVariables {
   email: string;
 }
 ```
 ### Return Type
-Recall that executing the `GetPendingInvitationsByEmail` query returns a `QueryPromise` that resolves to an object with a `data` property.
+Recall that executing the `GetPendingInvitations` query returns a `QueryPromise` that resolves to an object with a `data` property.
 
-The `data` property is an object of type `GetPendingInvitationsByEmailData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+The `data` property is an object of type `GetPendingInvitationsData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
 ```typescript
-export interface GetPendingInvitationsByEmailData {
+export interface GetPendingInvitationsData {
   workspaceInvitations: ({
     id: UUIDString;
-    workspaceId: UUIDString;
     email: string;
     role: string;
-    invitedBy: string;
     status: string;
     createdAt: TimestampString;
     expiresAt?: TimestampString | null;
+    workspaceId: UUIDString;
+    invitedBy: string;
   } & WorkspaceInvitation_Key)[];
 }
 ```
-### Using `GetPendingInvitationsByEmail`'s action shortcut function
+### Using `GetPendingInvitations`'s action shortcut function
 
 ```typescript
 import { getDataConnect } from 'firebase/data-connect';
-import { connectorConfig, getPendingInvitationsByEmail, GetPendingInvitationsByEmailVariables } from '@firebasegen/pib-connector';
+import { connectorConfig, getPendingInvitations, GetPendingInvitationsVariables } from '@firebasegen/pib-connector';
 
-// The `GetPendingInvitationsByEmail` query requires an argument of type `GetPendingInvitationsByEmailVariables`:
-const getPendingInvitationsByEmailVars: GetPendingInvitationsByEmailVariables = {
+// The `GetPendingInvitations` query requires an argument of type `GetPendingInvitationsVariables`:
+const getPendingInvitationsVars: GetPendingInvitationsVariables = {
   email: ..., 
 };
 
-// Call the `getPendingInvitationsByEmail()` function to execute the query.
+// Call the `getPendingInvitations()` function to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
-const { data } = await getPendingInvitationsByEmail(getPendingInvitationsByEmailVars);
+const { data } = await getPendingInvitations(getPendingInvitationsVars);
 // Variables can be defined inline as well.
-const { data } = await getPendingInvitationsByEmail({ email: ..., });
+const { data } = await getPendingInvitations({ email: ..., });
 
 // You can also pass in a `DataConnect` instance to the action shortcut function.
 const dataConnect = getDataConnect(connectorConfig);
-const { data } = await getPendingInvitationsByEmail(dataConnect, getPendingInvitationsByEmailVars);
+const { data } = await getPendingInvitations(dataConnect, getPendingInvitationsVars);
 
 console.log(data.workspaceInvitations);
 
 // Or, you can use the `Promise` API.
-getPendingInvitationsByEmail(getPendingInvitationsByEmailVars).then((response) => {
+getPendingInvitations(getPendingInvitationsVars).then((response) => {
   const data = response.data;
   console.log(data.workspaceInvitations);
 });
 ```
 
-### Using `GetPendingInvitationsByEmail`'s `QueryRef` function
+### Using `GetPendingInvitations`'s `QueryRef` function
 
 ```typescript
 import { getDataConnect, executeQuery } from 'firebase/data-connect';
-import { connectorConfig, getPendingInvitationsByEmailRef, GetPendingInvitationsByEmailVariables } from '@firebasegen/pib-connector';
+import { connectorConfig, getPendingInvitationsRef, GetPendingInvitationsVariables } from '@firebasegen/pib-connector';
 
-// The `GetPendingInvitationsByEmail` query requires an argument of type `GetPendingInvitationsByEmailVariables`:
-const getPendingInvitationsByEmailVars: GetPendingInvitationsByEmailVariables = {
+// The `GetPendingInvitations` query requires an argument of type `GetPendingInvitationsVariables`:
+const getPendingInvitationsVars: GetPendingInvitationsVariables = {
   email: ..., 
 };
 
-// Call the `getPendingInvitationsByEmailRef()` function to get a reference to the query.
-const ref = getPendingInvitationsByEmailRef(getPendingInvitationsByEmailVars);
+// Call the `getPendingInvitationsRef()` function to get a reference to the query.
+const ref = getPendingInvitationsRef(getPendingInvitationsVars);
 // Variables can be defined inline as well.
-const ref = getPendingInvitationsByEmailRef({ email: ..., });
+const ref = getPendingInvitationsRef({ email: ..., });
 
 // You can also pass in a `DataConnect` instance to the `QueryRef` function.
 const dataConnect = getDataConnect(connectorConfig);
-const ref = getPendingInvitationsByEmailRef(dataConnect, getPendingInvitationsByEmailVars);
+const ref = getPendingInvitationsRef(dataConnect, getPendingInvitationsVars);
 
 // Call `executeQuery()` on the reference to execute the query.
 // You can use the `await` keyword to wait for the promise to resolve.
@@ -1344,6 +1845,121 @@ The following is true for both the action shortcut function and the `MutationRef
 - Both functions can be called with or without passing in a `DataConnect` instance as an argument. If no `DataConnect` argument is passed in, then the generated SDK will call `getDataConnect(connectorConfig)` behind the scenes for you.
 
 Below are examples of how to use the `pib` connector's generated functions to execute each mutation. You can also follow the examples from the [Data Connect documentation](https://firebase.google.com/docs/data-connect/web-sdk#using-mutations).
+
+## CreateUser
+You can execute the `CreateUser` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+createUser(vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
+
+interface CreateUserRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateUserVariables): MutationRef<CreateUserData, CreateUserVariables>;
+}
+export const createUserRef: CreateUserRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+createUser(dc: DataConnect, vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
+
+interface CreateUserRef {
+  ...
+  (dc: DataConnect, vars: CreateUserVariables): MutationRef<CreateUserData, CreateUserVariables>;
+}
+export const createUserRef: CreateUserRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createUserRef:
+```typescript
+const name = createUserRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `CreateUser` mutation requires an argument of type `CreateUserVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface CreateUserVariables {
+  email: string;
+  displayName?: string | null;
+  photoUrl?: string | null;
+}
+```
+### Return Type
+Recall that executing the `CreateUser` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `CreateUserData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface CreateUserData {
+  createUser: User_Key;
+}
+```
+### Using `CreateUser`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, createUser, CreateUserVariables } from '@firebasegen/pib-connector';
+
+// The `CreateUser` mutation requires an argument of type `CreateUserVariables`:
+const createUserVars: CreateUserVariables = {
+  email: ..., 
+  displayName: ..., // optional
+  photoUrl: ..., // optional
+};
+
+// Call the `createUser()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await createUser(createUserVars);
+// Variables can be defined inline as well.
+const { data } = await createUser({ email: ..., displayName: ..., photoUrl: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await createUser(dataConnect, createUserVars);
+
+console.log(data.createUser);
+
+// Or, you can use the `Promise` API.
+createUser(createUserVars).then((response) => {
+  const data = response.data;
+  console.log(data.createUser);
+});
+```
+
+### Using `CreateUser`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, createUserRef, CreateUserVariables } from '@firebasegen/pib-connector';
+
+// The `CreateUser` mutation requires an argument of type `CreateUserVariables`:
+const createUserVars: CreateUserVariables = {
+  email: ..., 
+  displayName: ..., // optional
+  photoUrl: ..., // optional
+};
+
+// Call the `createUserRef()` function to get a reference to the mutation.
+const ref = createUserRef(createUserVars);
+// Variables can be defined inline as well.
+const ref = createUserRef({ email: ..., displayName: ..., photoUrl: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = createUserRef(dataConnect, createUserVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.createUser);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.createUser);
+});
+```
 
 ## UpdateUser
 You can execute the `UpdateUser` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
@@ -2411,6 +3027,121 @@ console.log(data.deleteWorkspace);
 executeMutation(ref).then((response) => {
   const data = response.data;
   console.log(data.deleteWorkspace);
+});
+```
+
+## JoinWorkspaceUser
+You can execute the `JoinWorkspaceUser` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+joinWorkspaceUser(vars: JoinWorkspaceUserVariables): MutationPromise<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+
+interface JoinWorkspaceUserRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: JoinWorkspaceUserVariables): MutationRef<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+}
+export const joinWorkspaceUserRef: JoinWorkspaceUserRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+joinWorkspaceUser(dc: DataConnect, vars: JoinWorkspaceUserVariables): MutationPromise<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+
+interface JoinWorkspaceUserRef {
+  ...
+  (dc: DataConnect, vars: JoinWorkspaceUserVariables): MutationRef<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+}
+export const joinWorkspaceUserRef: JoinWorkspaceUserRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the joinWorkspaceUserRef:
+```typescript
+const name = joinWorkspaceUserRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `JoinWorkspaceUser` mutation requires an argument of type `JoinWorkspaceUserVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface JoinWorkspaceUserVariables {
+  workspaceId: UUIDString;
+  userId: string;
+  role: string;
+}
+```
+### Return Type
+Recall that executing the `JoinWorkspaceUser` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `JoinWorkspaceUserData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface JoinWorkspaceUserData {
+  createWorkspaceUser: WorkspaceUser_Key;
+}
+```
+### Using `JoinWorkspaceUser`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, joinWorkspaceUser, JoinWorkspaceUserVariables } from '@firebasegen/pib-connector';
+
+// The `JoinWorkspaceUser` mutation requires an argument of type `JoinWorkspaceUserVariables`:
+const joinWorkspaceUserVars: JoinWorkspaceUserVariables = {
+  workspaceId: ..., 
+  userId: ..., 
+  role: ..., 
+};
+
+// Call the `joinWorkspaceUser()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await joinWorkspaceUser(joinWorkspaceUserVars);
+// Variables can be defined inline as well.
+const { data } = await joinWorkspaceUser({ workspaceId: ..., userId: ..., role: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await joinWorkspaceUser(dataConnect, joinWorkspaceUserVars);
+
+console.log(data.createWorkspaceUser);
+
+// Or, you can use the `Promise` API.
+joinWorkspaceUser(joinWorkspaceUserVars).then((response) => {
+  const data = response.data;
+  console.log(data.createWorkspaceUser);
+});
+```
+
+### Using `JoinWorkspaceUser`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, joinWorkspaceUserRef, JoinWorkspaceUserVariables } from '@firebasegen/pib-connector';
+
+// The `JoinWorkspaceUser` mutation requires an argument of type `JoinWorkspaceUserVariables`:
+const joinWorkspaceUserVars: JoinWorkspaceUserVariables = {
+  workspaceId: ..., 
+  userId: ..., 
+  role: ..., 
+};
+
+// Call the `joinWorkspaceUserRef()` function to get a reference to the mutation.
+const ref = joinWorkspaceUserRef(joinWorkspaceUserVars);
+// Variables can be defined inline as well.
+const ref = joinWorkspaceUserRef({ workspaceId: ..., userId: ..., role: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = joinWorkspaceUserRef(dataConnect, joinWorkspaceUserVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.createWorkspaceUser);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.createWorkspaceUser);
 });
 ```
 

@@ -292,6 +292,40 @@ extend type PartnerPreferences {
 }
 extend type Profile {
   """
+  ✨ List `WorkspaceMember` objects in a one-to-many relationship (where `WorkspaceMember`.`profile` is this object).
+  """
+  workspaceMembers_on_profile(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceMember_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceMember_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceMember_Having
+  ): [WorkspaceMember!]! @fdc_generated(from: "WorkspaceMember.profile", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
   _metadata: _Metadata @fdc_generated(from: "Profile", purpose: METADATA_FIELD)
@@ -399,6 +433,142 @@ extend type Profile {
 }
 extend type User {
   """
+  ✨ List `WorkspaceMember` objects in a one-to-many relationship (where `WorkspaceMember`.`user` is this object).
+  """
+  workspaceMembers_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceMember_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceMember_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceMember_Having
+  ): [WorkspaceMember!]! @fdc_generated(from: "WorkspaceMember.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `WorkspaceUser` objects in a one-to-many relationship (where `WorkspaceUser`.`user` is this object).
+  """
+  workspaceUsers_on_user(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceUser_Having
+  ): [WorkspaceUser!]! @fdc_generated(from: "WorkspaceUser.user", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `Workspace` objects using `WorkspaceMember` as the join table (a `WorkspaceMember` object exists where its `user` is this and its `workspace` is that).
+  """
+  workspaces_via_WorkspaceMember(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceMember_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceMember_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceMember_Having
+  ): [Workspace!]! @fdc_generated(from: "WorkspaceMember", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `Workspace` objects using `WorkspaceUser` as the join table (a `WorkspaceUser` object exists where its `user` is this and its `workspace` is that).
+  """
+  workspaces_via_WorkspaceUser(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceUser_Having
+  ): [Workspace!]! @fdc_generated(from: "WorkspaceUser", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
   _metadata: _Metadata @fdc_generated(from: "User", purpose: METADATA_FIELD)
@@ -478,6 +648,142 @@ extend type User {
   updatedAt_max: Timestamp @fdc_generated(from: "User.updatedAt", purpose: QUERY_MAX)
 }
 extend type Workspace {
+  """
+  ✨ List `WorkspaceMember` objects in a one-to-many relationship (where `WorkspaceMember`.`workspace` is this object).
+  """
+  workspaceMembers_on_workspace(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceMember_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceMember_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceMember_Having
+  ): [WorkspaceMember!]! @fdc_generated(from: "WorkspaceMember.workspace", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `WorkspaceUser` objects in a one-to-many relationship (where `WorkspaceUser`.`workspace` is this object).
+  """
+  workspaceUsers_on_workspace(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceUser_Having
+  ): [WorkspaceUser!]! @fdc_generated(from: "WorkspaceUser.workspace", purpose: QUERY_MULTIPLE_ONE_TO_MANY)
+  """
+  ✨ List `User` objects using `WorkspaceMember` as the join table (a `WorkspaceMember` object exists where its `workspace` is this and its `user` is that).
+  """
+  users_via_WorkspaceMember(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceMember_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceMember_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceMember_Having
+  ): [User!]! @fdc_generated(from: "WorkspaceMember", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
+  """
+  ✨ List `User` objects using `WorkspaceUser` as the join table (a `WorkspaceUser` object exists where its `workspace` is this and its `user` is that).
+  """
+  users_via_WorkspaceUser(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceUser_Having
+  ): [User!]! @fdc_generated(from: "WorkspaceUser", purpose: QUERY_MULTIPLE_MANY_TO_MANY)
   """
   Implicit metadata field that cannot be written. It provides extra information about query results.
   """
@@ -726,4 +1032,58 @@ extend type WorkspaceMember {
   ✨ Maximum of the `joinedAt` field in the `WorkspaceMember` table.
   """
   joinedAt_max: Timestamp @fdc_generated(from: "WorkspaceMember.joinedAt", purpose: QUERY_MAX)
+}
+extend type WorkspaceUser {
+  """
+  Implicit metadata field that cannot be written. It provides extra information about query results.
+  """
+  _metadata: _Metadata @fdc_generated(from: "WorkspaceUser", purpose: METADATA_FIELD)
+  """
+  ✨ Count the number of rows in the `WorkspaceUser` table.
+  """
+  _count: Int! @fdc_generated(from: "WorkspaceUser", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `WorkspaceUser` table where the `joinedAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  joinedAt_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "WorkspaceUser.joinedAt", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `WorkspaceUser` table where the `role` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  role_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "WorkspaceUser.role", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `WorkspaceUser` table where the `userId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  userId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "WorkspaceUser.userId", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `WorkspaceUser` table where the `workspaceId` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  workspaceId_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "WorkspaceUser.workspaceId", purpose: QUERY_COUNT)
+  """
+  ✨ Minimum of the `joinedAt` field in the `WorkspaceUser` table.
+  """
+  joinedAt_min: Timestamp @fdc_generated(from: "WorkspaceUser.joinedAt", purpose: QUERY_MIN)
+  """
+  ✨ Maximum of the `joinedAt` field in the `WorkspaceUser` table.
+  """
+  joinedAt_max: Timestamp @fdc_generated(from: "WorkspaceUser.joinedAt", purpose: QUERY_MAX)
 }

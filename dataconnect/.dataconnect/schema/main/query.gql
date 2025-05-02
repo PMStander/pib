@@ -133,6 +133,20 @@ extend type Query {
     first: WorkspaceMember_FirstRow
   ): WorkspaceMember @fdc_generated(from: "WorkspaceMember", purpose: QUERY_SINGLE)
   """
+  ✨ Look up a single `WorkspaceUser` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  workspaceUser(
+    """
+    The key used to identify the object.
+    """
+    key: WorkspaceUser_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: WorkspaceUser_FirstRow
+  ): WorkspaceUser @fdc_generated(from: "WorkspaceUser", purpose: QUERY_SINGLE)
+  """
   ✨ List `BusinessProfile` objects in the table and return selected fields, optionally filtered by `where` conditions
   """
   businessProfiles(
@@ -370,6 +384,40 @@ extend type Query {
     """
     having: WorkspaceMember_Having
   ): [WorkspaceMember!]! @fdc_generated(from: "WorkspaceMember", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `WorkspaceUser` objects in the table and return selected fields, optionally filtered by `where` conditions
+  """
+  workspaceUsers(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [WorkspaceUser_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+
+    """
+    Set to true to return distinct results.
+    """
+    distinct: Boolean = false
+
+    """
+    Filter condition to apply to the groups of aggregate queries.
+    """
+    having: WorkspaceUser_Having
+  ): [WorkspaceUser!]! @fdc_generated(from: "WorkspaceUser", purpose: QUERY_MULTIPLE)
   """
   ✨ List `BusinessProfile` objects and return selected fields, ordered by vector similarity between the `descriptionEmbedding` field and `compare_embed`.
   (Alternatively, `compare` can be used if the input is a raw Vector.)

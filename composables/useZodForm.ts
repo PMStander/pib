@@ -5,7 +5,7 @@ import { useForm } from 'vee-validate';
 
 /**
  * A composable for creating forms with Zod validation
- * 
+ *
  * @param schema The Zod schema for form validation
  * @param initialValues Initial values for the form
  * @returns Form utilities including values, errors, and submission handling
@@ -18,7 +18,7 @@ export function useZodForm<T extends z.ZodType<any, any>>(
   const validationSchema = toTypedSchema(schema);
 
   // Initialize the form with vee-validate
-  const { 
+  const {
     values,
     errors,
     handleSubmit,
@@ -39,7 +39,11 @@ export function useZodForm<T extends z.ZodType<any, any>>(
 
   // Create a submission handler that returns the validated data
   const onSubmit = handleSubmit((values) => {
+    console.log('useZodForm - Form submitted with values:', values);
     return values as z.infer<T>;
+  }, (errors) => {
+    console.error('useZodForm - Form validation failed with errors:', errors);
+    return undefined;
   });
 
   // Helper to check if a specific field has been touched and has errors
@@ -60,13 +64,13 @@ export function useZodForm<T extends z.ZodType<any, any>>(
     touched,
     submitCount,
     isSubmitting,
-    
+
     // Field helpers
     hasFieldError,
     getFieldError,
     setFieldValue,
     setFieldError,
-    
+
     // Form actions
     validate,
     onSubmit,

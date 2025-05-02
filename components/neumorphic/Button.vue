@@ -1,5 +1,6 @@
 <template>
-  <button 
+  <button
+    :type="type"
     :class="[
       'relative rounded-lg px-4 py-2 transition-all duration-300 focus:outline-none',
       variant === 'flat' ? 'nm-flat' : '',
@@ -25,6 +26,11 @@
 
 <script setup>
 defineProps({
+  type: {
+    type: String,
+    default: 'button',
+    validator: (value) => ['button', 'submit', 'reset'].includes(value)
+  },
   variant: {
     type: String,
     default: 'flat',

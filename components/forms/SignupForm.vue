@@ -1,8 +1,9 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form @submit.prevent="handleFormSubmit">
     <NeumorphicInput
-      v-model="values.name"
-      name="name"
+      :model-value="values.name"
+      @update:model-value="(val) => setFieldValue('name', val)"
+      name="signup-name"
       label="Full Name"
       placeholder="Enter your full name"
       :error="errors.name"
@@ -10,8 +11,9 @@
     />
 
     <NeumorphicInput
-      v-model="values.email"
-      name="email"
+      :model-value="values.email"
+      @update:model-value="(val) => setFieldValue('email', val)"
+      name="signup-email"
       label="Email"
       type="email"
       placeholder="Enter your email"
@@ -20,8 +22,9 @@
     />
 
     <NeumorphicInput
-      v-model="values.password"
-      name="password"
+      :model-value="values.password"
+      @update:model-value="(val) => setFieldValue('password', val)"
+      name="signup-password"
       label="Password"
       type="password"
       placeholder="Create a password"
@@ -30,8 +33,9 @@
     />
 
     <NeumorphicInput
-      v-model="values.confirmPassword"
-      name="confirmPassword"
+      :model-value="values.confirmPassword"
+      @update:model-value="(val) => setFieldValue('confirmPassword', val)"
+      name="signup-confirm-password"
       label="Confirm Password"
       type="password"
       placeholder="Confirm your password"
@@ -41,7 +45,8 @@
 
     <div class="flex items-center mb-6">
       <NeumorphicToggle
-        v-model="values.terms"
+        :model-value="values.terms"
+        @update:model-value="(val) => setFieldValue('terms', val)"
         name="terms"
         label="I agree to the Terms and Conditions"
       />
@@ -60,6 +65,7 @@
       color="primary"
       class="w-full"
       :disabled="isSubmitting || isAuthLoading"
+      @click="() => console.log('SignupForm - Submit button clicked directly')"
     >
       {{ isSubmitting || isAuthLoading ? 'Creating Account...' : 'Create Account' }}
     </NeumorphicButton>
@@ -96,7 +102,8 @@ const {
   values,
   errors,
   isSubmitting,
-  onSubmit
+  onSubmit,
+  setFieldValue
 } = useZodForm(signupFormSchema, {
   name: '',
   email: '',
@@ -105,8 +112,35 @@ const {
   terms: false
 });
 
-// Handle form submission
+// Custom form submission handler
+const handleFormSubmit = () => {
+  console.log('SignupForm - Form submit button clicked');
+  console.log('SignupForm - Current form values:', values);
+  console.log('SignupForm - Current form errors:', errors);
+
+  // Manually validate all fields
+  const validateAll = async () => {
+    try {
+      const result = await signupFormSchema.parseAsync({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        terms: values.terms
+      });
+      console.log('SignupForm - Manual validation passed:', result);
+      emit('submit', result);
+    } catch (error) {
+      console.error('SignupForm - Manual validation failed:', error);
+    }
+  };
+
+  validateAll();
+};
+
+// Handle form submission with validation
 onSubmit(async (validData) => {
+  console.log('SignupForm - Form submitted with valid data:', validData);
   emit('submit', validData);
 });
 </script>

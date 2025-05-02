@@ -1,8 +1,9 @@
 <template>
   <form @submit.prevent="onSubmit">
     <NeumorphicInput
-      v-model="values.email"
-      name="email"
+      :model-value="values.email"
+      @update:model-value="(val) => setFieldValue('email', val)"
+      name="login-email"
       label="Email"
       type="email"
       placeholder="Enter your email"
@@ -11,8 +12,9 @@
     />
 
     <NeumorphicInput
-      v-model="values.password"
-      name="password"
+      :model-value="values.password"
+      @update:model-value="(val) => setFieldValue('password', val)"
+      name="login-password"
       label="Password"
       type="password"
       placeholder="Enter your password"
@@ -22,7 +24,8 @@
 
     <div class="flex items-center justify-between mb-6">
       <NeumorphicToggle
-        v-model="values.rememberMe"
+        :model-value="values.rememberMe"
+        @update:model-value="(val) => setFieldValue('rememberMe', val)"
         name="rememberMe"
         label="Remember me"
       />
@@ -81,7 +84,8 @@ const {
   values,
   errors,
   isSubmitting,
-  onSubmit
+  onSubmit,
+  setFieldValue
 } = useZodForm(loginFormSchema, {
   email: '',
   password: '',

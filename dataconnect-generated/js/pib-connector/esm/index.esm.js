@@ -6,6 +6,17 @@ export const connectorConfig = {
   location: 'us-central1'
 };
 
+export const createUserRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateUser', inputVars);
+}
+createUserRef.operationName = 'CreateUser';
+
+export function createUser(dcOrVars, vars) {
+  return executeMutation(createUserRef(dcOrVars, vars));
+}
+
 export const updateUserRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
   dcInstance._useGeneratedSdk();
@@ -103,6 +114,17 @@ deleteWorkspaceRef.operationName = 'DeleteWorkspace';
 
 export function deleteWorkspace(dcOrVars, vars) {
   return executeMutation(deleteWorkspaceRef(dcOrVars, vars));
+}
+
+export const joinWorkspaceUserRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'JoinWorkspaceUser', inputVars);
+}
+joinWorkspaceUserRef.operationName = 'JoinWorkspaceUser';
+
+export function joinWorkspaceUser(dcOrVars, vars) {
+  return executeMutation(joinWorkspaceUserRef(dcOrVars, vars));
 }
 
 export const addWorkspaceMemberRef = (dcOrVars, vars) => {
@@ -281,6 +303,50 @@ export function searchProfilesByBio(dcOrVars, vars) {
   return executeQuery(searchProfilesByBioRef(dcOrVars, vars));
 }
 
+export const searchBusinessProfilesByDescriptionRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'SearchBusinessProfilesByDescription', inputVars);
+}
+searchBusinessProfilesByDescriptionRef.operationName = 'SearchBusinessProfilesByDescription';
+
+export function searchBusinessProfilesByDescription(dcOrVars, vars) {
+  return executeQuery(searchBusinessProfilesByDescriptionRef(dcOrVars, vars));
+}
+
+export const matchProfileToBusinessesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'MatchProfileToBusinesses', inputVars);
+}
+matchProfileToBusinessesRef.operationName = 'MatchProfileToBusinesses';
+
+export function matchProfileToBusinesses(dcOrVars, vars) {
+  return executeQuery(matchProfileToBusinessesRef(dcOrVars, vars));
+}
+
+export const matchBusinessToProfilesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'MatchBusinessToProfiles', inputVars);
+}
+matchBusinessToProfilesRef.operationName = 'MatchBusinessToProfiles';
+
+export function matchBusinessToProfiles(dcOrVars, vars) {
+  return executeQuery(matchBusinessToProfilesRef(dcOrVars, vars));
+}
+
+export const searchPartnerPreferencesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'SearchPartnerPreferences', inputVars);
+}
+searchPartnerPreferencesRef.operationName = 'SearchPartnerPreferences';
+
+export function searchPartnerPreferences(dcOrVars, vars) {
+  return executeQuery(searchPartnerPreferencesRef(dcOrVars, vars));
+}
+
 export const getUserRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -303,15 +369,15 @@ export function getUserProfiles(dc) {
   return executeQuery(getUserProfilesRef(dc));
 }
 
-export const getUserWorkspacesRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+export const getUserWorkspacesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetUserWorkspaces');
+  return queryRef(dcInstance, 'GetUserWorkspaces', inputVars);
 }
 getUserWorkspacesRef.operationName = 'GetUserWorkspaces';
 
-export function getUserWorkspaces(dc) {
-  return executeQuery(getUserWorkspacesRef(dc));
+export function getUserWorkspaces(dcOrVars, vars) {
+  return executeQuery(getUserWorkspacesRef(dcOrVars, vars));
 }
 
 export const getWorkspaceRef = (dcOrVars, vars) => {
@@ -369,14 +435,14 @@ export function getWorkspaceInvitations(dcOrVars, vars) {
   return executeQuery(getWorkspaceInvitationsRef(dcOrVars, vars));
 }
 
-export const getPendingInvitationsByEmailRef = (dcOrVars, vars) => {
+export const getPendingInvitationsRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetPendingInvitationsByEmail', inputVars);
+  return queryRef(dcInstance, 'GetPendingInvitations', inputVars);
 }
-getPendingInvitationsByEmailRef.operationName = 'GetPendingInvitationsByEmail';
+getPendingInvitationsRef.operationName = 'GetPendingInvitations';
 
-export function getPendingInvitationsByEmail(dcOrVars, vars) {
-  return executeQuery(getPendingInvitationsByEmailRef(dcOrVars, vars));
+export function getPendingInvitations(dcOrVars, vars) {
+  return executeQuery(getPendingInvitationsRef(dcOrVars, vars));
 }
 

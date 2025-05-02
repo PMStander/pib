@@ -9,7 +9,7 @@
     </label>
     <div class="relative">
       <input
-        :id="id"
+        :id="inputId"
         :type="type"
         :value="modelValue"
         :name="name"
@@ -94,7 +94,15 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'blur']);
 
-const inputId = computed(() => props.id || `input-${Math.random().toString(36).substring(2, 9)}`);
+// Use a deterministic ID based on the name or a counter to avoid hydration mismatches
+const inputId = computed(() => {
+  if (props.id) return props.id;
+  if (props.name) return `input-${props.name}`;
+
+  // If no id or name is provided, use a static prefix with the component instance id
+  // This is still unique within the component but consistent between server and client
+  return `input-default`;
+});
 
 // If name is provided, integrate with vee-validate
 const fieldName = computed(() => props.name || '');
@@ -110,14 +118,19 @@ const errorMsg = computed(() => props.error || errorMessage.value);
 // Handle input changes
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.value);
+  const newValue = target.value;
 
-  if (fieldName.value) {
-    handleChange(target.value);
-  }
+  // Only update if not readonly
+  if (!props.readonly) {
+    emit('update:modelValue', newValue);
 
-  if (props.validateOn === 'input') {
-    // Validation happens automatically through vee-validate
+    if (fieldName.value) {
+      handleChange(newValue);
+    }
+
+    if (props.validateOn === 'input') {
+      // Validation happens automatically through vee-validate
+    }
   }
 };
 

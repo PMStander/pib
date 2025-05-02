@@ -63,6 +63,15 @@ extend type Mutation {
     data: WorkspaceMember_Data!
   ): WorkspaceMember_KeyOutput! @fdc_generated(from: "WorkspaceMember", purpose: INSERT_SINGLE)
   """
+  ✨ Insert a single `WorkspaceUser` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  workspaceUser_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: WorkspaceUser_Data!
+  ): WorkspaceUser_KeyOutput! @fdc_generated(from: "WorkspaceUser", purpose: INSERT_SINGLE)
+  """
   ✨ Insert `BusinessProfile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   businessProfile_insertMany(
@@ -125,6 +134,15 @@ extend type Mutation {
     """
     data: [WorkspaceMember_Data!]!
   ): [WorkspaceMember_KeyOutput!]! @fdc_generated(from: "WorkspaceMember", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `WorkspaceUser` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  workspaceUser_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [WorkspaceUser_Data!]!
+  ): [WorkspaceUser_KeyOutput!]! @fdc_generated(from: "WorkspaceUser", purpose: INSERT_MULTIPLE)
   """
   ✨ Insert or update a single `BusinessProfile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `BusinessProfile`.
   """
@@ -189,6 +207,15 @@ extend type Mutation {
     data: WorkspaceMember_Data!
   ): WorkspaceMember_KeyOutput! @fdc_generated(from: "WorkspaceMember", purpose: UPSERT_SINGLE)
   """
+  ✨ Insert or update a single `WorkspaceUser` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceUser`.
+  """
+  workspaceUser_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: WorkspaceUser_Data!
+  ): WorkspaceUser_KeyOutput! @fdc_generated(from: "WorkspaceUser", purpose: UPSERT_SINGLE)
+  """
   ✨ Insert or update `BusinessProfile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `BusinessProfile`.
   """
   businessProfile_upsertMany(
@@ -251,6 +278,15 @@ extend type Mutation {
     """
     data: [WorkspaceMember_Data!]!
   ): [WorkspaceMember_KeyOutput!]! @fdc_generated(from: "WorkspaceMember", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `WorkspaceUser` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceUser`.
+  """
+  workspaceUser_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [WorkspaceUser_Data!]!
+  ): [WorkspaceUser_KeyOutput!]! @fdc_generated(from: "WorkspaceUser", purpose: UPSERT_MULTIPLE)
   """
   ✨ Update a single `BusinessProfile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `BusinessProfile` or `null` if not found.
   """
@@ -420,6 +456,25 @@ extend type Mutation {
     data: WorkspaceMember_Data!
   ): WorkspaceMember_KeyOutput @fdc_generated(from: "WorkspaceMember", purpose: UPDATE_SINGLE)
   """
+  ✨ Update a single `WorkspaceUser` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `WorkspaceUser` or `null` if not found.
+  """
+  workspaceUser_update(
+    """
+    The key used to identify the object.
+    """
+    key: WorkspaceUser_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: WorkspaceUser_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: WorkspaceUser_Data!
+  ): WorkspaceUser_KeyOutput @fdc_generated(from: "WorkspaceUser", purpose: UPDATE_SINGLE)
+  """
   ✨ Update `BusinessProfile` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
   businessProfile_updateMany(
@@ -552,6 +607,25 @@ extend type Mutation {
     """
     data: WorkspaceMember_Data!
   ): Int! @fdc_generated(from: "WorkspaceMember", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `WorkspaceUser` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  workspaceUser_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: WorkspaceUser_Data!
+  ): Int! @fdc_generated(from: "WorkspaceUser", purpose: UPDATE_MULTIPLE)
   """
   ✨ Delete a single `BusinessProfile` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
@@ -686,6 +760,20 @@ extend type Mutation {
     first: WorkspaceMember_FirstRow
   ): WorkspaceMember_KeyOutput @fdc_generated(from: "WorkspaceMember", purpose: DELETE_SINGLE)
   """
+  ✨ Delete a single `WorkspaceUser` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  workspaceUser_delete(
+    """
+    The key used to identify the object.
+    """
+    key: WorkspaceUser_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: WorkspaceUser_FirstRow
+  ): WorkspaceUser_KeyOutput @fdc_generated(from: "WorkspaceUser", purpose: DELETE_SINGLE)
+  """
   ✨ Delete `BusinessProfile` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """
   businessProfile_deleteMany(
@@ -783,4 +871,18 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "WorkspaceMember", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `WorkspaceUser` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  workspaceUser_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: WorkspaceUser_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "WorkspaceUser", purpose: DELETE_MULTIPLE)
 }

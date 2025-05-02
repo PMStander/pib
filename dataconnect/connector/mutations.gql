@@ -1,4 +1,18 @@
 # User mutations
+mutation CreateUser(
+  $email: String!,
+  $displayName: String,
+  $photoUrl: String
+) @auth(level: USER) {
+  createUser: user_insert(
+    data: {
+      email: $email,
+      displayName: $displayName,
+      photoUrl: $photoUrl
+    }
+  )
+}
+
 mutation UpdateUser(
   $displayName: String,
   $photoUrl: String
@@ -144,6 +158,23 @@ mutation UpdateWorkspace(
 
 mutation DeleteWorkspace($id: UUID!) @auth(level: USER) {
   deleteWorkspace: workspace_delete(key: { id: $id })
+}
+
+# Workspace user mutations
+
+mutation JoinWorkspaceUser(
+  $workspaceId: UUID!,
+  $userId: String!,
+  $role: String!
+) @auth(level: USER) {
+  createWorkspaceUser: workspaceUser_insert(
+    data: {
+      workspace: { id: $workspaceId },
+      user: { id: $userId },
+      role: $role,
+      joinedAt_expr: "request.time"
+    }
+  )
 }
 
 # Workspace member mutations

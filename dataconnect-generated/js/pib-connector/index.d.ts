@@ -113,6 +113,16 @@ export interface CreateProfileWithBioVariables {
   isDefault?: boolean | null;
 }
 
+export interface CreateUserData {
+  createUser: User_Key;
+}
+
+export interface CreateUserVariables {
+  email: string;
+  displayName?: string | null;
+  photoUrl?: string | null;
+}
+
 export interface CreateWorkspaceData {
   createWorkspace: Workspace_Key;
 }
@@ -195,20 +205,20 @@ export interface GetPartnerPreferencesVariables {
   workspaceId: UUIDString;
 }
 
-export interface GetPendingInvitationsByEmailData {
+export interface GetPendingInvitationsData {
   workspaceInvitations: ({
     id: UUIDString;
-    workspaceId: UUIDString;
     email: string;
     role: string;
-    invitedBy: string;
     status: string;
     createdAt: TimestampString;
     expiresAt?: TimestampString | null;
+    workspaceId: UUIDString;
+    invitedBy: string;
   } & WorkspaceInvitation_Key)[];
 }
 
-export interface GetPendingInvitationsByEmailVariables {
+export interface GetPendingInvitationsVariables {
   email: string;
 }
 
@@ -243,9 +253,21 @@ export interface GetUserVariables {
 }
 
 export interface GetUserWorkspacesData {
-  workspaceMembers: ({
-    workspaceId: UUIDString;
+  workspaceUsers: ({
+    workspace: {
+      id: UUIDString;
+      name: string;
+      description?: string | null;
+      logoUrl?: string | null;
+      createdBy: string;
+      createdAt: TimestampString;
+      updatedAt: TimestampString;
+    } & Workspace_Key;
   })[];
+}
+
+export interface GetUserWorkspacesVariables {
+  userId: string;
 }
 
 export interface GetWorkspaceData {
@@ -279,12 +301,11 @@ export interface GetWorkspaceInvitationsVariables {
 
 export interface GetWorkspaceMembersData {
   workspaceMembers: ({
-    workspaceId: UUIDString;
-    userId: string;
-    profileId?: UUIDString | null;
     role: string;
     joinedAt: TimestampString;
-  } & WorkspaceMember_Key)[];
+    userId: string;
+    profileId?: UUIDString | null;
+  })[];
 }
 
 export interface GetWorkspaceMembersVariables {
@@ -303,6 +324,42 @@ export interface InviteToWorkspaceVariables {
   workspaceId: UUIDString;
   email: string;
   role: string;
+}
+
+export interface JoinWorkspaceUserData {
+  createWorkspaceUser: WorkspaceUser_Key;
+}
+
+export interface JoinWorkspaceUserVariables {
+  workspaceId: UUIDString;
+  userId: string;
+  role: string;
+}
+
+export interface MatchBusinessToProfilesData {
+  businessProfile?: {
+    id: UUIDString;
+    name: string;
+    description?: string | null;
+  } & BusinessProfile_Key;
+}
+
+export interface MatchBusinessToProfilesVariables {
+  businessProfileId: UUIDString;
+  limit?: number | null;
+}
+
+export interface MatchProfileToBusinessesData {
+  profile?: {
+    id: UUIDString;
+    name: string;
+    bio?: string | null;
+  } & Profile_Key;
+}
+
+export interface MatchProfileToBusinessesVariables {
+  profileId: UUIDString;
+  limit?: number | null;
 }
 
 export interface PartnerPreferences_Key {
@@ -324,6 +381,41 @@ export interface RemoveWorkspaceMemberVariables {
   userId: string;
 }
 
+export interface SearchBusinessProfilesByDescriptionData {
+  businessProfiles_descriptionEmbedding_similarity: ({
+    id: UUIDString;
+    workspaceId: UUIDString;
+    name: string;
+    industry?: string | null;
+    description?: string | null;
+    location?: string | null;
+    website?: string | null;
+    employeeCount?: number | null;
+  } & BusinessProfile_Key)[];
+}
+
+export interface SearchBusinessProfilesByDescriptionVariables {
+  searchText: string;
+  limit?: number | null;
+}
+
+export interface SearchPartnerPreferencesData {
+  partnerPreferencess_combinedEmbedding_similarity: ({
+    id: UUIDString;
+    workspaceId: UUIDString;
+    industries?: string[] | null;
+    locations?: string[] | null;
+    minEmployeeCount?: number | null;
+    maxEmployeeCount?: number | null;
+    skillsNeeded?: string[] | null;
+  } & PartnerPreferences_Key)[];
+}
+
+export interface SearchPartnerPreferencesVariables {
+  searchText: string;
+  limit?: number | null;
+}
+
 export interface SearchProfilesByBioData {
   profiles_bioEmbedding_similarity: ({
     id: UUIDString;
@@ -333,9 +425,6 @@ export interface SearchProfilesByBioData {
     skills?: string[] | null;
     interests?: string[] | null;
     avatarUrl?: string | null;
-    _metadata?: {
-      distance?: number | null;
-    };
   } & Profile_Key)[];
 }
 
@@ -474,10 +563,28 @@ export interface WorkspaceMember_Key {
   __typename?: 'WorkspaceMember_Key';
 }
 
+export interface WorkspaceUser_Key {
+  workspaceId: UUIDString;
+  userId: string;
+  __typename?: 'WorkspaceUser_Key';
+}
+
 export interface Workspace_Key {
   id: UUIDString;
   __typename?: 'Workspace_Key';
 }
+
+interface CreateUserRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateUserVariables): MutationRef<CreateUserData, CreateUserVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateUserVariables): MutationRef<CreateUserData, CreateUserVariables>;
+  operationName: string;
+}
+export const createUserRef: CreateUserRef;
+
+export function createUser(vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
+export function createUser(dc: DataConnect, vars: CreateUserVariables): MutationPromise<CreateUserData, CreateUserVariables>;
 
 interface UpdateUserRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -586,6 +693,18 @@ export const deleteWorkspaceRef: DeleteWorkspaceRef;
 
 export function deleteWorkspace(vars: DeleteWorkspaceVariables): MutationPromise<DeleteWorkspaceData, DeleteWorkspaceVariables>;
 export function deleteWorkspace(dc: DataConnect, vars: DeleteWorkspaceVariables): MutationPromise<DeleteWorkspaceData, DeleteWorkspaceVariables>;
+
+interface JoinWorkspaceUserRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: JoinWorkspaceUserVariables): MutationRef<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: JoinWorkspaceUserVariables): MutationRef<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+  operationName: string;
+}
+export const joinWorkspaceUserRef: JoinWorkspaceUserRef;
+
+export function joinWorkspaceUser(vars: JoinWorkspaceUserVariables): MutationPromise<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
+export function joinWorkspaceUser(dc: DataConnect, vars: JoinWorkspaceUserVariables): MutationPromise<JoinWorkspaceUserData, JoinWorkspaceUserVariables>;
 
 interface AddWorkspaceMemberRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -779,6 +898,54 @@ export const searchProfilesByBioRef: SearchProfilesByBioRef;
 export function searchProfilesByBio(vars: SearchProfilesByBioVariables): QueryPromise<SearchProfilesByBioData, SearchProfilesByBioVariables>;
 export function searchProfilesByBio(dc: DataConnect, vars: SearchProfilesByBioVariables): QueryPromise<SearchProfilesByBioData, SearchProfilesByBioVariables>;
 
+interface SearchBusinessProfilesByDescriptionRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: SearchBusinessProfilesByDescriptionVariables): QueryRef<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: SearchBusinessProfilesByDescriptionVariables): QueryRef<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+  operationName: string;
+}
+export const searchBusinessProfilesByDescriptionRef: SearchBusinessProfilesByDescriptionRef;
+
+export function searchBusinessProfilesByDescription(vars: SearchBusinessProfilesByDescriptionVariables): QueryPromise<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+export function searchBusinessProfilesByDescription(dc: DataConnect, vars: SearchBusinessProfilesByDescriptionVariables): QueryPromise<SearchBusinessProfilesByDescriptionData, SearchBusinessProfilesByDescriptionVariables>;
+
+interface MatchProfileToBusinessesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: MatchProfileToBusinessesVariables): QueryRef<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: MatchProfileToBusinessesVariables): QueryRef<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+  operationName: string;
+}
+export const matchProfileToBusinessesRef: MatchProfileToBusinessesRef;
+
+export function matchProfileToBusinesses(vars: MatchProfileToBusinessesVariables): QueryPromise<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+export function matchProfileToBusinesses(dc: DataConnect, vars: MatchProfileToBusinessesVariables): QueryPromise<MatchProfileToBusinessesData, MatchProfileToBusinessesVariables>;
+
+interface MatchBusinessToProfilesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: MatchBusinessToProfilesVariables): QueryRef<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: MatchBusinessToProfilesVariables): QueryRef<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+  operationName: string;
+}
+export const matchBusinessToProfilesRef: MatchBusinessToProfilesRef;
+
+export function matchBusinessToProfiles(vars: MatchBusinessToProfilesVariables): QueryPromise<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+export function matchBusinessToProfiles(dc: DataConnect, vars: MatchBusinessToProfilesVariables): QueryPromise<MatchBusinessToProfilesData, MatchBusinessToProfilesVariables>;
+
+interface SearchPartnerPreferencesRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: SearchPartnerPreferencesVariables): QueryRef<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: SearchPartnerPreferencesVariables): QueryRef<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+  operationName: string;
+}
+export const searchPartnerPreferencesRef: SearchPartnerPreferencesRef;
+
+export function searchPartnerPreferences(vars: SearchPartnerPreferencesVariables): QueryPromise<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+export function searchPartnerPreferences(dc: DataConnect, vars: SearchPartnerPreferencesVariables): QueryPromise<SearchPartnerPreferencesData, SearchPartnerPreferencesVariables>;
+
 interface GetUserRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: GetUserVariables): QueryRef<GetUserData, GetUserVariables>;
@@ -805,15 +972,15 @@ export function getUserProfiles(dc: DataConnect): QueryPromise<GetUserProfilesDa
 
 interface GetUserWorkspacesRef {
   /* Allow users to create refs without passing in DataConnect */
-  (): QueryRef<GetUserWorkspacesData, undefined>;
+  (vars: GetUserWorkspacesVariables): QueryRef<GetUserWorkspacesData, GetUserWorkspacesVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect): QueryRef<GetUserWorkspacesData, undefined>;
+  (dc: DataConnect, vars: GetUserWorkspacesVariables): QueryRef<GetUserWorkspacesData, GetUserWorkspacesVariables>;
   operationName: string;
 }
 export const getUserWorkspacesRef: GetUserWorkspacesRef;
 
-export function getUserWorkspaces(): QueryPromise<GetUserWorkspacesData, undefined>;
-export function getUserWorkspaces(dc: DataConnect): QueryPromise<GetUserWorkspacesData, undefined>;
+export function getUserWorkspaces(vars: GetUserWorkspacesVariables): QueryPromise<GetUserWorkspacesData, GetUserWorkspacesVariables>;
+export function getUserWorkspaces(dc: DataConnect, vars: GetUserWorkspacesVariables): QueryPromise<GetUserWorkspacesData, GetUserWorkspacesVariables>;
 
 interface GetWorkspaceRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -875,15 +1042,15 @@ export const getWorkspaceInvitationsRef: GetWorkspaceInvitationsRef;
 export function getWorkspaceInvitations(vars: GetWorkspaceInvitationsVariables): QueryPromise<GetWorkspaceInvitationsData, GetWorkspaceInvitationsVariables>;
 export function getWorkspaceInvitations(dc: DataConnect, vars: GetWorkspaceInvitationsVariables): QueryPromise<GetWorkspaceInvitationsData, GetWorkspaceInvitationsVariables>;
 
-interface GetPendingInvitationsByEmailRef {
+interface GetPendingInvitationsRef {
   /* Allow users to create refs without passing in DataConnect */
-  (vars: GetPendingInvitationsByEmailVariables): QueryRef<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+  (vars: GetPendingInvitationsVariables): QueryRef<GetPendingInvitationsData, GetPendingInvitationsVariables>;
   /* Allow users to pass in custom DataConnect instances */
-  (dc: DataConnect, vars: GetPendingInvitationsByEmailVariables): QueryRef<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+  (dc: DataConnect, vars: GetPendingInvitationsVariables): QueryRef<GetPendingInvitationsData, GetPendingInvitationsVariables>;
   operationName: string;
 }
-export const getPendingInvitationsByEmailRef: GetPendingInvitationsByEmailRef;
+export const getPendingInvitationsRef: GetPendingInvitationsRef;
 
-export function getPendingInvitationsByEmail(vars: GetPendingInvitationsByEmailVariables): QueryPromise<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
-export function getPendingInvitationsByEmail(dc: DataConnect, vars: GetPendingInvitationsByEmailVariables): QueryPromise<GetPendingInvitationsByEmailData, GetPendingInvitationsByEmailVariables>;
+export function getPendingInvitations(vars: GetPendingInvitationsVariables): QueryPromise<GetPendingInvitationsData, GetPendingInvitationsVariables>;
+export function getPendingInvitations(dc: DataConnect, vars: GetPendingInvitationsVariables): QueryPromise<GetPendingInvitationsData, GetPendingInvitationsVariables>;
 

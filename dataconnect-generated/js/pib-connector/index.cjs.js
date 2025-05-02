@@ -7,6 +7,18 @@ const connectorConfig = {
 };
 exports.connectorConfig = connectorConfig;
 
+const createUserRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateUser', inputVars);
+}
+createUserRef.operationName = 'CreateUser';
+exports.createUserRef = createUserRef;
+
+exports.createUser = function createUser(dcOrVars, vars) {
+  return executeMutation(createUserRef(dcOrVars, vars));
+};
+
 const updateUserRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars);
   dcInstance._useGeneratedSdk();
@@ -113,6 +125,18 @@ exports.deleteWorkspaceRef = deleteWorkspaceRef;
 
 exports.deleteWorkspace = function deleteWorkspace(dcOrVars, vars) {
   return executeMutation(deleteWorkspaceRef(dcOrVars, vars));
+};
+
+const joinWorkspaceUserRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'JoinWorkspaceUser', inputVars);
+}
+joinWorkspaceUserRef.operationName = 'JoinWorkspaceUser';
+exports.joinWorkspaceUserRef = joinWorkspaceUserRef;
+
+exports.joinWorkspaceUser = function joinWorkspaceUser(dcOrVars, vars) {
+  return executeMutation(joinWorkspaceUserRef(dcOrVars, vars));
 };
 
 const addWorkspaceMemberRef = (dcOrVars, vars) => {
@@ -307,6 +331,54 @@ exports.searchProfilesByBio = function searchProfilesByBio(dcOrVars, vars) {
   return executeQuery(searchProfilesByBioRef(dcOrVars, vars));
 };
 
+const searchBusinessProfilesByDescriptionRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'SearchBusinessProfilesByDescription', inputVars);
+}
+searchBusinessProfilesByDescriptionRef.operationName = 'SearchBusinessProfilesByDescription';
+exports.searchBusinessProfilesByDescriptionRef = searchBusinessProfilesByDescriptionRef;
+
+exports.searchBusinessProfilesByDescription = function searchBusinessProfilesByDescription(dcOrVars, vars) {
+  return executeQuery(searchBusinessProfilesByDescriptionRef(dcOrVars, vars));
+};
+
+const matchProfileToBusinessesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'MatchProfileToBusinesses', inputVars);
+}
+matchProfileToBusinessesRef.operationName = 'MatchProfileToBusinesses';
+exports.matchProfileToBusinessesRef = matchProfileToBusinessesRef;
+
+exports.matchProfileToBusinesses = function matchProfileToBusinesses(dcOrVars, vars) {
+  return executeQuery(matchProfileToBusinessesRef(dcOrVars, vars));
+};
+
+const matchBusinessToProfilesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'MatchBusinessToProfiles', inputVars);
+}
+matchBusinessToProfilesRef.operationName = 'MatchBusinessToProfiles';
+exports.matchBusinessToProfilesRef = matchBusinessToProfilesRef;
+
+exports.matchBusinessToProfiles = function matchBusinessToProfiles(dcOrVars, vars) {
+  return executeQuery(matchBusinessToProfilesRef(dcOrVars, vars));
+};
+
+const searchPartnerPreferencesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'SearchPartnerPreferences', inputVars);
+}
+searchPartnerPreferencesRef.operationName = 'SearchPartnerPreferences';
+exports.searchPartnerPreferencesRef = searchPartnerPreferencesRef;
+
+exports.searchPartnerPreferences = function searchPartnerPreferences(dcOrVars, vars) {
+  return executeQuery(searchPartnerPreferencesRef(dcOrVars, vars));
+};
+
 const getUserRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -331,16 +403,16 @@ exports.getUserProfiles = function getUserProfiles(dc) {
   return executeQuery(getUserProfilesRef(dc));
 };
 
-const getUserWorkspacesRef = (dc) => {
-  const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
+const getUserWorkspacesRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetUserWorkspaces');
+  return queryRef(dcInstance, 'GetUserWorkspaces', inputVars);
 }
 getUserWorkspacesRef.operationName = 'GetUserWorkspaces';
 exports.getUserWorkspacesRef = getUserWorkspacesRef;
 
-exports.getUserWorkspaces = function getUserWorkspaces(dc) {
-  return executeQuery(getUserWorkspacesRef(dc));
+exports.getUserWorkspaces = function getUserWorkspaces(dcOrVars, vars) {
+  return executeQuery(getUserWorkspacesRef(dcOrVars, vars));
 };
 
 const getWorkspaceRef = (dcOrVars, vars) => {
@@ -403,14 +475,14 @@ exports.getWorkspaceInvitations = function getWorkspaceInvitations(dcOrVars, var
   return executeQuery(getWorkspaceInvitationsRef(dcOrVars, vars));
 };
 
-const getPendingInvitationsByEmailRef = (dcOrVars, vars) => {
+const getPendingInvitationsRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
-  return queryRef(dcInstance, 'GetPendingInvitationsByEmail', inputVars);
+  return queryRef(dcInstance, 'GetPendingInvitations', inputVars);
 }
-getPendingInvitationsByEmailRef.operationName = 'GetPendingInvitationsByEmail';
-exports.getPendingInvitationsByEmailRef = getPendingInvitationsByEmailRef;
+getPendingInvitationsRef.operationName = 'GetPendingInvitations';
+exports.getPendingInvitationsRef = getPendingInvitationsRef;
 
-exports.getPendingInvitationsByEmail = function getPendingInvitationsByEmail(dcOrVars, vars) {
-  return executeQuery(getPendingInvitationsByEmailRef(dcOrVars, vars));
+exports.getPendingInvitations = function getPendingInvitations(dcOrVars, vars) {
+  return executeQuery(getPendingInvitationsRef(dcOrVars, vars));
 };

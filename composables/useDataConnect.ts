@@ -54,42 +54,10 @@ import {
   createProfile as createProfileConnector
 } from '@pib/connector';
 
-// Create wrapper functions with proper parameters
-const getCurrentUser = async () => {
-  try {
-    // The connector function might expect parameters, but we're not using them
-    // @ts-ignore
-    return await getConnectorCurrentUser();
-  } catch (err) {
-    console.error('Error in getCurrentUser:', err);
-    throw err;
-  }
-};
-
-const getUserProfiles = async () => {
-  try {
-    // The connector function might expect parameters, but we're not using them
-    // @ts-ignore
-    return await getConnectorUserProfiles();
-  } catch (err) {
-    console.error('Error in getUserProfiles:', err);
-    throw err;
-  }
-};
-
-const getUserWorkspaces = async () => {
-  try {
-    // The connector function might expect parameters, but we're not using them
-    // @ts-ignore
-    return await getConnectorUserWorkspaces();
-  } catch (err) {
-    console.error('Error in getUserWorkspaces:', err);
-    throw err;
-  }
-};
+// Wrapper functions will be defined inside the composable to use the dataConnect instance
 
 export const useDataConnect = () => {
-  const { auth } = useFirebase();
+  const { auth, dataConnect } = useFirebase();
   const isLoading = ref(false);
   const error = ref<string | null>(null);
 
@@ -97,6 +65,43 @@ export const useDataConnect = () => {
   const currentUser = ref<LocalUser | null>(null);
   const currentUserProfiles = ref<LocalProfile[]>([]);
   const currentUserWorkspaces = ref<LocalWorkspace[]>([]);
+
+  // Create wrapper functions with proper parameters using the dataConnect instance
+  const getCurrentUser = async () => {
+    try {
+      if (!dataConnect) {
+        throw new Error('DataConnect is not initialized');
+      }
+      return await getConnectorCurrentUser(dataConnect);
+    } catch (err) {
+      console.error('Error in getCurrentUser:', err);
+      throw err;
+    }
+  };
+
+  const getUserProfiles = async () => {
+    try {
+      if (!dataConnect) {
+        throw new Error('DataConnect is not initialized');
+      }
+      return await getConnectorUserProfiles(dataConnect);
+    } catch (err) {
+      console.error('Error in getUserProfiles:', err);
+      throw err;
+    }
+  };
+
+  const getUserWorkspaces = async () => {
+    try {
+      if (!dataConnect) {
+        throw new Error('DataConnect is not initialized');
+      }
+      return await getConnectorUserWorkspaces(dataConnect);
+    } catch (err) {
+      console.error('Error in getUserWorkspaces:', err);
+      throw err;
+    }
+  };
 
   // Get current user data
   const fetchCurrentUser = async () => {
@@ -294,32 +299,50 @@ export const useDataConnect = () => {
       error.value = null;
 
       // Use the DataConnect connector to create a workspace
-      const { data: workspaceData } = await createWorkspaceConnector({
+      if (!dataConnect) {
+        throw new Error('DataConnect is not initialized');
+      }
+
+      console.log('Creating workspace with DataConnect:', {
         name: data.name,
         description: data.description,
         logoUrl: data.logo_url
       });
 
-      if (workspaceData) {
-        // Refresh workspaces after creation
-        await fetchUserWorkspaces();
-        return workspaceData;
-      } else {
-        // Fallback if DataConnect mutation fails
-        const workspace: LocalWorkspace = {
-          id: crypto.randomUUID(),
+      try {
+        const { data: workspaceData } = await createWorkspaceConnector(dataConnect, {
           name: data.name,
-          description: data.description || null,
-          logoUrl: data.logo_url || null,
-          createdBy: auth.currentUser.uid,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
+          description: data.description,
+          logoUrl: data.logo_url
+        });
 
-        // Add to current user workspaces
-        currentUserWorkspaces.value = [...currentUserWorkspaces.value, workspace];
-        return workspace;
+        console.log('Workspace created successfully:', workspaceData);
+
+        if (workspaceData) {
+          // Refresh workspaces after creation
+          await fetchUserWorkspaces();
+          return workspaceData;
+        }
+      } catch (connectorErr) {
+        console.error('DataConnect error creating workspace:', connectorErr);
+        // Continue to fallback
       }
+
+      // Fallback if DataConnect mutation fails
+      console.log('Using fallback for workspace creation');
+      const workspace: LocalWorkspace = {
+        id: crypto.randomUUID(),
+        name: data.name,
+        description: data.description || null,
+        logoUrl: data.logo_url || null,
+        createdBy: auth.currentUser.uid,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      // Add to current user workspaces
+      currentUserWorkspaces.value = [...currentUserWorkspaces.value, workspace];
+      return workspace;
     } catch (err: any) {
       error.value = err.message || 'Failed to create workspace';
       console.error('Error creating workspace:', err);
@@ -341,7 +364,11 @@ export const useDataConnect = () => {
       error.value = null;
 
       // Use the DataConnect connector to create a profile
-      const { data: profileData } = await createProfileConnector({
+      if (!dataConnect) {
+        throw new Error('DataConnect is not initialized');
+      }
+
+      console.log('Creating profile with DataConnect:', {
         name: data.name,
         bio: data.bio,
         avatarUrl: data.avatar_url,
@@ -350,29 +377,46 @@ export const useDataConnect = () => {
         isDefault: data.is_default
       });
 
-      if (profileData) {
-        // Refresh profiles after creation
-        await fetchUserProfiles();
-        return profileData;
-      } else {
-        // Fallback if DataConnect mutation fails
-        const profile: LocalProfile = {
-          id: crypto.randomUUID(),
-          userId: auth.currentUser.uid,
+      try {
+        const { data: profileData } = await createProfileConnector(dataConnect, {
           name: data.name,
-          bio: data.bio || null,
-          avatarUrl: data.avatar_url || null,
-          skills: data.skills || null,
-          interests: data.interests || null,
-          isDefault: data.is_default || false,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        };
+          bio: data.bio,
+          avatarUrl: data.avatar_url,
+          skills: data.skills,
+          interests: data.interests,
+          isDefault: data.is_default
+        });
 
-        // Add to current user profiles
-        currentUserProfiles.value = [...currentUserProfiles.value, profile];
-        return profile;
+        console.log('Profile created successfully:', profileData);
+
+        if (profileData) {
+          // Refresh profiles after creation
+          await fetchUserProfiles();
+          return profileData;
+        }
+      } catch (connectorErr) {
+        console.error('DataConnect error creating profile:', connectorErr);
+        // Continue to fallback
       }
+
+      // Fallback if DataConnect mutation fails
+      console.log('Using fallback for profile creation');
+      const profile: LocalProfile = {
+        id: crypto.randomUUID(),
+        userId: auth.currentUser.uid,
+        name: data.name,
+        bio: data.bio || null,
+        avatarUrl: data.avatar_url || null,
+        skills: data.skills || null,
+        interests: data.interests || null,
+        isDefault: data.is_default || false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
+
+      // Add to current user profiles
+      currentUserProfiles.value = [...currentUserProfiles.value, profile];
+      return profile;
     } catch (err: any) {
       error.value = err.message || 'Failed to create profile';
       console.error('Error creating profile:', err);

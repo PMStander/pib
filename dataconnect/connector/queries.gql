@@ -1,4 +1,16 @@
 # User queries
+
+query GetAllUsers @auth(level: USER) {
+  users {
+    id
+    email
+    displayName
+    photoUrl
+    createdAt
+    updatedAt
+  }
+}
+
 query GetCurrentUser @auth(level: USER) {
   user(key: {id_expr: "auth.uid"}) {
     id
@@ -24,9 +36,6 @@ query SearchProfilesByBio($searchText: String!, $limit: Int = 5) @auth(level: US
     skills
     interests
     avatarUrl
-    _metadata {
-      distance
-    }
   }
 }
 
@@ -44,9 +53,6 @@ query SearchBusinessProfilesByDescription($searchText: String!, $limit: Int = 5)
     location
     website
     employeeCount
-    _metadata {
-      distance
-    }
   }
 }
 
@@ -57,13 +63,23 @@ query MatchProfileToBusinesses($profileId: UUID!, $limit: Int = 5) @auth(level: 
     bio
     bioEmbedding
   }
+}
 
-  # This query will be executed in the frontend using the retrieved bioEmbedding
-  # businessProfiles_descriptionEmbedding_similarity(
-  #   compare: $bioEmbedding,
-  #   method: COSINE,
-  #   limit: $limit
-  # )
+query BusinessProfilesBySimilarity($bioEmbedding: Vector!, $limit: Int = 5) @auth(level: USER) {
+  businessProfiles_descriptionEmbedding_similarity(
+    compare: $bioEmbedding,
+    method: COSINE,
+    limit: $limit
+  ) {
+    id
+    workspaceId
+    name
+    industry
+    description
+    location
+    website
+    employeeCount
+  }
 }
 
 query MatchBusinessToProfiles($businessProfileId: UUID!, $limit: Int = 5) @auth(level: USER) {
@@ -73,13 +89,22 @@ query MatchBusinessToProfiles($businessProfileId: UUID!, $limit: Int = 5) @auth(
     description
     descriptionEmbedding
   }
+}
 
-  # This query will be executed in the frontend using the retrieved descriptionEmbedding
-  # profiles_bioEmbedding_similarity(
-  #   compare: $descriptionEmbedding,
-  #   method: COSINE,
-  #   limit: $limit
-  # )
+query ProfilesBySimilarity($descriptionEmbedding: Vector!, $limit: Int = 5) @auth(level: USER) {
+  profiles_bioEmbedding_similarity(
+    compare: $descriptionEmbedding,
+    method: COSINE,
+    limit: $limit
+  ) {
+    id
+    userId
+    name
+    bio
+    skills
+    interests
+    avatarUrl
+  }
 }
 
 query SearchPartnerPreferences($searchText: String!, $limit: Int = 5) @auth(level: USER) {
@@ -95,9 +120,6 @@ query SearchPartnerPreferences($searchText: String!, $limit: Int = 5) @auth(leve
     minEmployeeCount
     maxEmployeeCount
     skillsNeeded
-    _metadata {
-      distance
-    }
   }
 }
 
@@ -128,11 +150,17 @@ query GetUserProfiles @auth(level: USER) {
 }
 
 # Workspace queries
-query GetUserWorkspaces @auth(level: USER) {
-  workspaceMembers(where: {userId: {eq_expr: "auth.uid"}}) {
-    workspaceId
-    # Note: We can't directly query the workspace relationship
-    # We'll need to fetch the workspace separately using the workspaceId
+query GetUserWorkspaces($userId: String!) @auth(level: USER) {
+  workspaceUsers(where: { user: { id: { eq: $userId } } }) {
+    workspace {
+      id
+      name
+      description
+      logoUrl
+      createdBy
+      createdAt
+      updatedAt
+    }
   }
 }
 
@@ -148,15 +176,15 @@ query GetWorkspace($id: UUID!) @auth(level: USER) {
   }
 }
 
+# GetWorkspaceMembers (Reverted to fetch direct IDs)
 query GetWorkspaceMembers($workspaceId: UUID!) @auth(level: USER) {
   workspaceMembers(where: {workspaceId: {eq: $workspaceId}}) {
-    workspaceId
-    userId
-    profileId
     role
     joinedAt
-    # Note: We can't directly query the user and profile relationships
-    # We'll need to fetch them separately using the userId and profileId
+    # DataConnect doesn't generate nested user/profile here,
+    # fetch IDs and resolve client-side if needed.
+    userId 
+    profileId # Optional
   }
 }
 
@@ -202,7 +230,8 @@ query GetWorkspaceInvitations($workspaceId: UUID!) @auth(level: USER) {
   }
 }
 
-query GetPendingInvitationsByEmail($email: String!) @auth(level: USER) {
+# GetPendingInvitations (Reverted to fetch direct IDs)
+query GetPendingInvitations($email: String!) @auth(level: USER) {
   workspaceInvitations(where: {
     _and: [
       {email: {eq: $email}},
@@ -210,14 +239,14 @@ query GetPendingInvitationsByEmail($email: String!) @auth(level: USER) {
     ]
   }) {
     id
-    workspaceId
     email
     role
-    invitedBy
     status
     createdAt
     expiresAt
-    # Note: We can't directly query the workspace relationship
-    # We'll need to fetch the workspace separately using the workspaceId
+    # DataConnect doesn't generate nested workspace/inviter here,
+    # fetch IDs and resolve client-side if needed.
+    workspaceId
+    invitedBy # User ID of the inviter
   }
 }

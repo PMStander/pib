@@ -1,0 +1,24 @@
+extend type WorkspaceMember {
+  """
+  ✨ Implicit foreign key field based on `WorkspaceMember`.`workspace`. It must match the value of `Workspace`.`id`. See `@ref` for how to customize it.
+  """
+  workspaceId: UUID! @fdc_generated(from: "WorkspaceMember.workspace", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `WorkspaceMember`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "WorkspaceMember.user", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `WorkspaceMember`.`profile`. It must match the value of `Profile`.`id`. See `@ref` for how to customize it.
+  """
+  profileId: UUID @fdc_generated(from: "WorkspaceMember.profile", purpose: IMPLICIT_REF_FIELD)
+}
+extend type WorkspaceUser {
+  """
+  ✨ Implicit foreign key field based on `WorkspaceUser`.`workspace`. It must match the value of `Workspace`.`id`. See `@ref` for how to customize it.
+  """
+  workspaceId: UUID! @fdc_generated(from: "WorkspaceUser.workspace", purpose: IMPLICIT_REF_FIELD)
+  """
+  ✨ Implicit foreign key field based on `WorkspaceUser`.`user`. It must match the value of `User`.`id`. See `@ref` for how to customize it.
+  """
+  userId: String! @fdc_generated(from: "WorkspaceUser.user", purpose: IMPLICIT_REF_FIELD)
+}
