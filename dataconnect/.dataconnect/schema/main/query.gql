@@ -370,4 +370,109 @@ extend type Query {
     """
     having: WorkspaceMember_Having
   ): [WorkspaceMember!]! @fdc_generated(from: "WorkspaceMember", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `BusinessProfile` objects and return selected fields, ordered by vector similarity between the `descriptionEmbedding` field and `compare_embed`.
+  (Alternatively, `compare` can be used if the input is a raw Vector.)
+  """
+  businessProfiles_descriptionEmbedding_similarity(
+    """
+    Vector to compare with the stored vectors.
+    """
+    compare: Vector
+
+    """
+    ✨ `_embed` server value variant of `compare` (Vector to compare with the stored vectors.)
+    """
+    compare_embed: Vector_Embed
+
+    """
+    Similarity method to use for vector comparison (defaults to `INNER_PRODUCT`).
+    """
+    method: VectorSimilarityMethod = INNER_PRODUCT
+
+    """
+    Threshold for distance comparison.
+    """
+    within: Float
+
+    """
+    Filter condition to apply when searching for similar vectors.
+    """
+    where: BusinessProfile_Filter
+
+    """
+    Limit the number of similar vectors returned (defaults to 100 rows).
+    """
+    limit: Int = 100
+  ): [BusinessProfile!]! @fdc_generated(from: "BusinessProfile.descriptionEmbedding", purpose: QUERY_MULTIPLE_BY_SIMILARITY)
+  """
+  ✨ List `PartnerPreferences` objects and return selected fields, ordered by vector similarity between the `combinedEmbedding` field and `compare_embed`.
+  (Alternatively, `compare` can be used if the input is a raw Vector.)
+  """
+  partnerPreferencess_combinedEmbedding_similarity(
+    """
+    Vector to compare with the stored vectors.
+    """
+    compare: Vector
+
+    """
+    ✨ `_embed` server value variant of `compare` (Vector to compare with the stored vectors.)
+    """
+    compare_embed: Vector_Embed
+
+    """
+    Similarity method to use for vector comparison (defaults to `INNER_PRODUCT`).
+    """
+    method: VectorSimilarityMethod = INNER_PRODUCT
+
+    """
+    Threshold for distance comparison.
+    """
+    within: Float
+
+    """
+    Filter condition to apply when searching for similar vectors.
+    """
+    where: PartnerPreferences_Filter
+
+    """
+    Limit the number of similar vectors returned (defaults to 100 rows).
+    """
+    limit: Int = 100
+  ): [PartnerPreferences!]! @fdc_generated(from: "PartnerPreferences.combinedEmbedding", purpose: QUERY_MULTIPLE_BY_SIMILARITY)
+  """
+  ✨ List `Profile` objects and return selected fields, ordered by vector similarity between the `bioEmbedding` field and `compare_embed`.
+  (Alternatively, `compare` can be used if the input is a raw Vector.)
+  """
+  profiles_bioEmbedding_similarity(
+    """
+    Vector to compare with the stored vectors.
+    """
+    compare: Vector
+
+    """
+    ✨ `_embed` server value variant of `compare` (Vector to compare with the stored vectors.)
+    """
+    compare_embed: Vector_Embed
+
+    """
+    Similarity method to use for vector comparison (defaults to `INNER_PRODUCT`).
+    """
+    method: VectorSimilarityMethod = INNER_PRODUCT
+
+    """
+    Threshold for distance comparison.
+    """
+    within: Float
+
+    """
+    Filter condition to apply when searching for similar vectors.
+    """
+    where: Profile_Filter
+
+    """
+    Limit the number of similar vectors returned (defaults to 100 rows).
+    """
+    limit: Int = 100
+  ): [Profile!]! @fdc_generated(from: "Profile.bioEmbedding", purpose: QUERY_MULTIPLE_BY_SIMILARITY)
 }

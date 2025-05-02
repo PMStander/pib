@@ -28,6 +28,17 @@ export function createProfile(dcOrVars, vars) {
   return executeMutation(createProfileRef(dcOrVars, vars));
 }
 
+export const createProfileWithBioRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateProfileWithBio', inputVars);
+}
+createProfileWithBioRef.operationName = 'CreateProfileWithBio';
+
+export function createProfileWithBio(dcOrVars, vars) {
+  return executeMutation(createProfileWithBioRef(dcOrVars, vars));
+}
+
 export const updateProfileRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -37,6 +48,17 @@ updateProfileRef.operationName = 'UpdateProfile';
 
 export function updateProfile(dcOrVars, vars) {
   return executeMutation(updateProfileRef(dcOrVars, vars));
+}
+
+export const updateProfileWithBioRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdateProfileWithBio', inputVars);
+}
+updateProfileWithBioRef.operationName = 'UpdateProfileWithBio';
+
+export function updateProfileWithBio(dcOrVars, vars) {
+  return executeMutation(updateProfileWithBioRef(dcOrVars, vars));
 }
 
 export const deleteProfileRef = (dcOrVars, vars) => {
@@ -160,6 +182,17 @@ export function createBusinessProfile(dcOrVars, vars) {
   return executeMutation(createBusinessProfileRef(dcOrVars, vars));
 }
 
+export const createBusinessProfileWithDescriptionRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreateBusinessProfileWithDescription', inputVars);
+}
+createBusinessProfileWithDescriptionRef.operationName = 'CreateBusinessProfileWithDescription';
+
+export function createBusinessProfileWithDescription(dcOrVars, vars) {
+  return executeMutation(createBusinessProfileWithDescriptionRef(dcOrVars, vars));
+}
+
 export const updateBusinessProfileRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -169,6 +202,17 @@ updateBusinessProfileRef.operationName = 'UpdateBusinessProfile';
 
 export function updateBusinessProfile(dcOrVars, vars) {
   return executeMutation(updateBusinessProfileRef(dcOrVars, vars));
+}
+
+export const updateBusinessProfileWithDescriptionRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdateBusinessProfileWithDescription', inputVars);
+}
+updateBusinessProfileWithDescriptionRef.operationName = 'UpdateBusinessProfileWithDescription';
+
+export function updateBusinessProfileWithDescription(dcOrVars, vars) {
+  return executeMutation(updateBusinessProfileWithDescriptionRef(dcOrVars, vars));
 }
 
 export const createPartnerPreferencesRef = (dcOrVars, vars) => {
@@ -182,6 +226,17 @@ export function createPartnerPreferences(dcOrVars, vars) {
   return executeMutation(createPartnerPreferencesRef(dcOrVars, vars));
 }
 
+export const createPartnerPreferencesWithEmbeddingRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'CreatePartnerPreferencesWithEmbedding', inputVars);
+}
+createPartnerPreferencesWithEmbeddingRef.operationName = 'CreatePartnerPreferencesWithEmbedding';
+
+export function createPartnerPreferencesWithEmbedding(dcOrVars, vars) {
+  return executeMutation(createPartnerPreferencesWithEmbeddingRef(dcOrVars, vars));
+}
+
 export const updatePartnerPreferencesRef = (dcOrVars, vars) => {
   const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
   dcInstance._useGeneratedSdk();
@@ -193,6 +248,17 @@ export function updatePartnerPreferences(dcOrVars, vars) {
   return executeMutation(updatePartnerPreferencesRef(dcOrVars, vars));
 }
 
+export const updatePartnerPreferencesWithEmbeddingRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return mutationRef(dcInstance, 'UpdatePartnerPreferencesWithEmbedding', inputVars);
+}
+updatePartnerPreferencesWithEmbeddingRef.operationName = 'UpdatePartnerPreferencesWithEmbedding';
+
+export function updatePartnerPreferencesWithEmbedding(dcOrVars, vars) {
+  return executeMutation(updatePartnerPreferencesWithEmbeddingRef(dcOrVars, vars));
+}
+
 export const getCurrentUserRef = (dc) => {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   dcInstance._useGeneratedSdk();
@@ -202,6 +268,17 @@ getCurrentUserRef.operationName = 'GetCurrentUser';
 
 export function getCurrentUser(dc) {
   return executeQuery(getCurrentUserRef(dc));
+}
+
+export const searchProfilesByBioRef = (dcOrVars, vars) => {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  dcInstance._useGeneratedSdk();
+  return queryRef(dcInstance, 'SearchProfilesByBio', inputVars);
+}
+searchProfilesByBioRef.operationName = 'SearchProfilesByBio';
+
+export function searchProfilesByBio(dcOrVars, vars) {
+  return executeQuery(searchProfilesByBioRef(dcOrVars, vars));
 }
 
 export const getUserRef = (dcOrVars, vars) => {

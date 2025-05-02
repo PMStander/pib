@@ -46,6 +46,20 @@ export interface CreateBusinessProfileVariables {
   employeeCount?: number | null;
 }
 
+export interface CreateBusinessProfileWithDescriptionData {
+  createBusinessProfile: BusinessProfile_Key;
+}
+
+export interface CreateBusinessProfileWithDescriptionVariables {
+  workspaceId: UUIDString;
+  name: string;
+  industry?: string | null;
+  description: string;
+  location?: string | null;
+  website?: string | null;
+  employeeCount?: number | null;
+}
+
 export interface CreatePartnerPreferencesData {
   createPartnerPreferences: PartnerPreferences_Key;
 }
@@ -59,6 +73,20 @@ export interface CreatePartnerPreferencesVariables {
   skillsNeeded?: string[] | null;
 }
 
+export interface CreatePartnerPreferencesWithEmbeddingData {
+  createPartnerPreferences: PartnerPreferences_Key;
+}
+
+export interface CreatePartnerPreferencesWithEmbeddingVariables {
+  workspaceId: UUIDString;
+  industries?: string[] | null;
+  locations?: string[] | null;
+  minEmployeeCount?: number | null;
+  maxEmployeeCount?: number | null;
+  skillsNeeded?: string[] | null;
+  combinedText: string;
+}
+
 export interface CreateProfileData {
   createProfile: Profile_Key;
 }
@@ -66,6 +94,19 @@ export interface CreateProfileData {
 export interface CreateProfileVariables {
   name: string;
   bio?: string | null;
+  avatarUrl?: string | null;
+  skills?: string[] | null;
+  interests?: string[] | null;
+  isDefault?: boolean | null;
+}
+
+export interface CreateProfileWithBioData {
+  createProfile: Profile_Key;
+}
+
+export interface CreateProfileWithBioVariables {
+  name: string;
+  bio: string;
   avatarUrl?: string | null;
   skills?: string[] | null;
   interests?: string[] | null;
@@ -283,6 +324,26 @@ export interface RemoveWorkspaceMemberVariables {
   userId: string;
 }
 
+export interface SearchProfilesByBioData {
+  profiles_bioEmbedding_similarity: ({
+    id: UUIDString;
+    userId: string;
+    name: string;
+    bio?: string | null;
+    skills?: string[] | null;
+    interests?: string[] | null;
+    avatarUrl?: string | null;
+    _metadata?: {
+      distance?: number | null;
+    };
+  } & Profile_Key)[];
+}
+
+export interface SearchProfilesByBioVariables {
+  searchText: string;
+  limit?: number | null;
+}
+
 export interface UpdateBusinessProfileData {
   updateBusinessProfile?: BusinessProfile_Key | null;
 }
@@ -292,6 +353,20 @@ export interface UpdateBusinessProfileVariables {
   name?: string | null;
   industry?: string | null;
   description?: string | null;
+  location?: string | null;
+  website?: string | null;
+  employeeCount?: number | null;
+}
+
+export interface UpdateBusinessProfileWithDescriptionData {
+  updateBusinessProfile?: BusinessProfile_Key | null;
+}
+
+export interface UpdateBusinessProfileWithDescriptionVariables {
+  id: UUIDString;
+  name?: string | null;
+  industry?: string | null;
+  description: string;
   location?: string | null;
   website?: string | null;
   employeeCount?: number | null;
@@ -310,6 +385,20 @@ export interface UpdatePartnerPreferencesVariables {
   skillsNeeded?: string[] | null;
 }
 
+export interface UpdatePartnerPreferencesWithEmbeddingData {
+  updatePartnerPreferences?: PartnerPreferences_Key | null;
+}
+
+export interface UpdatePartnerPreferencesWithEmbeddingVariables {
+  id: UUIDString;
+  industries?: string[] | null;
+  locations?: string[] | null;
+  minEmployeeCount?: number | null;
+  maxEmployeeCount?: number | null;
+  skillsNeeded?: string[] | null;
+  combinedText: string;
+}
+
 export interface UpdateProfileData {
   updateProfile?: Profile_Key | null;
 }
@@ -318,6 +407,20 @@ export interface UpdateProfileVariables {
   id: UUIDString;
   name?: string | null;
   bio?: string | null;
+  avatarUrl?: string | null;
+  skills?: string[] | null;
+  interests?: string[] | null;
+  isDefault?: boolean | null;
+}
+
+export interface UpdateProfileWithBioData {
+  updateProfile?: Profile_Key | null;
+}
+
+export interface UpdateProfileWithBioVariables {
+  id: UUIDString;
+  name?: string | null;
+  bio: string;
   avatarUrl?: string | null;
   skills?: string[] | null;
   interests?: string[] | null;
@@ -400,6 +503,18 @@ export const createProfileRef: CreateProfileRef;
 export function createProfile(vars: CreateProfileVariables): MutationPromise<CreateProfileData, CreateProfileVariables>;
 export function createProfile(dc: DataConnect, vars: CreateProfileVariables): MutationPromise<CreateProfileData, CreateProfileVariables>;
 
+interface CreateProfileWithBioRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateProfileWithBioVariables): MutationRef<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateProfileWithBioVariables): MutationRef<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+  operationName: string;
+}
+export const createProfileWithBioRef: CreateProfileWithBioRef;
+
+export function createProfileWithBio(vars: CreateProfileWithBioVariables): MutationPromise<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+export function createProfileWithBio(dc: DataConnect, vars: CreateProfileWithBioVariables): MutationPromise<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+
 interface UpdateProfileRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: UpdateProfileVariables): MutationRef<UpdateProfileData, UpdateProfileVariables>;
@@ -411,6 +526,18 @@ export const updateProfileRef: UpdateProfileRef;
 
 export function updateProfile(vars: UpdateProfileVariables): MutationPromise<UpdateProfileData, UpdateProfileVariables>;
 export function updateProfile(dc: DataConnect, vars: UpdateProfileVariables): MutationPromise<UpdateProfileData, UpdateProfileVariables>;
+
+interface UpdateProfileWithBioRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateProfileWithBioVariables): MutationRef<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateProfileWithBioVariables): MutationRef<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+  operationName: string;
+}
+export const updateProfileWithBioRef: UpdateProfileWithBioRef;
+
+export function updateProfileWithBio(vars: UpdateProfileWithBioVariables): MutationPromise<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+export function updateProfileWithBio(dc: DataConnect, vars: UpdateProfileWithBioVariables): MutationPromise<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
 
 interface DeleteProfileRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -544,6 +671,18 @@ export const createBusinessProfileRef: CreateBusinessProfileRef;
 export function createBusinessProfile(vars: CreateBusinessProfileVariables): MutationPromise<CreateBusinessProfileData, CreateBusinessProfileVariables>;
 export function createBusinessProfile(dc: DataConnect, vars: CreateBusinessProfileVariables): MutationPromise<CreateBusinessProfileData, CreateBusinessProfileVariables>;
 
+interface CreateBusinessProfileWithDescriptionRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateBusinessProfileWithDescriptionVariables): MutationRef<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreateBusinessProfileWithDescriptionVariables): MutationRef<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+  operationName: string;
+}
+export const createBusinessProfileWithDescriptionRef: CreateBusinessProfileWithDescriptionRef;
+
+export function createBusinessProfileWithDescription(vars: CreateBusinessProfileWithDescriptionVariables): MutationPromise<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+export function createBusinessProfileWithDescription(dc: DataConnect, vars: CreateBusinessProfileWithDescriptionVariables): MutationPromise<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+
 interface UpdateBusinessProfileRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: UpdateBusinessProfileVariables): MutationRef<UpdateBusinessProfileData, UpdateBusinessProfileVariables>;
@@ -555,6 +694,18 @@ export const updateBusinessProfileRef: UpdateBusinessProfileRef;
 
 export function updateBusinessProfile(vars: UpdateBusinessProfileVariables): MutationPromise<UpdateBusinessProfileData, UpdateBusinessProfileVariables>;
 export function updateBusinessProfile(dc: DataConnect, vars: UpdateBusinessProfileVariables): MutationPromise<UpdateBusinessProfileData, UpdateBusinessProfileVariables>;
+
+interface UpdateBusinessProfileWithDescriptionRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateBusinessProfileWithDescriptionVariables): MutationRef<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdateBusinessProfileWithDescriptionVariables): MutationRef<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+  operationName: string;
+}
+export const updateBusinessProfileWithDescriptionRef: UpdateBusinessProfileWithDescriptionRef;
+
+export function updateBusinessProfileWithDescription(vars: UpdateBusinessProfileWithDescriptionVariables): MutationPromise<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+export function updateBusinessProfileWithDescription(dc: DataConnect, vars: UpdateBusinessProfileWithDescriptionVariables): MutationPromise<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
 
 interface CreatePartnerPreferencesRef {
   /* Allow users to create refs without passing in DataConnect */
@@ -568,6 +719,18 @@ export const createPartnerPreferencesRef: CreatePartnerPreferencesRef;
 export function createPartnerPreferences(vars: CreatePartnerPreferencesVariables): MutationPromise<CreatePartnerPreferencesData, CreatePartnerPreferencesVariables>;
 export function createPartnerPreferences(dc: DataConnect, vars: CreatePartnerPreferencesVariables): MutationPromise<CreatePartnerPreferencesData, CreatePartnerPreferencesVariables>;
 
+interface CreatePartnerPreferencesWithEmbeddingRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationRef<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationRef<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+  operationName: string;
+}
+export const createPartnerPreferencesWithEmbeddingRef: CreatePartnerPreferencesWithEmbeddingRef;
+
+export function createPartnerPreferencesWithEmbedding(vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationPromise<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+export function createPartnerPreferencesWithEmbedding(dc: DataConnect, vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationPromise<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+
 interface UpdatePartnerPreferencesRef {
   /* Allow users to create refs without passing in DataConnect */
   (vars: UpdatePartnerPreferencesVariables): MutationRef<UpdatePartnerPreferencesData, UpdatePartnerPreferencesVariables>;
@@ -580,6 +743,18 @@ export const updatePartnerPreferencesRef: UpdatePartnerPreferencesRef;
 export function updatePartnerPreferences(vars: UpdatePartnerPreferencesVariables): MutationPromise<UpdatePartnerPreferencesData, UpdatePartnerPreferencesVariables>;
 export function updatePartnerPreferences(dc: DataConnect, vars: UpdatePartnerPreferencesVariables): MutationPromise<UpdatePartnerPreferencesData, UpdatePartnerPreferencesVariables>;
 
+interface UpdatePartnerPreferencesWithEmbeddingRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationRef<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationRef<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+  operationName: string;
+}
+export const updatePartnerPreferencesWithEmbeddingRef: UpdatePartnerPreferencesWithEmbeddingRef;
+
+export function updatePartnerPreferencesWithEmbedding(vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationPromise<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+export function updatePartnerPreferencesWithEmbedding(dc: DataConnect, vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationPromise<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+
 interface GetCurrentUserRef {
   /* Allow users to create refs without passing in DataConnect */
   (): QueryRef<GetCurrentUserData, undefined>;
@@ -591,6 +766,18 @@ export const getCurrentUserRef: GetCurrentUserRef;
 
 export function getCurrentUser(): QueryPromise<GetCurrentUserData, undefined>;
 export function getCurrentUser(dc: DataConnect): QueryPromise<GetCurrentUserData, undefined>;
+
+interface SearchProfilesByBioRef {
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: SearchProfilesByBioVariables): QueryRef<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+  /* Allow users to pass in custom DataConnect instances */
+  (dc: DataConnect, vars: SearchProfilesByBioVariables): QueryRef<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+  operationName: string;
+}
+export const searchProfilesByBioRef: SearchProfilesByBioRef;
+
+export function searchProfilesByBio(vars: SearchProfilesByBioVariables): QueryPromise<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+export function searchProfilesByBio(dc: DataConnect, vars: SearchProfilesByBioVariables): QueryPromise<SearchProfilesByBioData, SearchProfilesByBioVariables>;
 
 interface GetUserRef {
   /* Allow users to create refs without passing in DataConnect */

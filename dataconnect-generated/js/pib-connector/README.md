@@ -4,6 +4,7 @@
   - [*Connecting to the local Emulator*](#connecting-to-the-local-emulator)
 - [**Queries**](#queries)
   - [*GetCurrentUser*](#getcurrentuser)
+  - [*SearchProfilesByBio*](#searchprofilesbybio)
   - [*GetUser*](#getuser)
   - [*GetUserProfiles*](#getuserprofiles)
   - [*GetUserWorkspaces*](#getuserworkspaces)
@@ -16,7 +17,9 @@
 - [**Mutations**](#mutations)
   - [*UpdateUser*](#updateuser)
   - [*CreateProfile*](#createprofile)
+  - [*CreateProfileWithBio*](#createprofilewithbio)
   - [*UpdateProfile*](#updateprofile)
+  - [*UpdateProfileWithBio*](#updateprofilewithbio)
   - [*DeleteProfile*](#deleteprofile)
   - [*CreateWorkspace*](#createworkspace)
   - [*UpdateWorkspace*](#updateworkspace)
@@ -28,9 +31,13 @@
   - [*AcceptInvitation*](#acceptinvitation)
   - [*DeclineInvitation*](#declineinvitation)
   - [*CreateBusinessProfile*](#createbusinessprofile)
+  - [*CreateBusinessProfileWithDescription*](#createbusinessprofilewithdescription)
   - [*UpdateBusinessProfile*](#updatebusinessprofile)
+  - [*UpdateBusinessProfileWithDescription*](#updatebusinessprofilewithdescription)
   - [*CreatePartnerPreferences*](#createpartnerpreferences)
+  - [*CreatePartnerPreferencesWithEmbedding*](#createpartnerpreferenceswithembedding)
   - [*UpdatePartnerPreferences*](#updatepartnerpreferences)
+  - [*UpdatePartnerPreferencesWithEmbedding*](#updatepartnerpreferenceswithembedding)
 
 # Generated TypeScript README
 This README will guide you through the process of using the generated JavaScript SDK package for the connector `pib`. It will also provide examples on how to use your generated SDK to call your Data Connect queries and mutations.
@@ -179,6 +186,129 @@ console.log(data.user);
 executeQuery(ref).then((response) => {
   const data = response.data;
   console.log(data.user);
+});
+```
+
+## SearchProfilesByBio
+You can execute the `SearchProfilesByBio` query using the following action shortcut function, or by calling `executeQuery()` after calling the following `QueryRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+searchProfilesByBio(vars: SearchProfilesByBioVariables): QueryPromise<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+
+interface SearchProfilesByBioRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: SearchProfilesByBioVariables): QueryRef<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+}
+export const searchProfilesByBioRef: SearchProfilesByBioRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `QueryRef` function.
+```typescript
+searchProfilesByBio(dc: DataConnect, vars: SearchProfilesByBioVariables): QueryPromise<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+
+interface SearchProfilesByBioRef {
+  ...
+  (dc: DataConnect, vars: SearchProfilesByBioVariables): QueryRef<SearchProfilesByBioData, SearchProfilesByBioVariables>;
+}
+export const searchProfilesByBioRef: SearchProfilesByBioRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the searchProfilesByBioRef:
+```typescript
+const name = searchProfilesByBioRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `SearchProfilesByBio` query requires an argument of type `SearchProfilesByBioVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface SearchProfilesByBioVariables {
+  searchText: string;
+  limit?: number | null;
+}
+```
+### Return Type
+Recall that executing the `SearchProfilesByBio` query returns a `QueryPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `SearchProfilesByBioData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface SearchProfilesByBioData {
+  profiles_bioEmbedding_similarity: ({
+    id: UUIDString;
+    userId: string;
+    name: string;
+    bio?: string | null;
+    skills?: string[] | null;
+    interests?: string[] | null;
+    avatarUrl?: string | null;
+    _metadata?: {
+      distance?: number | null;
+    };
+  } & Profile_Key)[];
+}
+```
+### Using `SearchProfilesByBio`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, searchProfilesByBio, SearchProfilesByBioVariables } from '@firebasegen/pib-connector';
+
+// The `SearchProfilesByBio` query requires an argument of type `SearchProfilesByBioVariables`:
+const searchProfilesByBioVars: SearchProfilesByBioVariables = {
+  searchText: ..., 
+  limit: ..., // optional
+};
+
+// Call the `searchProfilesByBio()` function to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await searchProfilesByBio(searchProfilesByBioVars);
+// Variables can be defined inline as well.
+const { data } = await searchProfilesByBio({ searchText: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await searchProfilesByBio(dataConnect, searchProfilesByBioVars);
+
+console.log(data.profiles_bioEmbedding_similarity);
+
+// Or, you can use the `Promise` API.
+searchProfilesByBio(searchProfilesByBioVars).then((response) => {
+  const data = response.data;
+  console.log(data.profiles_bioEmbedding_similarity);
+});
+```
+
+### Using `SearchProfilesByBio`'s `QueryRef` function
+
+```typescript
+import { getDataConnect, executeQuery } from 'firebase/data-connect';
+import { connectorConfig, searchProfilesByBioRef, SearchProfilesByBioVariables } from '@firebasegen/pib-connector';
+
+// The `SearchProfilesByBio` query requires an argument of type `SearchProfilesByBioVariables`:
+const searchProfilesByBioVars: SearchProfilesByBioVariables = {
+  searchText: ..., 
+  limit: ..., // optional
+};
+
+// Call the `searchProfilesByBioRef()` function to get a reference to the query.
+const ref = searchProfilesByBioRef(searchProfilesByBioVars);
+// Variables can be defined inline as well.
+const ref = searchProfilesByBioRef({ searchText: ..., limit: ..., });
+
+// You can also pass in a `DataConnect` instance to the `QueryRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = searchProfilesByBioRef(dataConnect, searchProfilesByBioVars);
+
+// Call `executeQuery()` on the reference to execute the query.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeQuery(ref);
+
+console.log(data.profiles_bioEmbedding_similarity);
+
+// Or, you can use the `Promise` API.
+executeQuery(ref).then((response) => {
+  const data = response.data;
+  console.log(data.profiles_bioEmbedding_similarity);
 });
 ```
 
@@ -1455,6 +1585,130 @@ executeMutation(ref).then((response) => {
 });
 ```
 
+## CreateProfileWithBio
+You can execute the `CreateProfileWithBio` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+createProfileWithBio(vars: CreateProfileWithBioVariables): MutationPromise<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+
+interface CreateProfileWithBioRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateProfileWithBioVariables): MutationRef<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+}
+export const createProfileWithBioRef: CreateProfileWithBioRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+createProfileWithBio(dc: DataConnect, vars: CreateProfileWithBioVariables): MutationPromise<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+
+interface CreateProfileWithBioRef {
+  ...
+  (dc: DataConnect, vars: CreateProfileWithBioVariables): MutationRef<CreateProfileWithBioData, CreateProfileWithBioVariables>;
+}
+export const createProfileWithBioRef: CreateProfileWithBioRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createProfileWithBioRef:
+```typescript
+const name = createProfileWithBioRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `CreateProfileWithBio` mutation requires an argument of type `CreateProfileWithBioVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface CreateProfileWithBioVariables {
+  name: string;
+  bio: string;
+  avatarUrl?: string | null;
+  skills?: string[] | null;
+  interests?: string[] | null;
+  isDefault?: boolean | null;
+}
+```
+### Return Type
+Recall that executing the `CreateProfileWithBio` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `CreateProfileWithBioData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface CreateProfileWithBioData {
+  createProfile: Profile_Key;
+}
+```
+### Using `CreateProfileWithBio`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, createProfileWithBio, CreateProfileWithBioVariables } from '@firebasegen/pib-connector';
+
+// The `CreateProfileWithBio` mutation requires an argument of type `CreateProfileWithBioVariables`:
+const createProfileWithBioVars: CreateProfileWithBioVariables = {
+  name: ..., 
+  bio: ..., 
+  avatarUrl: ..., // optional
+  skills: ..., // optional
+  interests: ..., // optional
+  isDefault: ..., // optional
+};
+
+// Call the `createProfileWithBio()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await createProfileWithBio(createProfileWithBioVars);
+// Variables can be defined inline as well.
+const { data } = await createProfileWithBio({ name: ..., bio: ..., avatarUrl: ..., skills: ..., interests: ..., isDefault: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await createProfileWithBio(dataConnect, createProfileWithBioVars);
+
+console.log(data.createProfile);
+
+// Or, you can use the `Promise` API.
+createProfileWithBio(createProfileWithBioVars).then((response) => {
+  const data = response.data;
+  console.log(data.createProfile);
+});
+```
+
+### Using `CreateProfileWithBio`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, createProfileWithBioRef, CreateProfileWithBioVariables } from '@firebasegen/pib-connector';
+
+// The `CreateProfileWithBio` mutation requires an argument of type `CreateProfileWithBioVariables`:
+const createProfileWithBioVars: CreateProfileWithBioVariables = {
+  name: ..., 
+  bio: ..., 
+  avatarUrl: ..., // optional
+  skills: ..., // optional
+  interests: ..., // optional
+  isDefault: ..., // optional
+};
+
+// Call the `createProfileWithBioRef()` function to get a reference to the mutation.
+const ref = createProfileWithBioRef(createProfileWithBioVars);
+// Variables can be defined inline as well.
+const ref = createProfileWithBioRef({ name: ..., bio: ..., avatarUrl: ..., skills: ..., interests: ..., isDefault: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = createProfileWithBioRef(dataConnect, createProfileWithBioVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.createProfile);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.createProfile);
+});
+```
+
 ## UpdateProfile
 You can execute the `UpdateProfile` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
 ```typescript
@@ -1568,6 +1822,133 @@ const ref = updateProfileRef({ id: ..., name: ..., bio: ..., avatarUrl: ..., ski
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
 const ref = updateProfileRef(dataConnect, updateProfileVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.updateProfile);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.updateProfile);
+});
+```
+
+## UpdateProfileWithBio
+You can execute the `UpdateProfileWithBio` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+updateProfileWithBio(vars: UpdateProfileWithBioVariables): MutationPromise<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+
+interface UpdateProfileWithBioRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateProfileWithBioVariables): MutationRef<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+}
+export const updateProfileWithBioRef: UpdateProfileWithBioRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+updateProfileWithBio(dc: DataConnect, vars: UpdateProfileWithBioVariables): MutationPromise<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+
+interface UpdateProfileWithBioRef {
+  ...
+  (dc: DataConnect, vars: UpdateProfileWithBioVariables): MutationRef<UpdateProfileWithBioData, UpdateProfileWithBioVariables>;
+}
+export const updateProfileWithBioRef: UpdateProfileWithBioRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the updateProfileWithBioRef:
+```typescript
+const name = updateProfileWithBioRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpdateProfileWithBio` mutation requires an argument of type `UpdateProfileWithBioVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpdateProfileWithBioVariables {
+  id: UUIDString;
+  name?: string | null;
+  bio: string;
+  avatarUrl?: string | null;
+  skills?: string[] | null;
+  interests?: string[] | null;
+  isDefault?: boolean | null;
+}
+```
+### Return Type
+Recall that executing the `UpdateProfileWithBio` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpdateProfileWithBioData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpdateProfileWithBioData {
+  updateProfile?: Profile_Key | null;
+}
+```
+### Using `UpdateProfileWithBio`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, updateProfileWithBio, UpdateProfileWithBioVariables } from '@firebasegen/pib-connector';
+
+// The `UpdateProfileWithBio` mutation requires an argument of type `UpdateProfileWithBioVariables`:
+const updateProfileWithBioVars: UpdateProfileWithBioVariables = {
+  id: ..., 
+  name: ..., // optional
+  bio: ..., 
+  avatarUrl: ..., // optional
+  skills: ..., // optional
+  interests: ..., // optional
+  isDefault: ..., // optional
+};
+
+// Call the `updateProfileWithBio()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await updateProfileWithBio(updateProfileWithBioVars);
+// Variables can be defined inline as well.
+const { data } = await updateProfileWithBio({ id: ..., name: ..., bio: ..., avatarUrl: ..., skills: ..., interests: ..., isDefault: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await updateProfileWithBio(dataConnect, updateProfileWithBioVars);
+
+console.log(data.updateProfile);
+
+// Or, you can use the `Promise` API.
+updateProfileWithBio(updateProfileWithBioVars).then((response) => {
+  const data = response.data;
+  console.log(data.updateProfile);
+});
+```
+
+### Using `UpdateProfileWithBio`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, updateProfileWithBioRef, UpdateProfileWithBioVariables } from '@firebasegen/pib-connector';
+
+// The `UpdateProfileWithBio` mutation requires an argument of type `UpdateProfileWithBioVariables`:
+const updateProfileWithBioVars: UpdateProfileWithBioVariables = {
+  id: ..., 
+  name: ..., // optional
+  bio: ..., 
+  avatarUrl: ..., // optional
+  skills: ..., // optional
+  interests: ..., // optional
+  isDefault: ..., // optional
+};
+
+// Call the `updateProfileWithBioRef()` function to get a reference to the mutation.
+const ref = updateProfileWithBioRef(updateProfileWithBioVars);
+// Variables can be defined inline as well.
+const ref = updateProfileWithBioRef({ id: ..., name: ..., bio: ..., avatarUrl: ..., skills: ..., interests: ..., isDefault: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = updateProfileWithBioRef(dataConnect, updateProfileWithBioVars);
 
 // Call `executeMutation()` on the reference to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
@@ -2841,6 +3222,133 @@ executeMutation(ref).then((response) => {
 });
 ```
 
+## CreateBusinessProfileWithDescription
+You can execute the `CreateBusinessProfileWithDescription` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+createBusinessProfileWithDescription(vars: CreateBusinessProfileWithDescriptionVariables): MutationPromise<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+
+interface CreateBusinessProfileWithDescriptionRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreateBusinessProfileWithDescriptionVariables): MutationRef<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+}
+export const createBusinessProfileWithDescriptionRef: CreateBusinessProfileWithDescriptionRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+createBusinessProfileWithDescription(dc: DataConnect, vars: CreateBusinessProfileWithDescriptionVariables): MutationPromise<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+
+interface CreateBusinessProfileWithDescriptionRef {
+  ...
+  (dc: DataConnect, vars: CreateBusinessProfileWithDescriptionVariables): MutationRef<CreateBusinessProfileWithDescriptionData, CreateBusinessProfileWithDescriptionVariables>;
+}
+export const createBusinessProfileWithDescriptionRef: CreateBusinessProfileWithDescriptionRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createBusinessProfileWithDescriptionRef:
+```typescript
+const name = createBusinessProfileWithDescriptionRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `CreateBusinessProfileWithDescription` mutation requires an argument of type `CreateBusinessProfileWithDescriptionVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface CreateBusinessProfileWithDescriptionVariables {
+  workspaceId: UUIDString;
+  name: string;
+  industry?: string | null;
+  description: string;
+  location?: string | null;
+  website?: string | null;
+  employeeCount?: number | null;
+}
+```
+### Return Type
+Recall that executing the `CreateBusinessProfileWithDescription` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `CreateBusinessProfileWithDescriptionData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface CreateBusinessProfileWithDescriptionData {
+  createBusinessProfile: BusinessProfile_Key;
+}
+```
+### Using `CreateBusinessProfileWithDescription`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, createBusinessProfileWithDescription, CreateBusinessProfileWithDescriptionVariables } from '@firebasegen/pib-connector';
+
+// The `CreateBusinessProfileWithDescription` mutation requires an argument of type `CreateBusinessProfileWithDescriptionVariables`:
+const createBusinessProfileWithDescriptionVars: CreateBusinessProfileWithDescriptionVariables = {
+  workspaceId: ..., 
+  name: ..., 
+  industry: ..., // optional
+  description: ..., 
+  location: ..., // optional
+  website: ..., // optional
+  employeeCount: ..., // optional
+};
+
+// Call the `createBusinessProfileWithDescription()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await createBusinessProfileWithDescription(createBusinessProfileWithDescriptionVars);
+// Variables can be defined inline as well.
+const { data } = await createBusinessProfileWithDescription({ workspaceId: ..., name: ..., industry: ..., description: ..., location: ..., website: ..., employeeCount: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await createBusinessProfileWithDescription(dataConnect, createBusinessProfileWithDescriptionVars);
+
+console.log(data.createBusinessProfile);
+
+// Or, you can use the `Promise` API.
+createBusinessProfileWithDescription(createBusinessProfileWithDescriptionVars).then((response) => {
+  const data = response.data;
+  console.log(data.createBusinessProfile);
+});
+```
+
+### Using `CreateBusinessProfileWithDescription`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, createBusinessProfileWithDescriptionRef, CreateBusinessProfileWithDescriptionVariables } from '@firebasegen/pib-connector';
+
+// The `CreateBusinessProfileWithDescription` mutation requires an argument of type `CreateBusinessProfileWithDescriptionVariables`:
+const createBusinessProfileWithDescriptionVars: CreateBusinessProfileWithDescriptionVariables = {
+  workspaceId: ..., 
+  name: ..., 
+  industry: ..., // optional
+  description: ..., 
+  location: ..., // optional
+  website: ..., // optional
+  employeeCount: ..., // optional
+};
+
+// Call the `createBusinessProfileWithDescriptionRef()` function to get a reference to the mutation.
+const ref = createBusinessProfileWithDescriptionRef(createBusinessProfileWithDescriptionVars);
+// Variables can be defined inline as well.
+const ref = createBusinessProfileWithDescriptionRef({ workspaceId: ..., name: ..., industry: ..., description: ..., location: ..., website: ..., employeeCount: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = createBusinessProfileWithDescriptionRef(dataConnect, createBusinessProfileWithDescriptionVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.createBusinessProfile);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.createBusinessProfile);
+});
+```
+
 ## UpdateBusinessProfile
 You can execute the `UpdateBusinessProfile` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
 ```typescript
@@ -2954,6 +3462,133 @@ const ref = updateBusinessProfileRef({ id: ..., name: ..., industry: ..., descri
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
 const ref = updateBusinessProfileRef(dataConnect, updateBusinessProfileVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.updateBusinessProfile);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.updateBusinessProfile);
+});
+```
+
+## UpdateBusinessProfileWithDescription
+You can execute the `UpdateBusinessProfileWithDescription` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+updateBusinessProfileWithDescription(vars: UpdateBusinessProfileWithDescriptionVariables): MutationPromise<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+
+interface UpdateBusinessProfileWithDescriptionRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdateBusinessProfileWithDescriptionVariables): MutationRef<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+}
+export const updateBusinessProfileWithDescriptionRef: UpdateBusinessProfileWithDescriptionRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+updateBusinessProfileWithDescription(dc: DataConnect, vars: UpdateBusinessProfileWithDescriptionVariables): MutationPromise<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+
+interface UpdateBusinessProfileWithDescriptionRef {
+  ...
+  (dc: DataConnect, vars: UpdateBusinessProfileWithDescriptionVariables): MutationRef<UpdateBusinessProfileWithDescriptionData, UpdateBusinessProfileWithDescriptionVariables>;
+}
+export const updateBusinessProfileWithDescriptionRef: UpdateBusinessProfileWithDescriptionRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the updateBusinessProfileWithDescriptionRef:
+```typescript
+const name = updateBusinessProfileWithDescriptionRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpdateBusinessProfileWithDescription` mutation requires an argument of type `UpdateBusinessProfileWithDescriptionVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpdateBusinessProfileWithDescriptionVariables {
+  id: UUIDString;
+  name?: string | null;
+  industry?: string | null;
+  description: string;
+  location?: string | null;
+  website?: string | null;
+  employeeCount?: number | null;
+}
+```
+### Return Type
+Recall that executing the `UpdateBusinessProfileWithDescription` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpdateBusinessProfileWithDescriptionData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpdateBusinessProfileWithDescriptionData {
+  updateBusinessProfile?: BusinessProfile_Key | null;
+}
+```
+### Using `UpdateBusinessProfileWithDescription`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, updateBusinessProfileWithDescription, UpdateBusinessProfileWithDescriptionVariables } from '@firebasegen/pib-connector';
+
+// The `UpdateBusinessProfileWithDescription` mutation requires an argument of type `UpdateBusinessProfileWithDescriptionVariables`:
+const updateBusinessProfileWithDescriptionVars: UpdateBusinessProfileWithDescriptionVariables = {
+  id: ..., 
+  name: ..., // optional
+  industry: ..., // optional
+  description: ..., 
+  location: ..., // optional
+  website: ..., // optional
+  employeeCount: ..., // optional
+};
+
+// Call the `updateBusinessProfileWithDescription()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await updateBusinessProfileWithDescription(updateBusinessProfileWithDescriptionVars);
+// Variables can be defined inline as well.
+const { data } = await updateBusinessProfileWithDescription({ id: ..., name: ..., industry: ..., description: ..., location: ..., website: ..., employeeCount: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await updateBusinessProfileWithDescription(dataConnect, updateBusinessProfileWithDescriptionVars);
+
+console.log(data.updateBusinessProfile);
+
+// Or, you can use the `Promise` API.
+updateBusinessProfileWithDescription(updateBusinessProfileWithDescriptionVars).then((response) => {
+  const data = response.data;
+  console.log(data.updateBusinessProfile);
+});
+```
+
+### Using `UpdateBusinessProfileWithDescription`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, updateBusinessProfileWithDescriptionRef, UpdateBusinessProfileWithDescriptionVariables } from '@firebasegen/pib-connector';
+
+// The `UpdateBusinessProfileWithDescription` mutation requires an argument of type `UpdateBusinessProfileWithDescriptionVariables`:
+const updateBusinessProfileWithDescriptionVars: UpdateBusinessProfileWithDescriptionVariables = {
+  id: ..., 
+  name: ..., // optional
+  industry: ..., // optional
+  description: ..., 
+  location: ..., // optional
+  website: ..., // optional
+  employeeCount: ..., // optional
+};
+
+// Call the `updateBusinessProfileWithDescriptionRef()` function to get a reference to the mutation.
+const ref = updateBusinessProfileWithDescriptionRef(updateBusinessProfileWithDescriptionVars);
+// Variables can be defined inline as well.
+const ref = updateBusinessProfileWithDescriptionRef({ id: ..., name: ..., industry: ..., description: ..., location: ..., website: ..., employeeCount: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = updateBusinessProfileWithDescriptionRef(dataConnect, updateBusinessProfileWithDescriptionVars);
 
 // Call `executeMutation()` on the reference to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.
@@ -3092,6 +3727,133 @@ executeMutation(ref).then((response) => {
 });
 ```
 
+## CreatePartnerPreferencesWithEmbedding
+You can execute the `CreatePartnerPreferencesWithEmbedding` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+createPartnerPreferencesWithEmbedding(vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationPromise<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+
+interface CreatePartnerPreferencesWithEmbeddingRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationRef<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+}
+export const createPartnerPreferencesWithEmbeddingRef: CreatePartnerPreferencesWithEmbeddingRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+createPartnerPreferencesWithEmbedding(dc: DataConnect, vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationPromise<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+
+interface CreatePartnerPreferencesWithEmbeddingRef {
+  ...
+  (dc: DataConnect, vars: CreatePartnerPreferencesWithEmbeddingVariables): MutationRef<CreatePartnerPreferencesWithEmbeddingData, CreatePartnerPreferencesWithEmbeddingVariables>;
+}
+export const createPartnerPreferencesWithEmbeddingRef: CreatePartnerPreferencesWithEmbeddingRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the createPartnerPreferencesWithEmbeddingRef:
+```typescript
+const name = createPartnerPreferencesWithEmbeddingRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `CreatePartnerPreferencesWithEmbedding` mutation requires an argument of type `CreatePartnerPreferencesWithEmbeddingVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface CreatePartnerPreferencesWithEmbeddingVariables {
+  workspaceId: UUIDString;
+  industries?: string[] | null;
+  locations?: string[] | null;
+  minEmployeeCount?: number | null;
+  maxEmployeeCount?: number | null;
+  skillsNeeded?: string[] | null;
+  combinedText: string;
+}
+```
+### Return Type
+Recall that executing the `CreatePartnerPreferencesWithEmbedding` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `CreatePartnerPreferencesWithEmbeddingData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface CreatePartnerPreferencesWithEmbeddingData {
+  createPartnerPreferences: PartnerPreferences_Key;
+}
+```
+### Using `CreatePartnerPreferencesWithEmbedding`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, createPartnerPreferencesWithEmbedding, CreatePartnerPreferencesWithEmbeddingVariables } from '@firebasegen/pib-connector';
+
+// The `CreatePartnerPreferencesWithEmbedding` mutation requires an argument of type `CreatePartnerPreferencesWithEmbeddingVariables`:
+const createPartnerPreferencesWithEmbeddingVars: CreatePartnerPreferencesWithEmbeddingVariables = {
+  workspaceId: ..., 
+  industries: ..., // optional
+  locations: ..., // optional
+  minEmployeeCount: ..., // optional
+  maxEmployeeCount: ..., // optional
+  skillsNeeded: ..., // optional
+  combinedText: ..., 
+};
+
+// Call the `createPartnerPreferencesWithEmbedding()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await createPartnerPreferencesWithEmbedding(createPartnerPreferencesWithEmbeddingVars);
+// Variables can be defined inline as well.
+const { data } = await createPartnerPreferencesWithEmbedding({ workspaceId: ..., industries: ..., locations: ..., minEmployeeCount: ..., maxEmployeeCount: ..., skillsNeeded: ..., combinedText: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await createPartnerPreferencesWithEmbedding(dataConnect, createPartnerPreferencesWithEmbeddingVars);
+
+console.log(data.createPartnerPreferences);
+
+// Or, you can use the `Promise` API.
+createPartnerPreferencesWithEmbedding(createPartnerPreferencesWithEmbeddingVars).then((response) => {
+  const data = response.data;
+  console.log(data.createPartnerPreferences);
+});
+```
+
+### Using `CreatePartnerPreferencesWithEmbedding`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, createPartnerPreferencesWithEmbeddingRef, CreatePartnerPreferencesWithEmbeddingVariables } from '@firebasegen/pib-connector';
+
+// The `CreatePartnerPreferencesWithEmbedding` mutation requires an argument of type `CreatePartnerPreferencesWithEmbeddingVariables`:
+const createPartnerPreferencesWithEmbeddingVars: CreatePartnerPreferencesWithEmbeddingVariables = {
+  workspaceId: ..., 
+  industries: ..., // optional
+  locations: ..., // optional
+  minEmployeeCount: ..., // optional
+  maxEmployeeCount: ..., // optional
+  skillsNeeded: ..., // optional
+  combinedText: ..., 
+};
+
+// Call the `createPartnerPreferencesWithEmbeddingRef()` function to get a reference to the mutation.
+const ref = createPartnerPreferencesWithEmbeddingRef(createPartnerPreferencesWithEmbeddingVars);
+// Variables can be defined inline as well.
+const ref = createPartnerPreferencesWithEmbeddingRef({ workspaceId: ..., industries: ..., locations: ..., minEmployeeCount: ..., maxEmployeeCount: ..., skillsNeeded: ..., combinedText: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = createPartnerPreferencesWithEmbeddingRef(dataConnect, createPartnerPreferencesWithEmbeddingVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.createPartnerPreferences);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.createPartnerPreferences);
+});
+```
+
 ## UpdatePartnerPreferences
 You can execute the `UpdatePartnerPreferences` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
 ```typescript
@@ -3202,6 +3964,133 @@ const ref = updatePartnerPreferencesRef({ id: ..., industries: ..., locations: .
 // You can also pass in a `DataConnect` instance to the `MutationRef` function.
 const dataConnect = getDataConnect(connectorConfig);
 const ref = updatePartnerPreferencesRef(dataConnect, updatePartnerPreferencesVars);
+
+// Call `executeMutation()` on the reference to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await executeMutation(ref);
+
+console.log(data.updatePartnerPreferences);
+
+// Or, you can use the `Promise` API.
+executeMutation(ref).then((response) => {
+  const data = response.data;
+  console.log(data.updatePartnerPreferences);
+});
+```
+
+## UpdatePartnerPreferencesWithEmbedding
+You can execute the `UpdatePartnerPreferencesWithEmbedding` mutation using the following action shortcut function, or by calling `executeMutation()` after calling the following `MutationRef` function, both of which are defined in [pib-connector/index.d.ts](./index.d.ts):
+```typescript
+updatePartnerPreferencesWithEmbedding(vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationPromise<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+
+interface UpdatePartnerPreferencesWithEmbeddingRef {
+  ...
+  /* Allow users to create refs without passing in DataConnect */
+  (vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationRef<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+}
+export const updatePartnerPreferencesWithEmbeddingRef: UpdatePartnerPreferencesWithEmbeddingRef;
+```
+You can also pass in a `DataConnect` instance to the action shortcut function or `MutationRef` function.
+```typescript
+updatePartnerPreferencesWithEmbedding(dc: DataConnect, vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationPromise<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+
+interface UpdatePartnerPreferencesWithEmbeddingRef {
+  ...
+  (dc: DataConnect, vars: UpdatePartnerPreferencesWithEmbeddingVariables): MutationRef<UpdatePartnerPreferencesWithEmbeddingData, UpdatePartnerPreferencesWithEmbeddingVariables>;
+}
+export const updatePartnerPreferencesWithEmbeddingRef: UpdatePartnerPreferencesWithEmbeddingRef;
+```
+
+If you need the name of the operation without creating a ref, you can retrieve the operation name by calling the `operationName` property on the updatePartnerPreferencesWithEmbeddingRef:
+```typescript
+const name = updatePartnerPreferencesWithEmbeddingRef.operationName;
+console.log(name);
+```
+
+### Variables
+The `UpdatePartnerPreferencesWithEmbedding` mutation requires an argument of type `UpdatePartnerPreferencesWithEmbeddingVariables`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+
+```typescript
+export interface UpdatePartnerPreferencesWithEmbeddingVariables {
+  id: UUIDString;
+  industries?: string[] | null;
+  locations?: string[] | null;
+  minEmployeeCount?: number | null;
+  maxEmployeeCount?: number | null;
+  skillsNeeded?: string[] | null;
+  combinedText: string;
+}
+```
+### Return Type
+Recall that executing the `UpdatePartnerPreferencesWithEmbedding` mutation returns a `MutationPromise` that resolves to an object with a `data` property.
+
+The `data` property is an object of type `UpdatePartnerPreferencesWithEmbeddingData`, which is defined in [pib-connector/index.d.ts](./index.d.ts). It has the following fields:
+```typescript
+export interface UpdatePartnerPreferencesWithEmbeddingData {
+  updatePartnerPreferences?: PartnerPreferences_Key | null;
+}
+```
+### Using `UpdatePartnerPreferencesWithEmbedding`'s action shortcut function
+
+```typescript
+import { getDataConnect } from 'firebase/data-connect';
+import { connectorConfig, updatePartnerPreferencesWithEmbedding, UpdatePartnerPreferencesWithEmbeddingVariables } from '@firebasegen/pib-connector';
+
+// The `UpdatePartnerPreferencesWithEmbedding` mutation requires an argument of type `UpdatePartnerPreferencesWithEmbeddingVariables`:
+const updatePartnerPreferencesWithEmbeddingVars: UpdatePartnerPreferencesWithEmbeddingVariables = {
+  id: ..., 
+  industries: ..., // optional
+  locations: ..., // optional
+  minEmployeeCount: ..., // optional
+  maxEmployeeCount: ..., // optional
+  skillsNeeded: ..., // optional
+  combinedText: ..., 
+};
+
+// Call the `updatePartnerPreferencesWithEmbedding()` function to execute the mutation.
+// You can use the `await` keyword to wait for the promise to resolve.
+const { data } = await updatePartnerPreferencesWithEmbedding(updatePartnerPreferencesWithEmbeddingVars);
+// Variables can be defined inline as well.
+const { data } = await updatePartnerPreferencesWithEmbedding({ id: ..., industries: ..., locations: ..., minEmployeeCount: ..., maxEmployeeCount: ..., skillsNeeded: ..., combinedText: ..., });
+
+// You can also pass in a `DataConnect` instance to the action shortcut function.
+const dataConnect = getDataConnect(connectorConfig);
+const { data } = await updatePartnerPreferencesWithEmbedding(dataConnect, updatePartnerPreferencesWithEmbeddingVars);
+
+console.log(data.updatePartnerPreferences);
+
+// Or, you can use the `Promise` API.
+updatePartnerPreferencesWithEmbedding(updatePartnerPreferencesWithEmbeddingVars).then((response) => {
+  const data = response.data;
+  console.log(data.updatePartnerPreferences);
+});
+```
+
+### Using `UpdatePartnerPreferencesWithEmbedding`'s `MutationRef` function
+
+```typescript
+import { getDataConnect, executeMutation } from 'firebase/data-connect';
+import { connectorConfig, updatePartnerPreferencesWithEmbeddingRef, UpdatePartnerPreferencesWithEmbeddingVariables } from '@firebasegen/pib-connector';
+
+// The `UpdatePartnerPreferencesWithEmbedding` mutation requires an argument of type `UpdatePartnerPreferencesWithEmbeddingVariables`:
+const updatePartnerPreferencesWithEmbeddingVars: UpdatePartnerPreferencesWithEmbeddingVariables = {
+  id: ..., 
+  industries: ..., // optional
+  locations: ..., // optional
+  minEmployeeCount: ..., // optional
+  maxEmployeeCount: ..., // optional
+  skillsNeeded: ..., // optional
+  combinedText: ..., 
+};
+
+// Call the `updatePartnerPreferencesWithEmbeddingRef()` function to get a reference to the mutation.
+const ref = updatePartnerPreferencesWithEmbeddingRef(updatePartnerPreferencesWithEmbeddingVars);
+// Variables can be defined inline as well.
+const ref = updatePartnerPreferencesWithEmbeddingRef({ id: ..., industries: ..., locations: ..., minEmployeeCount: ..., maxEmployeeCount: ..., skillsNeeded: ..., combinedText: ..., });
+
+// You can also pass in a `DataConnect` instance to the `MutationRef` function.
+const dataConnect = getDataConnect(connectorConfig);
+const ref = updatePartnerPreferencesWithEmbeddingRef(dataConnect, updatePartnerPreferencesWithEmbeddingVars);
 
 // Call `executeMutation()` on the reference to execute the mutation.
 // You can use the `await` keyword to wait for the promise to resolve.

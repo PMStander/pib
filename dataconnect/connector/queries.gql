@@ -10,6 +10,97 @@ query GetCurrentUser @auth(level: USER) {
   }
 }
 
+# Vector search queries
+query SearchProfilesByBio($searchText: String!, $limit: Int = 5) @auth(level: USER) {
+  profiles_bioEmbedding_similarity(
+    compare_embed: {model: "textembedding-gecko@003", text: $searchText},
+    method: COSINE,
+    limit: $limit
+  ) {
+    id
+    userId
+    name
+    bio
+    skills
+    interests
+    avatarUrl
+    _metadata {
+      distance
+    }
+  }
+}
+
+query SearchBusinessProfilesByDescription($searchText: String!, $limit: Int = 5) @auth(level: USER) {
+  businessProfiles_descriptionEmbedding_similarity(
+    compare_embed: {model: "textembedding-gecko@003", text: $searchText},
+    method: COSINE,
+    limit: $limit
+  ) {
+    id
+    workspaceId
+    name
+    industry
+    description
+    location
+    website
+    employeeCount
+    _metadata {
+      distance
+    }
+  }
+}
+
+query MatchProfileToBusinesses($profileId: UUID!, $limit: Int = 5) @auth(level: USER) {
+  profile(key: {id: $profileId}) {
+    id
+    name
+    bio
+    bioEmbedding
+  }
+
+  # This query will be executed in the frontend using the retrieved bioEmbedding
+  # businessProfiles_descriptionEmbedding_similarity(
+  #   compare: $bioEmbedding,
+  #   method: COSINE,
+  #   limit: $limit
+  # )
+}
+
+query MatchBusinessToProfiles($businessProfileId: UUID!, $limit: Int = 5) @auth(level: USER) {
+  businessProfile(key: {id: $businessProfileId}) {
+    id
+    name
+    description
+    descriptionEmbedding
+  }
+
+  # This query will be executed in the frontend using the retrieved descriptionEmbedding
+  # profiles_bioEmbedding_similarity(
+  #   compare: $descriptionEmbedding,
+  #   method: COSINE,
+  #   limit: $limit
+  # )
+}
+
+query SearchPartnerPreferences($searchText: String!, $limit: Int = 5) @auth(level: USER) {
+  partnerPreferencess_combinedEmbedding_similarity(
+    compare_embed: {model: "textembedding-gecko@003", text: $searchText},
+    method: COSINE,
+    limit: $limit
+  ) {
+    id
+    workspaceId
+    industries
+    locations
+    minEmployeeCount
+    maxEmployeeCount
+    skillsNeeded
+    _metadata {
+      distance
+    }
+  }
+}
+
 query GetUser($id: String!) @auth(level: USER) {
   user(key: {id: $id}) {
     id

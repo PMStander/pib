@@ -77,6 +77,14 @@ input BusinessProfile_Data {
   """
   description_expr: String_Expr
   """
+  ✨ Generated from Field `BusinessProfile`.`descriptionEmbedding` of type `Vector`
+  """
+  descriptionEmbedding: Vector
+  """
+  ✨ `_embed` server value variant of `descriptionEmbedding` (✨ Generated from Field `BusinessProfile`.`descriptionEmbedding` of type `Vector`)
+  """
+  descriptionEmbedding_embed: Vector_Embed
+  """
   ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
   """
   employeeCount: Int
@@ -174,6 +182,10 @@ input BusinessProfile_Filter {
   """
   description: String_Filter
   """
+  ✨ Generated from Field `BusinessProfile`.`descriptionEmbedding` of type `Vector`
+  """
+  descriptionEmbedding: Vector_Filter
+  """
   ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
   """
   employeeCount: Int_Filter
@@ -243,6 +255,10 @@ input BusinessProfile_Having {
   ✨ Generated from Field `BusinessProfile`.`createdAt_count` of type `Int!`
   """
   createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`descriptionEmbedding_count` of type `Int!`
+  """
+  descriptionEmbedding_count: Int_Filter
   """
   ✨ Generated from Field `BusinessProfile`.`description_count` of type `Int!`
   """
@@ -355,6 +371,10 @@ input BusinessProfile_Order {
   """
   description: OrderDirection
   """
+  ✨ Generated from Field `BusinessProfile`.`descriptionEmbedding` of type `Vector`
+  """
+  descriptionEmbedding: OrderDirection
+  """
   ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
   """
   employeeCount: OrderDirection
@@ -395,6 +415,14 @@ input PartnerPreferences_Data {
   ✨ `_expr` server value variant of `id` (✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`)
   """
   id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `PartnerPreferences`.`combinedEmbedding` of type `Vector`
+  """
+  combinedEmbedding: Vector
+  """
+  ✨ `_embed` server value variant of `combinedEmbedding` (✨ Generated from Field `PartnerPreferences`.`combinedEmbedding` of type `Vector`)
+  """
+  combinedEmbedding_embed: Vector_Embed
   """
   ✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`
   """
@@ -505,6 +533,10 @@ input PartnerPreferences_Filter {
   """
   id: UUID_Filter
   """
+  ✨ Generated from Field `PartnerPreferences`.`combinedEmbedding` of type `Vector`
+  """
+  combinedEmbedding: Vector_Filter
+  """
   ✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`
   """
   createdAt: Timestamp_Filter
@@ -574,6 +606,10 @@ input PartnerPreferences_Having {
   ✨ Generated from Field `PartnerPreferences`.`_count` of type `Int!`
   """
   _count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`combinedEmbedding_count` of type `Int!`
+  """
+  combinedEmbedding_count: Int_Filter
   """
   ✨ Generated from Field `PartnerPreferences`.`createdAt_count` of type `Int!`
   """
@@ -682,6 +718,10 @@ input PartnerPreferences_Order {
   """
   id: OrderDirection
   """
+  ✨ Generated from Field `PartnerPreferences`.`combinedEmbedding` of type `Vector`
+  """
+  combinedEmbedding: OrderDirection
+  """
   ✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`
   """
   createdAt: OrderDirection
@@ -730,6 +770,14 @@ input Profile_Data {
   ✨ `_expr` server value variant of `bio` (✨ Generated from Field `Profile`.`bio` of type `String`)
   """
   bio_expr: String_Expr
+  """
+  ✨ Generated from Field `Profile`.`bioEmbedding` of type `Vector`
+  """
+  bioEmbedding: Vector
+  """
+  ✨ `_embed` server value variant of `bioEmbedding` (✨ Generated from Field `Profile`.`bioEmbedding` of type `Vector`)
+  """
+  bioEmbedding_embed: Vector_Embed
   """
   ✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`
   """
@@ -832,6 +880,10 @@ input Profile_Filter {
   """
   bio: String_Filter
   """
+  ✨ Generated from Field `Profile`.`bioEmbedding` of type `Vector`
+  """
+  bioEmbedding: Vector_Filter
+  """
   ✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`
   """
   createdAt: Timestamp_Filter
@@ -901,6 +953,10 @@ input Profile_Having {
   ✨ Generated from Field `Profile`.`avatarUrl_count` of type `Int!`
   """
   avatarUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`bioEmbedding_count` of type `Int!`
+  """
+  bioEmbedding_count: Int_Filter
   """
   ✨ Generated from Field `Profile`.`bio_count` of type `Int!`
   """
@@ -988,6 +1044,10 @@ input Profile_Order {
   ✨ Generated from Field `Profile`.`bio` of type `String`
   """
   bio: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`bioEmbedding` of type `Vector`
+  """
+  bioEmbedding: OrderDirection
   """
   ✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`
   """

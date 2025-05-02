@@ -27,6 +27,7 @@ type Profile @table {
   userId: String! @col(name: "user_id")
   name: String! @col(name: "name", dataType: "varchar(100)")
   bio: String @col(name: "bio")
+  bioEmbedding: Vector @col(name: "bio_embedding", size: 768)
   avatarUrl: String @col(name: "avatar_url")
   skills: [String] @col(name: "skills")
   interests: [String] @col(name: "interests")
@@ -63,6 +64,7 @@ type BusinessProfile @table {
   name: String! @col(name: "name", dataType: "varchar(100)")
   industry: String @col(name: "industry", dataType: "varchar(50)")
   description: String @col(name: "description")
+  descriptionEmbedding: Vector @col(name: "description_embedding", size: 768)
   location: String @col(name: "location", dataType: "varchar(100)")
   website: String @col(name: "website", dataType: "varchar(255)")
   employeeCount: Int @col(name: "employee_count")
@@ -79,6 +81,7 @@ type PartnerPreferences @table {
   minEmployeeCount: Int @col(name: "min_employee_count")
   maxEmployeeCount: Int @col(name: "max_employee_count")
   skillsNeeded: [String] @col(name: "skills_needed")
+  combinedEmbedding: Vector @col(name: "combined_embedding", size: 768)
   createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
   updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }

@@ -17,6 +17,15 @@ extend type BusinessProfile {
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "BusinessProfile.createdAt", purpose: QUERY_COUNT)
   """
+  ✨ Count the number of rows in the `BusinessProfile` table where the `descriptionEmbedding` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  descriptionEmbedding_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "BusinessProfile.descriptionEmbedding", purpose: QUERY_COUNT)
+  """
   ✨ Count the number of rows in the `BusinessProfile` table where the `description` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
   description_count(
@@ -149,6 +158,15 @@ extend type PartnerPreferences {
   ✨ Count the number of rows in the `PartnerPreferences` table.
   """
   _count: Int! @fdc_generated(from: "PartnerPreferences", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `PartnerPreferences` table where the `combinedEmbedding` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  combinedEmbedding_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "PartnerPreferences.combinedEmbedding", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `PartnerPreferences` table where the `createdAt` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """
@@ -290,6 +308,15 @@ extend type Profile {
     """
     distinct: Boolean = false
   ): Int! @fdc_generated(from: "Profile.avatarUrl", purpose: QUERY_COUNT)
+  """
+  ✨ Count the number of rows in the `Profile` table where the `bioEmbedding` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
+  """
+  bioEmbedding_count(
+    """
+    Set to true to count the number of distinct values.
+    """
+    distinct: Boolean = false
+  ): Int! @fdc_generated(from: "Profile.bioEmbedding", purpose: QUERY_COUNT)
   """
   ✨ Count the number of rows in the `Profile` table where the `bio` field is non-null. Pass the `distinct` argument to instead count the number of distinct values.
   """

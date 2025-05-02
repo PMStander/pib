@@ -162,6 +162,7 @@ Load at session start and context refreshes.
     <Action>Ensure all memory layers are synchronized</Action>
     <Action>Document session summary in activeContext.md</Action>
     <Action>Update checksums in memory-index.md</Action>
+    <Action>Git commit all changes and push to remote</Action>
   </Handler>
 </EventHandlers>
 
