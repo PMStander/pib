@@ -6,11 +6,15 @@ settings:
 
 overrides:
   '@firebasegen/default-connector': link:dataconnect-generated/js/default-connector
+  '@firebasegen/pib-connector': link:dataconnect-generated/js/pib-connector
 
 importers:
 
   .:
     dependencies:
+      '@firebasegen/pib-connector':
+        specifier: link:dataconnect-generated/js/pib-connector
+        version: link:dataconnect-generated/js/pib-connector
       '@nuxtjs/color-mode':
         specifier: ^3.5.2
         version: 3.5.2(magicast@0.3.5)
@@ -18,7 +22,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4
       '@nuxtjs/tailwindcss':
-        specifier: ^6.11.4
+        specifier: ^6.14.0
         version: 6.14.0(magicast@0.3.5)
       '@pib/connector':
         specifier: file:dataconnect-generated/js/pib-connector
@@ -48,7 +52,7 @@ importers:
         specifier: ^0.1.2
         version: 0.1.2(magicast@0.3.5)(nitropack@2.11.11(@netlify/blobs@8.2.0))(nuxi@3.25.0)(nuxt@3.17.1(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.15.3)(db0@0.3.2)(ioredis@5.6.1)(lightningcss@1.29.2)(magicast@0.3.5)(rollup@4.40.1)(terser@5.39.0)(typescript@5.8.3)(vite@6.3.4(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(yaml@2.7.1))(yaml@2.7.1))(vite@6.3.4(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(yaml@2.7.1))
       tailwindcss:
-        specifier: ^3.4.1
+        specifier: ^3.4.17
         version: 3.4.17
       vee-validate:
         specifier: ^4.15.0
@@ -731,7 +735,7 @@ packages:
     resolution: {directory: dataconnect-generated/js/pib-connector, type: directory}
     engines: {node: ' >=18.0'}
     peerDependencies:
-      firebase: ^10.14.0 || ^11.0.0
+      firebase: ^10.14.0 || ^11.3.0
 
   '@google-cloud/firestore@7.11.0':
     resolution: {integrity: sha512-88uZ+jLsp1aVMj7gh3EKYH1aulTAMFAp8sH/v5a9w8q8iqSG27RiWLoxSAFr/XocZ9hGiWH1kEnBw+zl3xAgNA==}

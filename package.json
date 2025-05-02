@@ -12,10 +12,11 @@
     "dataconnectCheck": "firebase init dataconnect:sdk"
   },
   "dependencies": {
+    "@firebasegen/pib-connector": "link:dataconnect-generated/js/pib-connector",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/device": "^3.2.4",
+    "@nuxtjs/tailwindcss": "^6.14.0",
     "@pib/connector": "file:dataconnect-generated/js/pib-connector",
-    "@nuxtjs/tailwindcss": "^6.11.4",
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^13.1.0",
     "@vueuse/nuxt": "^13.1.0",
@@ -24,7 +25,7 @@
     "nuxt": "^3.17.1",
     "nuxt-icons": "^3.2.1",
     "nuxt-mcp": "^0.1.2",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.17",
     "vee-validate": "^4.15.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1",

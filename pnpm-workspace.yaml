@@ -1,2 +1,3 @@
 overrides:
   '@firebasegen/default-connector': link:dataconnect-generated/js/default-connector
+  '@firebasegen/pib-connector': link:dataconnect-generated/js/pib-connector
