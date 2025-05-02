@@ -1,9 +1,19 @@
-import tailwindcss from "@tailwindcss/vite";
+// Import Tailwind CSS directly - Nuxt 3 has built-in support for Tailwind CSS
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
-  modules: ['@nuxtjs/color-mode', '@nuxtjs/device', 'nuxt-icons', '@vueuse/nuxt'],
+  devtools: { enabled: false },
+  modules: [
+    // Core modules first
+    '@vueuse/nuxt',
+    'nuxt-mcp',
+
+    // UI and styling modules last
+    '@nuxtjs/device',
+    '@nuxtjs/color-mode',
+    'nuxt-icons',
+    '@nuxtjs/tailwindcss', // Add Tailwind CSS module
+  ],
   colorMode: {
     preference: 'system', // default value
     fallback: 'light', // fallback value if not system preference found
@@ -11,9 +21,26 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   vite: {
-    plugins: [
-      tailwindcss(),
-    ],
+    plugins: [],
+    optimizeDeps: {
+      exclude: ['fsevents'],
+    },
+    server: {
+      watch: {
+        usePolling: true,
+        ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**']
+      }
+    }
+  },
+  nitro: {
+    esbuild: {
+      options: {
+        target: 'esnext'
+      }
+    }
+  },
+  experimental: {
+    watcher: 'parcel'
   },
   runtimeConfig: {
     // Private keys that are exposed to the server

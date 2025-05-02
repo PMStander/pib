@@ -88,10 +88,14 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { signupFormSchema } from '~/utils/validations/schemas';
 import { useZodForm } from '~/composables/useZodForm';
-import { signUp, isLoading as isAuthLoading } from '~/composables/useFirebaseAuth';
+import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
+import { useDataConnect } from '~/composables/useDataConnect';
 
 const router = useRouter();
 const authError = ref<string | null>(null);
+
+// Initialize Firebase Auth
+const { signUp, isLoading: isAuthLoading } = useFirebaseAuth();
 
 // Initialize form with Zod validation
 const {
@@ -114,6 +118,10 @@ onSubmit(async (validData) => {
 
     // Create user with Firebase
     await signUp(validData.email, validData.password, validData.name);
+
+    // Initialize user data in DataConnect
+    const dataConnect = useDataConnect();
+    await dataConnect.initUserData();
 
     // Show success message
     alert('Account created successfully! You can now log in.');

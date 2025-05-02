@@ -11,7 +11,7 @@
 ## Task Details
 - **Goal**: Update the Firebase DataConnect package name to be more descriptive and concise
 - **Implementation**: 
-  - Changed the package name from "@firebasegen/default-connector" to "@pib/connector"
+  - Changed the package name from "@firebasegen/default-connector" to "@firebasegen/pib-connector"
   - Updated the output directory from "dataconnect-generated/js/default-connector" to "dataconnect-generated/js/pib-connector"
   - Updated the package.json dependency reference to match the new package name
 - **Challenges**: 

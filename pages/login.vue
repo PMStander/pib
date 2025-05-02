@@ -117,10 +117,14 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { loginFormSchema } from '~/utils/validations/schemas';
 import { useZodForm } from '~/composables/useZodForm';
-import { signIn, resetPassword, isLoading as isAuthLoading, error as authErrorRef } from '~/composables/useFirebaseAuth';
+import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
+import { useDataConnect } from '~/composables/useDataConnect';
 
 const router = useRouter();
 const authError = ref<string | null>(null);
+
+// Initialize Firebase Auth
+const { signIn, resetPassword, isLoading: isAuthLoading } = useFirebaseAuth();
 
 // Initialize form with Zod validation
 const {
@@ -151,6 +155,10 @@ onSubmit(async (validData) => {
 
     // If remember me is not checked, set session persistence
     // This would require additional configuration in a real app
+
+    // Initialize user data from DataConnect
+    const dataConnect = useDataConnect();
+    await dataConnect.initUserData();
 
     // Redirect to dashboard
     router.push('/dashboard');

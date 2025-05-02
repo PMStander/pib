@@ -4,10 +4,16 @@
 export interface User {
   id: string;
   email: string;
-  display_name: string | null;
-  photo_url: string | null;
-  created_at: Date;
-  updated_at: Date;
+  displayName: string | null;
+  photoUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Legacy fields for backward compatibility
+  display_name?: string | null;
+  photo_url?: string | null;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Workspace type
@@ -15,72 +21,111 @@ export interface Workspace {
   id: string;
   name: string;
   description: string | null;
-  logo_url: string | null;
-  created_by: string;
-  created_at: Date;
-  updated_at: Date;
+  logoUrl: string | null;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Legacy fields for backward compatibility
+  logo_url?: string | null;
+  created_by?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Profile type
 export interface Profile {
   id: string;
-  user_id: string;
+  userId: string;
   name: string;
   bio: string | null;
-  avatar_url: string | null;
+  avatarUrl: string | null;
   skills: string[] | null;
   interests: string[] | null;
-  is_default: boolean;
-  created_at: Date;
-  updated_at: Date;
+  isDefault: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Legacy fields for backward compatibility
+  user_id?: string;
+  avatar_url?: string | null;
+  is_default?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Workspace Member type
 export interface WorkspaceMember {
-  workspace_id: string;
-  user_id: string;
-  profile_id: string | null;
+  workspaceId: string;
+  userId: string;
+  profileId: string | null;
   role: 'owner' | 'admin' | 'member' | 'guest';
-  joined_at: Date;
+  joinedAt: Date;
+
+  // Legacy fields for backward compatibility
+  workspace_id?: string;
+  user_id?: string;
+  profile_id?: string | null;
+  joined_at?: Date;
 }
 
 // Workspace Invitation type
 export interface WorkspaceInvitation {
   id: string;
-  workspace_id: string;
+  workspaceId: string;
   email: string;
   role: 'admin' | 'member' | 'guest';
-  invited_by: string;
+  invitedBy: string;
   status: 'pending' | 'accepted' | 'declined';
-  created_at: Date;
-  expires_at: Date | null;
+  createdAt: Date;
+  expiresAt: Date | null;
+
+  // Legacy fields for backward compatibility
+  workspace_id?: string;
+  invited_by?: string;
+  created_at?: Date;
+  expires_at?: Date | null;
 }
 
 // Business Profile type
 export interface BusinessProfile {
   id: string;
-  workspace_id: string;
+  workspaceId: string;
   name: string;
   industry: string | null;
   description: string | null;
   location: string | null;
   website: string | null;
-  employee_count: number | null;
-  created_at: Date;
-  updated_at: Date;
+  employeeCount: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Legacy fields for backward compatibility
+  workspace_id?: string;
+  employee_count?: number | null;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Partner Preferences type
 export interface PartnerPreferences {
   id: string;
-  workspace_id: string;
+  workspaceId: string;
   industries: string[] | null;
   locations: string[] | null;
-  min_employee_count: number | null;
-  max_employee_count: number | null;
-  skills_needed: string[] | null;
-  created_at: Date;
-  updated_at: Date;
+  minEmployeeCount: number | null;
+  maxEmployeeCount: number | null;
+  skillsNeeded: string[] | null;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Legacy fields for backward compatibility
+  workspace_id?: string;
+  min_employee_count?: number | null;
+  max_employee_count?: number | null;
+  skills_needed?: string[] | null;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 // Extended User type with relationships
@@ -92,6 +137,10 @@ export interface UserWithRelationships extends User {
 // Extended Workspace type with relationships
 export interface WorkspaceWithRelationships extends Workspace {
   members?: WorkspaceMember[];
+  businessProfile?: BusinessProfile;
+  partnerPreferences?: PartnerPreferences;
+
+  // Legacy fields for backward compatibility
   business_profile?: BusinessProfile;
   partner_preferences?: PartnerPreferences;
 }

@@ -3,10 +3,10 @@ query GetCurrentUser @auth(level: USER) {
   user(key: {id_expr: "auth.uid"}) {
     id
     email
-    display_name
-    photo_url
-    created_at
-    updated_at
+    displayName
+    photoUrl
+    createdAt
+    updatedAt
   }
 }
 
@@ -14,40 +14,34 @@ query GetUser($id: String!) @auth(level: USER) {
   user(key: {id: $id}) {
     id
     email
-    display_name
-    photo_url
-    created_at
-    updated_at
+    displayName
+    photoUrl
+    createdAt
+    updatedAt
   }
 }
 
 query GetUserProfiles @auth(level: USER) {
-  profiles(where: {user_id: {eq_expr: "auth.uid"}}) {
+  profiles(where: {userId: {eq_expr: "auth.uid"}}) {
     id
-    user_id
+    userId
     name
     bio
-    avatar_url
+    avatarUrl
     skills
     interests
-    is_default
-    created_at
-    updated_at
+    isDefault
+    createdAt
+    updatedAt
   }
 }
 
 # Workspace queries
 query GetUserWorkspaces @auth(level: USER) {
-  workspace_members(where: {user_id: {eq_expr: "auth.uid"}}) {
-    workspace {
-      id
-      name
-      description
-      logo_url
-      created_by
-      created_at
-      updated_at
-    }
+  workspaceMembers(where: {userId: {eq_expr: "auth.uid"}}) {
+    workspaceId
+    # Note: We can't directly query the workspace relationship
+    # We'll need to fetch the workspace separately using the workspaceId
   }
 }
 
@@ -56,95 +50,83 @@ query GetWorkspace($id: UUID!) @auth(level: USER) {
     id
     name
     description
-    logo_url
-    created_by
-    created_at
-    updated_at
+    logoUrl
+    createdBy
+    createdAt
+    updatedAt
   }
 }
 
 query GetWorkspaceMembers($workspaceId: UUID!) @auth(level: USER) {
-  workspace_members(where: {workspace_id: {eq: $workspaceId}}) {
-    workspace_id
-    user_id
-    profile_id
+  workspaceMembers(where: {workspaceId: {eq: $workspaceId}}) {
+    workspaceId
+    userId
+    profileId
     role
-    joined_at
-    user {
-      id
-      email
-      display_name
-      photo_url
-    }
-    profile {
-      id
-      name
-      avatar_url
-    }
+    joinedAt
+    # Note: We can't directly query the user and profile relationships
+    # We'll need to fetch them separately using the userId and profileId
   }
 }
 
 query GetBusinessProfile($workspaceId: UUID!) @auth(level: USER) {
-  business_profile(key: {workspace_id: $workspaceId}) {
+  businessProfile(first: {where: {workspaceId: {eq: $workspaceId}}}) {
     id
-    workspace_id
+    workspaceId
     name
     industry
     description
     location
     website
-    employee_count
-    created_at
-    updated_at
+    employeeCount
+    createdAt
+    updatedAt
   }
 }
 
 query GetPartnerPreferences($workspaceId: UUID!) @auth(level: USER) {
-  partner_preferences(key: {workspace_id: $workspaceId}) {
+  partnerPreferences(first: {where: {workspaceId: {eq: $workspaceId}}}) {
     id
-    workspace_id
+    workspaceId
     industries
     locations
-    min_employee_count
-    max_employee_count
-    skills_needed
-    created_at
-    updated_at
+    minEmployeeCount
+    maxEmployeeCount
+    skillsNeeded
+    createdAt
+    updatedAt
   }
 }
 
 query GetWorkspaceInvitations($workspaceId: UUID!) @auth(level: USER) {
-  workspace_invitations(where: {workspace_id: {eq: $workspaceId}}) {
+  workspaceInvitations(where: {workspaceId: {eq: $workspaceId}}) {
     id
-    workspace_id
+    workspaceId
     email
     role
-    invited_by
+    invitedBy
     status
-    created_at
-    expires_at
+    createdAt
+    expiresAt
   }
 }
 
 query GetPendingInvitationsByEmail($email: String!) @auth(level: USER) {
-  workspace_invitations(where: {
+  workspaceInvitations(where: {
     _and: [
       {email: {eq: $email}},
       {status: {eq: "pending"}}
     ]
   }) {
     id
-    workspace_id
+    workspaceId
     email
     role
-    invited_by
+    invitedBy
     status
-    created_at
-    expires_at
-    workspace {
-      id
-      name
-      logo_url
-    }
+    createdAt
+    expiresAt
+    # Note: We can't directly query the workspace relationship
+    # We'll need to fetch the workspace separately using the workspaceId
   }
 }

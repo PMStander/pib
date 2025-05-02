@@ -29,7 +29,7 @@ The DataConnect schema is organized in the following directories:
 
 ## Package Configuration
 
-The DataConnect connector is configured with the package name `@pib/connector` in `dataconnect/connector/connector.yaml`. This package is referenced in `package.json` and used throughout the application for data access.
+The DataConnect connector is configured with the package name `@firebasegen/pib-connector` in `dataconnect/connector/connector.yaml`. This package is referenced in `package.json` and used throughout the application for data access.
 
 ## Entity Relationships
 
@@ -57,7 +57,7 @@ To use DataConnect in the application:
 
 1. Import the connector:
    ```typescript
-   import { getCurrentUser } from '@pib/connector';
+   import { getCurrentUser } from '@firebasegen/pib-connector';
    ```
 
 2. Use the queries and mutations:

@@ -5,7 +5,7 @@
         <p class="text-[rgb(var(--color-neumorphic-text))]">Loading...</p>
       </div>
     </div>
-    
+
     <div v-else-if="!isAuthenticated" class="flex justify-center items-center h-screen">
       <NeumorphicCard title="Access Denied" class="w-full max-w-md">
         <p class="text-[rgb(var(--color-neumorphic-text))/70] mb-6">
@@ -21,7 +21,7 @@
         </NeumorphicButton>
       </NeumorphicCard>
     </div>
-    
+
     <div v-else>
       <header class="mb-8">
         <div class="flex justify-between items-center">
@@ -41,7 +41,7 @@
           </div>
         </div>
       </header>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <NeumorphicCard title="Profile" class="h-full">
           <div class="space-y-4">
@@ -68,7 +68,7 @@
             </NeumorphicButton>
           </div>
         </NeumorphicCard>
-        
+
         <NeumorphicCard title="Recent Activity" class="h-full">
           <div class="space-y-2">
             <div v-for="(activity, index) in recentActivities" :key="index" class="nm-flat p-3 rounded-lg">
@@ -80,7 +80,7 @@
             </div>
           </div>
         </NeumorphicCard>
-        
+
         <NeumorphicCard title="Quick Actions" class="h-full">
           <div class="grid grid-cols-2 gap-4">
             <NeumorphicButton
@@ -118,9 +118,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { user, isAuthenticated, isLoading, signOut } from '~/composables/useFirebaseAuth';
+import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
 
 const router = useRouter();
+
+// Initialize Firebase Auth
+const { user, isAuthenticated, isLoading, signOut } = useFirebaseAuth();
 
 // Sample recent activities
 const recentActivities = ref([

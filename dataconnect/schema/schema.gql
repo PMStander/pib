@@ -4,10 +4,10 @@
 type User @table {
   id: String! @col(name: "id")
   email: String! @col(name: "email", dataType: "varchar(255)")
-  display_name: String @col(name: "display_name", dataType: "varchar(100)")
-  photo_url: String @col(name: "photo_url")
-  created_at: Timestamp! @default(expr: "request.time")
-  updated_at: Timestamp! @default(expr: "request.time")
+  displayName: String @col(name: "display_name", dataType: "varchar(100)")
+  photoUrl: String @col(name: "photo_url")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }
 
 # Workspaces
@@ -15,70 +15,70 @@ type Workspace @table {
   id: UUID! @default(expr: "uuidV4()")
   name: String! @col(name: "name", dataType: "varchar(100)")
   description: String @col(name: "description")
-  logo_url: String @col(name: "logo_url")
-  created_by: String! @col(name: "created_by")
-  created_at: Timestamp! @default(expr: "request.time")
-  updated_at: Timestamp! @default(expr: "request.time")
+  logoUrl: String @col(name: "logo_url")
+  createdBy: String! @col(name: "created_by")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }
 
 # Profiles
 type Profile @table {
   id: UUID! @default(expr: "uuidV4()")
-  user_id: String! @col(name: "user_id")
+  userId: String! @col(name: "user_id")
   name: String! @col(name: "name", dataType: "varchar(100)")
   bio: String @col(name: "bio")
-  avatar_url: String @col(name: "avatar_url")
+  avatarUrl: String @col(name: "avatar_url")
   skills: [String] @col(name: "skills")
   interests: [String] @col(name: "interests")
-  is_default: Boolean! @default(value: false)
-  created_at: Timestamp! @default(expr: "request.time")
-  updated_at: Timestamp! @default(expr: "request.time")
+  isDefault: Boolean! @default(value: false) @col(name: "is_default")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }
 
 # Workspace Members (many-to-many relationship)
-type WorkspaceMember @table(name: "workspace_members", key: ["workspace_id", "user_id"]) {
-  workspace_id: UUID!
-  user_id: String!
-  profile_id: UUID
+type WorkspaceMember @table(name: "workspace_members", key: ["workspaceId", "userId"]) {
+  workspaceId: UUID! @col(name: "workspace_id")
+  userId: String! @col(name: "user_id")
+  profileId: UUID @col(name: "profile_id")
   role: String! @col(name: "role", dataType: "varchar(20)")
-  joined_at: Timestamp! @default(expr: "request.time")
+  joinedAt: Timestamp! @default(expr: "request.time") @col(name: "joined_at")
 }
 
 # Workspace Invitations
 type WorkspaceInvitation @table {
   id: UUID! @default(expr: "uuidV4()")
-  workspace_id: UUID!
+  workspaceId: UUID! @col(name: "workspace_id")
   email: String! @col(name: "email", dataType: "varchar(255)")
   role: String! @col(name: "role", dataType: "varchar(20)")
-  invited_by: String!
+  invitedBy: String! @col(name: "invited_by")
   status: String! @col(name: "status", dataType: "varchar(20)")
-  created_at: Timestamp! @default(expr: "request.time")
-  expires_at: Timestamp
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  expiresAt: Timestamp @col(name: "expires_at")
 }
 
 # Business Profiles
 type BusinessProfile @table {
   id: UUID! @default(expr: "uuidV4()")
-  workspace_id: UUID! @unique
+  workspaceId: UUID! @unique @col(name: "workspace_id")
   name: String! @col(name: "name", dataType: "varchar(100)")
   industry: String @col(name: "industry", dataType: "varchar(50)")
   description: String @col(name: "description")
   location: String @col(name: "location", dataType: "varchar(100)")
   website: String @col(name: "website", dataType: "varchar(255)")
-  employee_count: Int @col(name: "employee_count")
-  created_at: Timestamp! @default(expr: "request.time")
-  updated_at: Timestamp! @default(expr: "request.time")
+  employeeCount: Int @col(name: "employee_count")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }
 
 # Partner Preferences
 type PartnerPreferences @table {
   id: UUID! @default(expr: "uuidV4()")
-  workspace_id: UUID! @unique
+  workspaceId: UUID! @unique @col(name: "workspace_id")
   industries: [String] @col(name: "industries")
   locations: [String] @col(name: "locations")
-  min_employee_count: Int @col(name: "min_employee_count")
-  max_employee_count: Int @col(name: "max_employee_count")
-  skills_needed: [String] @col(name: "skills_needed")
-  created_at: Timestamp! @default(expr: "request.time")
-  updated_at: Timestamp! @default(expr: "request.time")
+  minEmployeeCount: Int @col(name: "min_employee_count")
+  maxEmployeeCount: Int @col(name: "max_employee_count")
+  skillsNeeded: [String] @col(name: "skills_needed")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }

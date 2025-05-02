@@ -3,10 +3,12 @@ mutation UpdateUser(
   $displayName: String,
   $photoUrl: String
 ) @auth(level: USER) {
-  updateUser(
-    id: "auth.uid",
-    display_name: $displayName,
-    photo_url: $photoUrl
+  updateUser: user_update(
+    key: { id_expr: "auth.uid" },
+    data: {
+      displayName: $displayName,
+      photoUrl: $photoUrl
+    }
   )
 }
 
@@ -15,19 +17,19 @@ mutation CreateProfile(
   $name: String!,
   $bio: String,
   $avatarUrl: String,
-  $skills: [String],
-  $interests: [String],
+  $skills: [String!],
+  $interests: [String!],
   $isDefault: Boolean
 ) @auth(level: USER) {
-  profile_insert(
+  createProfile: profile_insert(
     data: {
-      user_id_expr: "auth.uid",
+      userId_expr: "auth.uid",
       name: $name,
       bio: $bio,
-      avatar_url: $avatarUrl,
+      avatarUrl: $avatarUrl,
       skills: $skills,
       interests: $interests,
-      is_default: $isDefault
+      isDefault: $isDefault
     }
   )
 }
@@ -37,26 +39,26 @@ mutation UpdateProfile(
   $name: String,
   $bio: String,
   $avatarUrl: String,
-  $skills: [String],
-  $interests: [String],
+  $skills: [String!],
+  $interests: [String!],
   $isDefault: Boolean
 ) @auth(level: USER) {
-  profile_update(
+  updateProfile: profile_update(
     key: { id: $id },
     data: {
       name: $name,
       bio: $bio,
-      avatar_url: $avatarUrl,
+      avatarUrl: $avatarUrl,
       skills: $skills,
       interests: $interests,
-      is_default: $isDefault,
-      updated_at_expr: "request.time"
+      isDefault: $isDefault,
+      updatedAt_expr: "request.time"
     }
   )
 }
 
 mutation DeleteProfile($id: UUID!) @auth(level: USER) {
-  profile_delete(key: { id: $id })
+  deleteProfile: profile_delete(key: { id: $id })
 }
 
 # Workspace mutations
@@ -65,12 +67,12 @@ mutation CreateWorkspace(
   $description: String,
   $logoUrl: String
 ) @auth(level: USER) {
-  workspace_insert(
+  createWorkspace: workspace_insert(
     data: {
       name: $name,
       description: $description,
-      logo_url: $logoUrl,
-      created_by_expr: "auth.uid"
+      logoUrl: $logoUrl,
+      createdBy_expr: "auth.uid"
     }
   )
 }
@@ -81,19 +83,19 @@ mutation UpdateWorkspace(
   $description: String,
   $logoUrl: String
 ) @auth(level: USER) {
-  workspace_update(
+  updateWorkspace: workspace_update(
     key: { id: $id },
     data: {
       name: $name,
       description: $description,
-      logo_url: $logoUrl,
-      updated_at_expr: "request.time"
+      logoUrl: $logoUrl,
+      updatedAt_expr: "request.time"
     }
   )
 }
 
 mutation DeleteWorkspace($id: UUID!) @auth(level: USER) {
-  workspace_delete(key: { id: $id })
+  deleteWorkspace: workspace_delete(key: { id: $id })
 }
 
 # Workspace member mutations
@@ -103,11 +105,11 @@ mutation AddWorkspaceMember(
   $profileId: UUID,
   $role: String!
 ) @auth(level: USER) {
-  workspace_member_insert(
+  addWorkspaceMember: workspaceMember_insert(
     data: {
-      workspace_id: $workspaceId,
-      user_id: $userId,
-      profile_id: $profileId,
+      workspaceId: $workspaceId,
+      userId: $userId,
+      profileId: $profileId,
       role: $role
     }
   )
@@ -119,10 +121,10 @@ mutation UpdateWorkspaceMember(
   $profileId: UUID,
   $role: String
 ) @auth(level: USER) {
-  workspace_member_update(
-    key: { workspace_id: $workspaceId, user_id: $userId },
+  updateWorkspaceMember: workspaceMember_update(
+    key: { workspaceId: $workspaceId, userId: $userId },
     data: {
-      profile_id: $profileId,
+      profileId: $profileId,
       role: $role
     }
   )
@@ -132,7 +134,7 @@ mutation RemoveWorkspaceMember(
   $workspaceId: UUID!,
   $userId: String!
 ) @auth(level: USER) {
-  workspace_member_delete(key: { workspace_id: $workspaceId, user_id: $userId })
+  removeWorkspaceMember: workspaceMember_delete(key: { workspaceId: $workspaceId, userId: $userId })
 }
 
 # Invitation mutations
@@ -141,20 +143,19 @@ mutation InviteToWorkspace(
   $email: String!,
   $role: String!
 ) @auth(level: USER) {
-  workspace_invitation_insert(
+  inviteToWorkspace: workspaceInvitation_insert(
     data: {
-      workspace_id: $workspaceId,
+      workspaceId: $workspaceId,
       email: $email,
       role: $role,
-      invited_by_expr: "auth.uid",
-      status: "pending",
-      expires_at_expr: "dateAdd(request.time, 7, 'day')"
+      invitedBy_expr: "auth.uid",
+      status: "pending"
     }
   )
 }
 
 mutation AcceptInvitation($invitationId: UUID!) @auth(level: USER) {
-  workspace_invitation_update(
+  acceptInvitation: workspaceInvitation_update(
     key: { id: $invitationId },
     data: {
       status: "accepted"
@@ -163,7 +164,7 @@ mutation AcceptInvitation($invitationId: UUID!) @auth(level: USER) {
 }
 
 mutation DeclineInvitation($invitationId: UUID!) @auth(level: USER) {
-  workspace_invitation_update(
+  declineInvitation: workspaceInvitation_update(
     key: { id: $invitationId },
     data: {
       status: "declined"
@@ -181,15 +182,15 @@ mutation CreateBusinessProfile(
   $website: String,
   $employeeCount: Int
 ) @auth(level: USER) {
-  business_profile_insert(
+  createBusinessProfile: businessProfile_insert(
     data: {
-      workspace_id: $workspaceId,
+      workspaceId: $workspaceId,
       name: $name,
       industry: $industry,
       description: $description,
       location: $location,
       website: $website,
-      employee_count: $employeeCount
+      employeeCount: $employeeCount
     }
   )
 }
@@ -203,7 +204,7 @@ mutation UpdateBusinessProfile(
   $website: String,
   $employeeCount: Int
 ) @auth(level: USER) {
-  business_profile_update(
+  updateBusinessProfile: businessProfile_update(
     key: { id: $id },
     data: {
       name: $name,
@@ -211,30 +212,50 @@ mutation UpdateBusinessProfile(
       description: $description,
       location: $location,
       website: $website,
-      employee_count: $employeeCount,
-      updated_at_expr: "request.time"
+      employeeCount: $employeeCount,
+      updatedAt_expr: "request.time"
     }
   )
 }
 
 # Partner preferences mutations
-mutation UpdatePartnerPreferences(
+mutation CreatePartnerPreferences(
   $workspaceId: UUID!,
-  $industries: [String],
-  $locations: [String],
+  $industries: [String!],
+  $locations: [String!],
   $minEmployeeCount: Int,
   $maxEmployeeCount: Int,
-  $skillsNeeded: [String]
+  $skillsNeeded: [String!]
 ) @auth(level: USER) {
-  partner_preferences_upsert(
+  createPartnerPreferences: partnerPreferences_insert(
     data: {
-      workspace_id: $workspaceId,
+      workspaceId: $workspaceId,
       industries: $industries,
       locations: $locations,
-      min_employee_count: $minEmployeeCount,
-      max_employee_count: $maxEmployeeCount,
-      skills_needed: $skillsNeeded,
-      updated_at_expr: "request.time"
+      minEmployeeCount: $minEmployeeCount,
+      maxEmployeeCount: $maxEmployeeCount,
+      skillsNeeded: $skillsNeeded
+    }
+  )
+}
+
+mutation UpdatePartnerPreferences(
+  $id: UUID!,
+  $industries: [String!],
+  $locations: [String!],
+  $minEmployeeCount: Int,
+  $maxEmployeeCount: Int,
+  $skillsNeeded: [String!]
+) @auth(level: USER) {
+  updatePartnerPreferences: partnerPreferences_update(
+    key: { id: $id },
+    data: {
+      industries: $industries,
+      locations: $locations,
+      minEmployeeCount: $minEmployeeCount,
+      maxEmployeeCount: $maxEmployeeCount,
+      skillsNeeded: $skillsNeeded,
+      updatedAt_expr: "request.time"
     }
   )
 }

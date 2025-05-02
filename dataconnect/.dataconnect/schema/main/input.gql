@@ -1,0 +1,2015 @@
+"""
+✨ `BusinessProfile_KeyOutput` returns the primary key fields of table type `BusinessProfile`.
+
+It has the same format as `BusinessProfile_Key`, but is only used as mutation return value.
+"""
+scalar BusinessProfile_KeyOutput
+"""
+✨ `PartnerPreferences_KeyOutput` returns the primary key fields of table type `PartnerPreferences`.
+
+It has the same format as `PartnerPreferences_Key`, but is only used as mutation return value.
+"""
+scalar PartnerPreferences_KeyOutput
+"""
+✨ `Profile_KeyOutput` returns the primary key fields of table type `Profile`.
+
+It has the same format as `Profile_Key`, but is only used as mutation return value.
+"""
+scalar Profile_KeyOutput
+"""
+✨ `User_KeyOutput` returns the primary key fields of table type `User`.
+
+It has the same format as `User_Key`, but is only used as mutation return value.
+"""
+scalar User_KeyOutput
+"""
+✨ `Workspace_KeyOutput` returns the primary key fields of table type `Workspace`.
+
+It has the same format as `Workspace_Key`, but is only used as mutation return value.
+"""
+scalar Workspace_KeyOutput
+"""
+✨ `WorkspaceInvitation_KeyOutput` returns the primary key fields of table type `WorkspaceInvitation`.
+
+It has the same format as `WorkspaceInvitation_Key`, but is only used as mutation return value.
+"""
+scalar WorkspaceInvitation_KeyOutput
+"""
+✨ `WorkspaceMember_KeyOutput` returns the primary key fields of table type `WorkspaceMember`.
+
+It has the same format as `WorkspaceMember_Key`, but is only used as mutation return value.
+"""
+scalar WorkspaceMember_KeyOutput
+"""
+✨ Generated data input type for table 'BusinessProfile'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input BusinessProfile_Data {
+  """
+  ✨ Generated from Field `BusinessProfile`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `BusinessProfile`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `BusinessProfile`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `BusinessProfile`.`description` of type `String`)
+  """
+  description_expr: String_Expr
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
+  """
+  employeeCount: Int
+  """
+  ✨ `_expr` server value variant of `employeeCount` (✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`)
+  """
+  employeeCount_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `employeeCount` (✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`)
+  """
+  employeeCount_update: [Int_Update!]
+  """
+  ✨ Generated from Field `BusinessProfile`.`industry` of type `String`
+  """
+  industry: String
+  """
+  ✨ `_expr` server value variant of `industry` (✨ Generated from Field `BusinessProfile`.`industry` of type `String`)
+  """
+  industry_expr: String_Expr
+  """
+  ✨ Generated from Field `BusinessProfile`.`location` of type `String`
+  """
+  location: String
+  """
+  ✨ `_expr` server value variant of `location` (✨ Generated from Field `BusinessProfile`.`location` of type `String`)
+  """
+  location_expr: String_Expr
+  """
+  ✨ Generated from Field `BusinessProfile`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `BusinessProfile`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+  """
+  ✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `BusinessProfile`.`website` of type `String`
+  """
+  website: String
+  """
+  ✨ `_expr` server value variant of `website` (✨ Generated from Field `BusinessProfile`.`website` of type `String`)
+  """
+  website_expr: String_Expr
+  """
+  ✨ Generated from Field `BusinessProfile`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID
+  """
+  ✨ `_expr` server value variant of `workspaceId` (✨ Generated from Field `BusinessProfile`.`workspaceId` of type `UUID!`)
+  """
+  workspaceId_expr: UUID_Expr
+}
+"""
+✨ Generated filter input type for table 'BusinessProfile'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input BusinessProfile_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [BusinessProfile_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: BusinessProfile_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [BusinessProfile_Filter!]
+  """
+  ✨ Generated from Field `BusinessProfile`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
+  """
+  employeeCount: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`industry` of type `String`
+  """
+  industry: String_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`location` of type `String`
+  """
+  location: String_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`website` of type `String`
+  """
+  website: String_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID_Filter
+}
+"""
+✨ Generated first-row input type for table 'BusinessProfile'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input BusinessProfile_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [BusinessProfile_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: BusinessProfile_Filter
+}
+"""
+✨ Generated having input type for table 'BusinessProfile'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input BusinessProfile_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [BusinessProfile_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: BusinessProfile_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [BusinessProfile_Having!]
+  """
+  ✨ Generated from Field `BusinessProfile`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount_count` of type `Int!`
+  """
+  employeeCount_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`industry_count` of type `Int!`
+  """
+  industry_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`location_count` of type `Int!`
+  """
+  location_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`website_count` of type `Int!`
+  """
+  website_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`workspaceId_count` of type `Int!`
+  """
+  workspaceId_count: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount_sum` of type `Int`
+  """
+  employeeCount_sum: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount_avg` of type `Float`
+  """
+  employeeCount_avg: Float_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount_min` of type `Int`
+  """
+  employeeCount_min: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount_max` of type `Int`
+  """
+  employeeCount_max: Int_Filter
+  """
+  ✨ Generated from Field `BusinessProfile`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'BusinessProfile'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input BusinessProfile_Key {
+  """
+  ✨ Generated from Field `BusinessProfile`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `BusinessProfile`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'BusinessProfile'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input BusinessProfile_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: BusinessProfile_Filter
+}
+"""
+✨ Generated order input type for table 'BusinessProfile'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input BusinessProfile_Order {
+  """
+  ✨ Generated from Field `BusinessProfile`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
+  """
+  employeeCount: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`industry` of type `String`
+  """
+  industry: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`location` of type `String`
+  """
+  location: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`website` of type `String`
+  """
+  website: OrderDirection
+  """
+  ✨ Generated from Field `BusinessProfile`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: OrderDirection
+}
+"""
+✨ Generated data input type for table 'PartnerPreferences'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input PartnerPreferences_Data {
+  """
+  ✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`industries` of type `[String]`
+  """
+  industries: [String!]
+  """
+  ✨ `_update` server value variant of `industries` (✨ Generated from Field `PartnerPreferences`.`industries` of type `[String]`)
+  """
+  industries_update: [String_ListUpdate!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`locations` of type `[String]`
+  """
+  locations: [String!]
+  """
+  ✨ `_update` server value variant of `locations` (✨ Generated from Field `PartnerPreferences`.`locations` of type `[String]`)
+  """
+  locations_update: [String_ListUpdate!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`
+  """
+  maxEmployeeCount: Int
+  """
+  ✨ `_expr` server value variant of `maxEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`)
+  """
+  maxEmployeeCount_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `maxEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`)
+  """
+  maxEmployeeCount_update: [Int_Update!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`
+  """
+  minEmployeeCount: Int
+  """
+  ✨ `_expr` server value variant of `minEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`)
+  """
+  minEmployeeCount_expr: Int_Expr
+  """
+  ✨ `_update` server value variant of `minEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`)
+  """
+  minEmployeeCount_update: [Int_Update!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`skillsNeeded` of type `[String]`
+  """
+  skillsNeeded: [String!]
+  """
+  ✨ `_update` server value variant of `skillsNeeded` (✨ Generated from Field `PartnerPreferences`.`skillsNeeded` of type `[String]`)
+  """
+  skillsNeeded_update: [String_ListUpdate!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID
+  """
+  ✨ `_expr` server value variant of `workspaceId` (✨ Generated from Field `PartnerPreferences`.`workspaceId` of type `UUID!`)
+  """
+  workspaceId_expr: UUID_Expr
+}
+"""
+✨ Generated filter input type for table 'PartnerPreferences'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input PartnerPreferences_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [PartnerPreferences_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: PartnerPreferences_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [PartnerPreferences_Filter!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`industries` of type `[String]`
+  """
+  industries: String_ListFilter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`locations` of type `[String]`
+  """
+  locations: String_ListFilter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`
+  """
+  maxEmployeeCount: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`
+  """
+  minEmployeeCount: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`skillsNeeded` of type `[String]`
+  """
+  skillsNeeded: String_ListFilter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID_Filter
+}
+"""
+✨ Generated first-row input type for table 'PartnerPreferences'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input PartnerPreferences_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [PartnerPreferences_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: PartnerPreferences_Filter
+}
+"""
+✨ Generated having input type for table 'PartnerPreferences'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input PartnerPreferences_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [PartnerPreferences_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: PartnerPreferences_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [PartnerPreferences_Having!]
+  """
+  ✨ Generated from Field `PartnerPreferences`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_count` of type `Int!`
+  """
+  maxEmployeeCount_count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_count` of type `Int!`
+  """
+  minEmployeeCount_count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`workspaceId_count` of type `Int!`
+  """
+  workspaceId_count: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_sum` of type `Int`
+  """
+  maxEmployeeCount_sum: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_sum` of type `Int`
+  """
+  minEmployeeCount_sum: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_avg` of type `Float`
+  """
+  maxEmployeeCount_avg: Float_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_avg` of type `Float`
+  """
+  minEmployeeCount_avg: Float_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_min` of type `Int`
+  """
+  maxEmployeeCount_min: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_min` of type `Int`
+  """
+  minEmployeeCount_min: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_max` of type `Int`
+  """
+  maxEmployeeCount_max: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_max` of type `Int`
+  """
+  minEmployeeCount_max: Int_Filter
+  """
+  ✨ Generated from Field `PartnerPreferences`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'PartnerPreferences'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input PartnerPreferences_Key {
+  """
+  ✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'PartnerPreferences'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input PartnerPreferences_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: PartnerPreferences_Filter
+}
+"""
+✨ Generated order input type for table 'PartnerPreferences'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input PartnerPreferences_Order {
+  """
+  ✨ Generated from Field `PartnerPreferences`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`
+  """
+  maxEmployeeCount: OrderDirection
+  """
+  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`
+  """
+  minEmployeeCount: OrderDirection
+  """
+  ✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `PartnerPreferences`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Profile'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Profile_Data {
+  """
+  ✨ Generated from Field `Profile`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Profile`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Profile`.`avatarUrl` of type `String`
+  """
+  avatarUrl: String
+  """
+  ✨ `_expr` server value variant of `avatarUrl` (✨ Generated from Field `Profile`.`avatarUrl` of type `String`)
+  """
+  avatarUrl_expr: String_Expr
+  """
+  ✨ Generated from Field `Profile`.`bio` of type `String`
+  """
+  bio: String
+  """
+  ✨ `_expr` server value variant of `bio` (✨ Generated from Field `Profile`.`bio` of type `String`)
+  """
+  bio_expr: String_Expr
+  """
+  ✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Profile`.`interests` of type `[String]`
+  """
+  interests: [String!]
+  """
+  ✨ `_update` server value variant of `interests` (✨ Generated from Field `Profile`.`interests` of type `[String]`)
+  """
+  interests_update: [String_ListUpdate!]
+  """
+  ✨ Generated from Field `Profile`.`isDefault` of type `Boolean!`
+  """
+  isDefault: Boolean
+  """
+  ✨ `_expr` server value variant of `isDefault` (✨ Generated from Field `Profile`.`isDefault` of type `Boolean!`)
+  """
+  isDefault_expr: Boolean_Expr
+  """
+  ✨ Generated from Field `Profile`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Profile`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+  """
+  ✨ Generated from Field `Profile`.`skills` of type `[String]`
+  """
+  skills: [String!]
+  """
+  ✨ `_update` server value variant of `skills` (✨ Generated from Field `Profile`.`skills` of type `[String]`)
+  """
+  skills_update: [String_ListUpdate!]
+  """
+  ✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Profile`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `Profile`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'Profile'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Profile_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Profile_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Profile_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Profile_Filter!]
+  """
+  ✨ Generated from Field `Profile`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Profile`.`avatarUrl` of type `String`
+  """
+  avatarUrl: String_Filter
+  """
+  ✨ Generated from Field `Profile`.`bio` of type `String`
+  """
+  bio: String_Filter
+  """
+  ✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Profile`.`interests` of type `[String]`
+  """
+  interests: String_ListFilter
+  """
+  ✨ Generated from Field `Profile`.`isDefault` of type `Boolean!`
+  """
+  isDefault: Boolean_Filter
+  """
+  ✨ Generated from Field `Profile`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Profile`.`skills` of type `[String]`
+  """
+  skills: String_ListFilter
+  """
+  ✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Profile`.`userId` of type `String!`
+  """
+  userId: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'Profile'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Profile_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Profile_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Profile_Filter
+}
+"""
+✨ Generated having input type for table 'Profile'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Profile_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Profile_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Profile_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Profile_Having!]
+  """
+  ✨ Generated from Field `Profile`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`avatarUrl_count` of type `Int!`
+  """
+  avatarUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`bio_count` of type `Int!`
+  """
+  bio_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`isDefault_count` of type `Int!`
+  """
+  isDefault_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `Profile`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Profile`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Profile`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Profile`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Profile'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Profile_Key {
+  """
+  ✨ Generated from Field `Profile`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Profile`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Profile'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Profile_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Profile_Filter
+}
+"""
+✨ Generated order input type for table 'Profile'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Profile_Order {
+  """
+  ✨ Generated from Field `Profile`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`avatarUrl` of type `String`
+  """
+  avatarUrl: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`bio` of type `String`
+  """
+  bio: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`isDefault` of type `Boolean!`
+  """
+  isDefault: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+  """
+  ✨ Generated from Field `Profile`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+}
+"""
+✨ Generated data input type for table 'User'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input User_Data {
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: String
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `String!`)
+  """
+  id_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String`
+  """
+  displayName: String
+  """
+  ✨ `_expr` server value variant of `displayName` (✨ Generated from Field `User`.`displayName` of type `String`)
+  """
+  displayName_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `User`.`email` of type `String!`)
+  """
+  email_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`photoUrl` of type `String`
+  """
+  photoUrl: String
+  """
+  ✨ `_expr` server value variant of `photoUrl` (✨ Generated from Field `User`.`photoUrl` of type `String`)
+  """
+  photoUrl_expr: String_Expr
+  """
+  ✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!]
+}
+"""
+✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [User_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: User_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [User_Filter!]
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: String_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String`
+  """
+  displayName: String_Filter
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `User`.`photoUrl` of type `String`
+  """
+  photoUrl: String_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'User'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input User_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [User_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: User_Filter
+}
+"""
+✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input User_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [User_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: User_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [User_Having!]
+  """
+  ✨ Generated from Field `User`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
+  """
+  displayName_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`photoUrl_count` of type `Int!`
+  """
+  photoUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `User`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input User_Key {
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: String
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `User`.`id` of type `String!`)
+  """
+  id_expr: String_Expr
+}
+"""
+✨ Generated list filter input type for table 'User'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input User_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: User_Filter
+}
+"""
+✨ Generated order input type for table 'User'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input User_Order {
+  """
+  ✨ Generated from Field `User`.`id` of type `String!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `User`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `User`.`displayName` of type `String`
+  """
+  displayName: OrderDirection
+  """
+  ✨ Generated from Field `User`.`email` of type `String!`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `User`.`photoUrl` of type `String`
+  """
+  photoUrl: OrderDirection
+  """
+  ✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+}
+"""
+✨ Generated data input type for table 'Workspace'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input Workspace_Data {
+  """
+  ✨ Generated from Field `Workspace`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Workspace`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `Workspace`.`createdBy` of type `String!`
+  """
+  createdBy: String
+  """
+  ✨ `_expr` server value variant of `createdBy` (✨ Generated from Field `Workspace`.`createdBy` of type `String!`)
+  """
+  createdBy_expr: String_Expr
+  """
+  ✨ Generated from Field `Workspace`.`description` of type `String`
+  """
+  description: String
+  """
+  ✨ `_expr` server value variant of `description` (✨ Generated from Field `Workspace`.`description` of type `String`)
+  """
+  description_expr: String_Expr
+  """
+  ✨ Generated from Field `Workspace`.`logoUrl` of type `String`
+  """
+  logoUrl: String
+  """
+  ✨ `_expr` server value variant of `logoUrl` (✨ Generated from Field `Workspace`.`logoUrl` of type `String`)
+  """
+  logoUrl_expr: String_Expr
+  """
+  ✨ Generated from Field `Workspace`.`name` of type `String!`
+  """
+  name: String
+  """
+  ✨ `_expr` server value variant of `name` (✨ Generated from Field `Workspace`.`name` of type `String!`)
+  """
+  name_expr: String_Expr
+  """
+  ✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_update: [Timestamp_Update!]
+}
+"""
+✨ Generated filter input type for table 'Workspace'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Workspace_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [Workspace_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: Workspace_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [Workspace_Filter!]
+  """
+  ✨ Generated from Field `Workspace`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `Workspace`.`createdBy` of type `String!`
+  """
+  createdBy: String_Filter
+  """
+  ✨ Generated from Field `Workspace`.`description` of type `String`
+  """
+  description: String_Filter
+  """
+  ✨ Generated from Field `Workspace`.`logoUrl` of type `String`
+  """
+  logoUrl: String_Filter
+  """
+  ✨ Generated from Field `Workspace`.`name` of type `String!`
+  """
+  name: String_Filter
+  """
+  ✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'Workspace'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input Workspace_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [Workspace_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: Workspace_Filter
+}
+"""
+✨ Generated having input type for table 'Workspace'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input Workspace_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [Workspace_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: Workspace_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [Workspace_Having!]
+  """
+  ✨ Generated from Field `Workspace`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`createdBy_count` of type `Int!`
+  """
+  createdBy_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`description_count` of type `Int!`
+  """
+  description_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`logoUrl_count` of type `Int!`
+  """
+  logoUrl_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`name_count` of type `Int!`
+  """
+  name_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`updatedAt_count` of type `Int!`
+  """
+  updatedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `Workspace`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Workspace`.`updatedAt_min` of type `Timestamp`
+  """
+  updatedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `Workspace`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `Workspace`.`updatedAt_max` of type `Timestamp`
+  """
+  updatedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'Workspace'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input Workspace_Key {
+  """
+  ✨ Generated from Field `Workspace`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `Workspace`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'Workspace'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input Workspace_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: Workspace_Filter
+}
+"""
+✨ Generated order input type for table 'Workspace'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input Workspace_Order {
+  """
+  ✨ Generated from Field `Workspace`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `Workspace`.`createdBy` of type `String!`
+  """
+  createdBy: OrderDirection
+  """
+  ✨ Generated from Field `Workspace`.`description` of type `String`
+  """
+  description: OrderDirection
+  """
+  ✨ Generated from Field `Workspace`.`logoUrl` of type `String`
+  """
+  logoUrl: OrderDirection
+  """
+  ✨ Generated from Field `Workspace`.`name` of type `String!`
+  """
+  name: OrderDirection
+  """
+  ✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+}
+"""
+✨ Generated data input type for table 'WorkspaceInvitation'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input WorkspaceInvitation_Data {
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `WorkspaceInvitation`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`email` of type `String!`
+  """
+  email: String
+  """
+  ✨ `_expr` server value variant of `email` (✨ Generated from Field `WorkspaceInvitation`.`email` of type `String!`)
+  """
+  email_expr: String_Expr
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`
+  """
+  expiresAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `expiresAt` (✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`)
+  """
+  expiresAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `expiresAt` (✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`)
+  """
+  expiresAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `expiresAt` (✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`)
+  """
+  expiresAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`invitedBy` of type `String!`
+  """
+  invitedBy: String
+  """
+  ✨ `_expr` server value variant of `invitedBy` (✨ Generated from Field `WorkspaceInvitation`.`invitedBy` of type `String!`)
+  """
+  invitedBy_expr: String_Expr
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`role` of type `String!`
+  """
+  role: String
+  """
+  ✨ `_expr` server value variant of `role` (✨ Generated from Field `WorkspaceInvitation`.`role` of type `String!`)
+  """
+  role_expr: String_Expr
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`status` of type `String!`
+  """
+  status: String
+  """
+  ✨ `_expr` server value variant of `status` (✨ Generated from Field `WorkspaceInvitation`.`status` of type `String!`)
+  """
+  status_expr: String_Expr
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID
+  """
+  ✨ `_expr` server value variant of `workspaceId` (✨ Generated from Field `WorkspaceInvitation`.`workspaceId` of type `UUID!`)
+  """
+  workspaceId_expr: UUID_Expr
+}
+"""
+✨ Generated filter input type for table 'WorkspaceInvitation'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input WorkspaceInvitation_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [WorkspaceInvitation_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: WorkspaceInvitation_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [WorkspaceInvitation_Filter!]
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`email` of type `String!`
+  """
+  email: String_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`
+  """
+  expiresAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`invitedBy` of type `String!`
+  """
+  invitedBy: String_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`role` of type `String!`
+  """
+  role: String_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`status` of type `String!`
+  """
+  status: String_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID_Filter
+}
+"""
+✨ Generated first-row input type for table 'WorkspaceInvitation'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input WorkspaceInvitation_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [WorkspaceInvitation_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: WorkspaceInvitation_Filter
+}
+"""
+✨ Generated having input type for table 'WorkspaceInvitation'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input WorkspaceInvitation_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [WorkspaceInvitation_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: WorkspaceInvitation_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [WorkspaceInvitation_Having!]
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`createdAt_count` of type `Int!`
+  """
+  createdAt_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`email_count` of type `Int!`
+  """
+  email_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt_count` of type `Int!`
+  """
+  expiresAt_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`id_count` of type `Int!`
+  """
+  id_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`invitedBy_count` of type `Int!`
+  """
+  invitedBy_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`role_count` of type `Int!`
+  """
+  role_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`status_count` of type `Int!`
+  """
+  status_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`workspaceId_count` of type `Int!`
+  """
+  workspaceId_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`createdAt_min` of type `Timestamp`
+  """
+  createdAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt_min` of type `Timestamp`
+  """
+  expiresAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`createdAt_max` of type `Timestamp`
+  """
+  createdAt_max: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt_max` of type `Timestamp`
+  """
+  expiresAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'WorkspaceInvitation'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input WorkspaceInvitation_Key {
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `WorkspaceInvitation`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'WorkspaceInvitation'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input WorkspaceInvitation_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: WorkspaceInvitation_Filter
+}
+"""
+✨ Generated order input type for table 'WorkspaceInvitation'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input WorkspaceInvitation_Order {
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`email` of type `String!`
+  """
+  email: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`
+  """
+  expiresAt: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`invitedBy` of type `String!`
+  """
+  invitedBy: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`role` of type `String!`
+  """
+  role: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`status` of type `String!`
+  """
+  status: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceInvitation`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: OrderDirection
+}
+"""
+✨ Generated data input type for table 'WorkspaceMember'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input WorkspaceMember_Data {
+  """
+  ✨ Generated from Field `WorkspaceMember`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID
+  """
+  ✨ `_expr` server value variant of `workspaceId` (✨ Generated from Field `WorkspaceMember`.`workspaceId` of type `UUID!`)
+  """
+  workspaceId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `WorkspaceMember`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `WorkspaceMember`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr
+  """
+  ✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`
+  """
+  joinedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `joinedAt` (✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`)
+  """
+  joinedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `joinedAt` (✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`)
+  """
+  joinedAt_time: Timestamp_Relative
+  """
+  ✨ `_update` server value variant of `joinedAt` (✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`)
+  """
+  joinedAt_update: [Timestamp_Update!]
+  """
+  ✨ Generated from Field `WorkspaceMember`.`profileId` of type `UUID`
+  """
+  profileId: UUID
+  """
+  ✨ `_expr` server value variant of `profileId` (✨ Generated from Field `WorkspaceMember`.`profileId` of type `UUID`)
+  """
+  profileId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `WorkspaceMember`.`role` of type `String!`
+  """
+  role: String
+  """
+  ✨ `_expr` server value variant of `role` (✨ Generated from Field `WorkspaceMember`.`role` of type `String!`)
+  """
+  role_expr: String_Expr
+}
+"""
+✨ Generated filter input type for table 'WorkspaceMember'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input WorkspaceMember_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [WorkspaceMember_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: WorkspaceMember_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [WorkspaceMember_Filter!]
+  """
+  ✨ Generated from Field `WorkspaceMember`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`userId` of type `String!`
+  """
+  userId: String_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`
+  """
+  joinedAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`profileId` of type `UUID`
+  """
+  profileId: UUID_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`role` of type `String!`
+  """
+  role: String_Filter
+}
+"""
+✨ Generated first-row input type for table 'WorkspaceMember'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input WorkspaceMember_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [WorkspaceMember_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: WorkspaceMember_Filter
+}
+"""
+✨ Generated having input type for table 'WorkspaceMember'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input WorkspaceMember_Having {
+  """
+  Apply multiple Having conditions using `AND` logic.
+  """
+  _and: [WorkspaceMember_Having!]
+  """
+  Whether to apply DISTINCT to the aggregate function.
+  """
+  _distinct: Boolean
+  """
+  Negate the result of the provided Having condition.
+  """
+  _not: WorkspaceMember_Having
+  """
+  Apply multiple Having conditions using `OR` logic.
+  """
+  _or: [WorkspaceMember_Having!]
+  """
+  ✨ Generated from Field `WorkspaceMember`.`_count` of type `Int!`
+  """
+  _count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`joinedAt_count` of type `Int!`
+  """
+  joinedAt_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`profileId_count` of type `Int!`
+  """
+  profileId_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`role_count` of type `Int!`
+  """
+  role_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`userId_count` of type `Int!`
+  """
+  userId_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`workspaceId_count` of type `Int!`
+  """
+  workspaceId_count: Int_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`joinedAt_min` of type `Timestamp`
+  """
+  joinedAt_min: Timestamp_Filter
+  """
+  ✨ Generated from Field `WorkspaceMember`.`joinedAt_max` of type `Timestamp`
+  """
+  joinedAt_max: Timestamp_Filter
+}
+"""
+✨ Generated key input type for table 'WorkspaceMember'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input WorkspaceMember_Key {
+  """
+  ✨ Generated from Field `WorkspaceMember`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: UUID
+  """
+  ✨ `_expr` server value variant of `workspaceId` (✨ Generated from Field `WorkspaceMember`.`workspaceId` of type `UUID!`)
+  """
+  workspaceId_expr: UUID_Expr
+  """
+  ✨ Generated from Field `WorkspaceMember`.`userId` of type `String!`
+  """
+  userId: String
+  """
+  ✨ `_expr` server value variant of `userId` (✨ Generated from Field `WorkspaceMember`.`userId` of type `String!`)
+  """
+  userId_expr: String_Expr
+}
+"""
+✨ Generated list filter input type for table 'WorkspaceMember'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input WorkspaceMember_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: WorkspaceMember_Filter
+}
+"""
+✨ Generated order input type for table 'WorkspaceMember'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input WorkspaceMember_Order {
+  """
+  ✨ Generated from Field `WorkspaceMember`.`workspaceId` of type `UUID!`
+  """
+  workspaceId: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceMember`.`userId` of type `String!`
+  """
+  userId: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`
+  """
+  joinedAt: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceMember`.`profileId` of type `UUID`
+  """
+  profileId: OrderDirection
+  """
+  ✨ Generated from Field `WorkspaceMember`.`role` of type `String!`
+  """
+  role: OrderDirection
+}

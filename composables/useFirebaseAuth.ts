@@ -12,9 +12,6 @@ import type { User as FirebaseUser } from 'firebase/auth';
 // Import the useFirebase composable
 import { useFirebase } from './useFirebase';
 
-// Get Firebase auth instance from the useFirebase composable
-const { auth } = useFirebase();
-
 // User type
 export interface User {
   uid: string;
@@ -26,6 +23,9 @@ export interface User {
 
 // Auth state
 export const useFirebaseAuth = () => {
+  // Get Firebase auth instance from the useFirebase composable
+  const { auth } = useFirebase();
+
   const user = ref<User | null>(null);
   const isAuthenticated = computed(() => !!user.value);
   const isLoading = ref(true);
@@ -145,14 +145,5 @@ export const useFirebaseAuth = () => {
   };
 };
 
-// Export a singleton instance for use across the app
-export const {
-  user,
-  isAuthenticated,
-  isLoading,
-  error,
-  signIn,
-  signUp,
-  signOut,
-  resetPassword
-} = useFirebaseAuth();
+// Don't export a singleton instance directly
+// Instead, use the composable in your components or plugins

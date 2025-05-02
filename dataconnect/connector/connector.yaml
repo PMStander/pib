@@ -1,6 +1,6 @@
-connectorId: default
+connectorId: pib
 generate:
   javascriptSdk:
     outputDir: ../../dataconnect-generated/js/pib-connector
-    package: "@pib/connector"
+    package: "@firebasegen/pib-connector"
     packageJsonDir: ../..
