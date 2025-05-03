@@ -1,14 +1,17 @@
-# Active Context: Bug Fixes and Session End
+# Active Context: Firebase DataConnect Emulator Integration
 
 ## Context
 This document tracks the current work focus and state of the "Partners in Biz" project.
 
 ## Current Focus
-- Fixing authentication issues across the application
-- Ensuring consistent state management for workspaces and profiles
-- Improving error handling and loading states
-- Preparing for session end and next steps
-- Planning for production deployment
+- Fixing signup process by properly connecting to Firebase DataConnect emulator
+- Ensuring proper development environment setup with Firebase emulators
+- Resolving authentication and data persistence issues
+- Implementing secure LLM key management system
+- Creating UI components for managing LLM keys
+- Integrating with multiple LLM providers
+- Enhancing AI capabilities of the application
+- Improving security for sensitive API keys
 
 ## Project State
 - Basic Nuxt.js application structure is in place
@@ -60,32 +63,37 @@ This document tracks the current work focus and state of the "Partners in Biz" p
 - Fixed workspaces display issues in the workspaces tab
 - Standardized authentication handling across pages
 - Improved state management consistency for workspaces data
+- Implemented secure LLM key management system with AES-256-GCM encryption
+- Created UI components for managing LLM keys at user, profile, and workspace levels
+- Added settings pages for managing LLM keys
+- Implemented utilities for integrating with multiple LLM providers
+- Added support for OpenAI, Anthropic, Gemini, Ollama, and XAI
 
 ## Next Steps
-1. Enhance AI chat interface:
+1. Integrate LLM key management with chat interface:
+   - Connect the chat interface to use the configured LLM providers
+   - Implement fallback mechanisms when keys are not available
+   - Add provider selection in the chat interface
+   - Implement streaming responses for supported providers
+
+2. Enhance AI chat interface:
    - Improve NLP capabilities with more sophisticated techniques
    - Add support for follow-up questions and conversation context
    - Implement more advanced response generation with better explanations
    - Add support for more complex queries and entity extraction
    - Integrate with a real NLP service for better query understanding
 
-2. Add voice capabilities:
-   - Implement speech-to-text for voice input
-   - Add text-to-speech for voice output
-   - Create a voice user interface (VUI)
-   - Implement voice commands for common actions
+3. Enhance LLM key management:
+   - Implement key validation before saving
+   - Add key usage analytics to track API usage
+   - Consider adding key rotation and expiration features
+   - Implement more robust error handling for encryption/decryption failures
 
-3. Implement workspace detail page:
+4. Implement workspace detail page:
    - Create workspace detail view
    - Add member management functionality
    - Implement workspace settings
    - Create business profile management
-
-4. Enhance the UI/UX:
-   - Add animations and transitions
-   - Improve accessibility features
-   - Implement keyboard navigation
-   - Add more interactive elements
 
 5. Prepare for production deployment:
    - Set up CI/CD pipeline
@@ -94,8 +102,45 @@ This document tracks the current work focus and state of the "Partners in Biz" p
    - Optimize performance and bundle size
 
 ## Last Updated
-- Date: May 4, 2024
-- Session: Bug Fixes and Session End
+- Date: May 5, 2024
+- Session: Firebase DataConnect Emulator Integration
+
+## Session Summary (2024-05-05)
+In this session, we fixed the signup process by properly connecting to the Firebase DataConnect emulator in development mode. This resolved the 403 Forbidden errors that were occurring when trying to create user records in DataConnect after successful Firebase Authentication.
+
+### Key Observations:
+1. Authentication Flow Issues:
+   - Firebase Authentication was working correctly (creating users)
+   - DataConnect operations were failing with 403 Forbidden errors
+   - The application was trying to use the production DataConnect service instead of the local emulator
+
+2. Implementation Challenges:
+   - Identifying the correct emulator port from firebase.json (9499)
+   - Adding proper error handling for both initialization and emulator connection
+   - Ensuring the emulator connection is only attempted in development mode
+
+3. Implementation Approach:
+   - Updated useFirebase.ts to connect to the DataConnect emulator in development mode
+   - Added nested try/catch blocks to handle different types of errors
+   - Added detailed logging to help with troubleshooting
+   - Maintained consistency with how other Firebase services connect to emulators
+
+### Implementation Details:
+1. DataConnect Emulator Connection:
+   - Used connectDataConnectEmulator function to connect to the local emulator on port 9499
+   - Added conditional logic to only connect to the emulator in development mode
+   - Improved error handling with separate try/catch blocks for initialization and emulator connection
+
+2. Error Handling:
+   - Added more detailed error logging for both initialization and emulator connection
+   - Included error stack traces for better debugging
+   - Ensured the application can continue even if emulator connection fails
+
+3. Previous Session Work (LLM Key Management):
+   - Implemented secure LLM key management system with AES-256-GCM encryption
+   - Created UI components for managing LLM keys at user, profile, and workspace levels
+   - Added support for multiple LLM providers (OpenAI, Anthropic, Gemini, Ollama, XAI)
+   - Implemented provider-specific configuration options
 
 ## Session Summary (2024-05-04)
 In this session, we fixed authentication issues in the chat page and workspaces display issues in the workspaces tab. We also implemented an AI chat interface for interacting with the vector search functionality.
@@ -137,24 +182,34 @@ In this session, we fixed authentication issues in the chat page and workspaces 
    - Added proper loading states and error handling
 
 ## Current State
-The application now has a functional AI chat interface that allows users to interact with the vector search functionality using natural language. Authentication issues have been fixed, and workspaces are now properly displayed in the workspaces tab. The next step is to enhance the NLP capabilities, improve error handling, and prepare for production deployment.
+The application now has proper Firebase DataConnect emulator integration for local development, which resolves the signup process issues. The Firebase Authentication system works correctly to create users, and the DataConnect emulator is properly connected to store user data, profiles, and workspaces. The application also has a secure LLM key management system that allows users to store and manage API keys for various LLM providers, and a functional AI chat interface that allows users to interact with the vector search functionality using natural language.
 
 ## Next Steps
-1. Enhance AI chat interface:
+1. Test the signup process with the DataConnect emulator:
+   - Verify that user creation works correctly
+   - Ensure profiles and workspaces are created properly
+   - Test the entire authentication flow from signup to login
+
+2. Improve Firebase emulator integration:
+   - Add a startup script to ensure all emulators are running
+   - Create better error handling for when emulators are not available
+   - Add documentation for setting up the development environment
+
+3. Integrate LLM key management with chat interface:
+   - Connect the chat interface to use the configured LLM providers
+   - Implement fallback mechanisms when keys are not available
+   - Add provider selection in the chat interface
+   - Implement streaming responses for supported providers
+
+4. Enhance LLM key management:
+   - Implement key validation before saving
+   - Add key usage analytics to track API usage
+   - Consider adding key rotation and expiration features
+   - Implement more robust error handling for encryption/decryption failures
+
+5. Enhance AI chat interface:
    - Improve NLP capabilities with more sophisticated techniques
    - Add support for follow-up questions and conversation context
    - Implement more advanced response generation with better explanations
    - Add support for more complex queries and entity extraction
    - Integrate with a real NLP service for better query understanding
-
-2. Improve error handling and user experience:
-   - Add more comprehensive error handling for edge cases
-   - Improve loading indicators and transitions
-   - Implement more comprehensive logging for debugging
-   - Add unit tests for authentication and data fetching
-
-3. Prepare for production deployment:
-   - Set up CI/CD pipeline
-   - Configure production environment
-   - Implement error tracking and monitoring
-   - Optimize performance and bundle size

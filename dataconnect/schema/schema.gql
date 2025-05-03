@@ -93,3 +93,16 @@ type PartnerPreferences @table {
   createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
   updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
 }
+
+# LLM Keys
+type LLMKey @table(name: "llm_keys") {
+  id: UUID! @default(expr: "uuidV4()")
+  entityType: String! @col(name: "entity_type", dataType: "varchar(20)")
+  entityId: String! @col(name: "entity_id")
+  provider: String! @col(name: "provider", dataType: "varchar(20)")
+  encryptedKey: String @col(name: "encrypted_key")
+  encryptionIV: String @col(name: "encryption_iv")
+  config: String @col(name: "config")
+  createdAt: Timestamp! @default(expr: "request.time") @col(name: "created_at")
+  updatedAt: Timestamp! @default(expr: "request.time") @col(name: "updated_at")
+}

@@ -39,8 +39,9 @@ export default defineNuxtConfig({
       }
     }
   },
+  // Changed from 'parcel' to 'chokidar' to avoid oxc-parser native binding issues
   experimental: {
-    watcher: 'parcel'
+    watcher: 'chokidar' 
   },
   runtimeConfig: {
     // Private keys that are exposed to the server

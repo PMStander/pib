@@ -1,6 +1,6 @@
 extend type Mutation {
   """
-  ✨ Insert a single `BusinessProfile` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `BusinessProfile` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   businessProfile_insert(
     """
@@ -9,7 +9,16 @@ extend type Mutation {
     data: BusinessProfile_Data!
   ): BusinessProfile_KeyOutput! @fdc_generated(from: "BusinessProfile", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `PartnerPreferences` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `LLMKey` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  lLMKey_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: LLMKey_Data!
+  ): LLMKey_KeyOutput! @fdc_generated(from: "LLMKey", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `PartnerPreferences` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   partnerPreferences_insert(
     """
@@ -18,7 +27,7 @@ extend type Mutation {
     data: PartnerPreferences_Data!
   ): PartnerPreferences_KeyOutput! @fdc_generated(from: "PartnerPreferences", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `Profile` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Profile` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   profile_insert(
     """
@@ -27,7 +36,7 @@ extend type Mutation {
     data: Profile_Data!
   ): Profile_KeyOutput! @fdc_generated(from: "Profile", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `User` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `User` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   user_insert(
     """
@@ -36,7 +45,7 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput! @fdc_generated(from: "User", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `Workspace` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `Workspace` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspace_insert(
     """
@@ -45,7 +54,7 @@ extend type Mutation {
     data: Workspace_Data!
   ): Workspace_KeyOutput! @fdc_generated(from: "Workspace", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `WorkspaceInvitation` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `WorkspaceInvitation` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspaceInvitation_insert(
     """
@@ -54,7 +63,7 @@ extend type Mutation {
     data: WorkspaceInvitation_Data!
   ): WorkspaceInvitation_KeyOutput! @fdc_generated(from: "WorkspaceInvitation", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `WorkspaceMember` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `WorkspaceMember` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspaceMember_insert(
     """
@@ -63,7 +72,7 @@ extend type Mutation {
     data: WorkspaceMember_Data!
   ): WorkspaceMember_KeyOutput! @fdc_generated(from: "WorkspaceMember", purpose: INSERT_SINGLE)
   """
-  ✨ Insert a single `WorkspaceUser` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert a single `WorkspaceUser` into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspaceUser_insert(
     """
@@ -72,7 +81,7 @@ extend type Mutation {
     data: WorkspaceUser_Data!
   ): WorkspaceUser_KeyOutput! @fdc_generated(from: "WorkspaceUser", purpose: INSERT_SINGLE)
   """
-  ✨ Insert `BusinessProfile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `BusinessProfile` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   businessProfile_insertMany(
     """
@@ -81,7 +90,16 @@ extend type Mutation {
     data: [BusinessProfile_Data!]!
   ): [BusinessProfile_KeyOutput!]! @fdc_generated(from: "BusinessProfile", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `PartnerPreferences` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `LLMKey` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  lLMKey_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [LLMKey_Data!]!
+  ): [LLMKey_KeyOutput!]! @fdc_generated(from: "LLMKey", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `PartnerPreferences` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   partnerPreferences_insertMany(
     """
@@ -90,7 +108,7 @@ extend type Mutation {
     data: [PartnerPreferences_Data!]!
   ): [PartnerPreferences_KeyOutput!]! @fdc_generated(from: "PartnerPreferences", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `Profile` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Profile` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   profile_insertMany(
     """
@@ -99,7 +117,7 @@ extend type Mutation {
     data: [Profile_Data!]!
   ): [Profile_KeyOutput!]! @fdc_generated(from: "Profile", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `User` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `User` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   user_insertMany(
     """
@@ -108,7 +126,7 @@ extend type Mutation {
     data: [User_Data!]!
   ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `Workspace` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `Workspace` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspace_insertMany(
     """
@@ -117,7 +135,7 @@ extend type Mutation {
     data: [Workspace_Data!]!
   ): [Workspace_KeyOutput!]! @fdc_generated(from: "Workspace", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `WorkspaceInvitation` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `WorkspaceInvitation` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspaceInvitation_insertMany(
     """
@@ -126,7 +144,7 @@ extend type Mutation {
     data: [WorkspaceInvitation_Data!]!
   ): [WorkspaceInvitation_KeyOutput!]! @fdc_generated(from: "WorkspaceInvitation", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `WorkspaceMember` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `WorkspaceMember` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspaceMember_insertMany(
     """
@@ -135,7 +153,7 @@ extend type Mutation {
     data: [WorkspaceMember_Data!]!
   ): [WorkspaceMember_KeyOutput!]! @fdc_generated(from: "WorkspaceMember", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert `WorkspaceUser` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  ✨ Insert `WorkspaceUser` objects into the table. Columns not specified in `data` will receive defaults (e.g. `null`).
   """
   workspaceUser_insertMany(
     """
@@ -144,7 +162,7 @@ extend type Mutation {
     data: [WorkspaceUser_Data!]!
   ): [WorkspaceUser_KeyOutput!]! @fdc_generated(from: "WorkspaceUser", purpose: INSERT_MULTIPLE)
   """
-  ✨ Insert or update a single `BusinessProfile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `BusinessProfile`.
+  ✨ Insert or update a single `BusinessProfile` into the table, based on the primary key. Returns the key of the newly inserted `BusinessProfile`.
   """
   businessProfile_upsert(
     """
@@ -153,7 +171,16 @@ extend type Mutation {
     data: BusinessProfile_Data!
   ): BusinessProfile_KeyOutput! @fdc_generated(from: "BusinessProfile", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `PartnerPreferences` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PartnerPreferences`.
+  ✨ Insert or update a single `LLMKey` into the table, based on the primary key. Returns the key of the newly inserted `LLMKey`.
+  """
+  lLMKey_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: LLMKey_Data!
+  ): LLMKey_KeyOutput! @fdc_generated(from: "LLMKey", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `PartnerPreferences` into the table, based on the primary key. Returns the key of the newly inserted `PartnerPreferences`.
   """
   partnerPreferences_upsert(
     """
@@ -162,7 +189,7 @@ extend type Mutation {
     data: PartnerPreferences_Data!
   ): PartnerPreferences_KeyOutput! @fdc_generated(from: "PartnerPreferences", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `Profile` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Profile`.
+  ✨ Insert or update a single `Profile` into the table, based on the primary key. Returns the key of the newly inserted `Profile`.
   """
   profile_upsert(
     """
@@ -171,7 +198,7 @@ extend type Mutation {
     data: Profile_Data!
   ): Profile_KeyOutput! @fdc_generated(from: "Profile", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  ✨ Insert or update a single `User` into the table, based on the primary key. Returns the key of the newly inserted `User`.
   """
   user_upsert(
     """
@@ -180,7 +207,7 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput! @fdc_generated(from: "User", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `Workspace` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Workspace`.
+  ✨ Insert or update a single `Workspace` into the table, based on the primary key. Returns the key of the newly inserted `Workspace`.
   """
   workspace_upsert(
     """
@@ -189,7 +216,7 @@ extend type Mutation {
     data: Workspace_Data!
   ): Workspace_KeyOutput! @fdc_generated(from: "Workspace", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `WorkspaceInvitation` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceInvitation`.
+  ✨ Insert or update a single `WorkspaceInvitation` into the table, based on the primary key. Returns the key of the newly inserted `WorkspaceInvitation`.
   """
   workspaceInvitation_upsert(
     """
@@ -198,7 +225,7 @@ extend type Mutation {
     data: WorkspaceInvitation_Data!
   ): WorkspaceInvitation_KeyOutput! @fdc_generated(from: "WorkspaceInvitation", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `WorkspaceMember` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceMember`.
+  ✨ Insert or update a single `WorkspaceMember` into the table, based on the primary key. Returns the key of the newly inserted `WorkspaceMember`.
   """
   workspaceMember_upsert(
     """
@@ -207,7 +234,7 @@ extend type Mutation {
     data: WorkspaceMember_Data!
   ): WorkspaceMember_KeyOutput! @fdc_generated(from: "WorkspaceMember", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update a single `WorkspaceUser` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceUser`.
+  ✨ Insert or update a single `WorkspaceUser` into the table, based on the primary key. Returns the key of the newly inserted `WorkspaceUser`.
   """
   workspaceUser_upsert(
     """
@@ -216,7 +243,7 @@ extend type Mutation {
     data: WorkspaceUser_Data!
   ): WorkspaceUser_KeyOutput! @fdc_generated(from: "WorkspaceUser", purpose: UPSERT_SINGLE)
   """
-  ✨ Insert or update `BusinessProfile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `BusinessProfile`.
+  ✨ Insert or update `BusinessProfile` objects into the table, based on the primary key. Returns the key of the newly inserted `BusinessProfile`.
   """
   businessProfile_upsertMany(
     """
@@ -225,7 +252,16 @@ extend type Mutation {
     data: [BusinessProfile_Data!]!
   ): [BusinessProfile_KeyOutput!]! @fdc_generated(from: "BusinessProfile", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `PartnerPreferences` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `PartnerPreferences`.
+  ✨ Insert or update `LLMKey` objects into the table, based on the primary key. Returns the key of the newly inserted `LLMKey`.
+  """
+  lLMKey_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [LLMKey_Data!]!
+  ): [LLMKey_KeyOutput!]! @fdc_generated(from: "LLMKey", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `PartnerPreferences` objects into the table, based on the primary key. Returns the key of the newly inserted `PartnerPreferences`.
   """
   partnerPreferences_upsertMany(
     """
@@ -234,7 +270,7 @@ extend type Mutation {
     data: [PartnerPreferences_Data!]!
   ): [PartnerPreferences_KeyOutput!]! @fdc_generated(from: "PartnerPreferences", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `Profile` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Profile`.
+  ✨ Insert or update `Profile` objects into the table, based on the primary key. Returns the key of the newly inserted `Profile`.
   """
   profile_upsertMany(
     """
@@ -243,7 +279,7 @@ extend type Mutation {
     data: [Profile_Data!]!
   ): [Profile_KeyOutput!]! @fdc_generated(from: "Profile", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `User`.
+  ✨ Insert or update `User` objects into the table, based on the primary key. Returns the key of the newly inserted `User`.
   """
   user_upsertMany(
     """
@@ -252,7 +288,7 @@ extend type Mutation {
     data: [User_Data!]!
   ): [User_KeyOutput!]! @fdc_generated(from: "User", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `Workspace` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Workspace`.
+  ✨ Insert or update `Workspace` objects into the table, based on the primary key. Returns the key of the newly inserted `Workspace`.
   """
   workspace_upsertMany(
     """
@@ -261,7 +297,7 @@ extend type Mutation {
     data: [Workspace_Data!]!
   ): [Workspace_KeyOutput!]! @fdc_generated(from: "Workspace", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `WorkspaceInvitation` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceInvitation`.
+  ✨ Insert or update `WorkspaceInvitation` objects into the table, based on the primary key. Returns the key of the newly inserted `WorkspaceInvitation`.
   """
   workspaceInvitation_upsertMany(
     """
@@ -270,7 +306,7 @@ extend type Mutation {
     data: [WorkspaceInvitation_Data!]!
   ): [WorkspaceInvitation_KeyOutput!]! @fdc_generated(from: "WorkspaceInvitation", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `WorkspaceMember` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceMember`.
+  ✨ Insert or update `WorkspaceMember` objects into the table, based on the primary key. Returns the key of the newly inserted `WorkspaceMember`.
   """
   workspaceMember_upsertMany(
     """
@@ -279,7 +315,7 @@ extend type Mutation {
     data: [WorkspaceMember_Data!]!
   ): [WorkspaceMember_KeyOutput!]! @fdc_generated(from: "WorkspaceMember", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Insert or update `WorkspaceUser` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `WorkspaceUser`.
+  ✨ Insert or update `WorkspaceUser` objects into the table, based on the primary key. Returns the key of the newly inserted `WorkspaceUser`.
   """
   workspaceUser_upsertMany(
     """
@@ -288,7 +324,7 @@ extend type Mutation {
     data: [WorkspaceUser_Data!]!
   ): [WorkspaceUser_KeyOutput!]! @fdc_generated(from: "WorkspaceUser", purpose: UPSERT_MULTIPLE)
   """
-  ✨ Update a single `BusinessProfile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `BusinessProfile` or `null` if not found.
+  ✨ Update a single `BusinessProfile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   businessProfile_update(
     """
@@ -312,7 +348,31 @@ extend type Mutation {
     data: BusinessProfile_Data!
   ): BusinessProfile_KeyOutput @fdc_generated(from: "BusinessProfile", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `PartnerPreferences` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `PartnerPreferences` or `null` if not found.
+  ✨ Update a single `LLMKey` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
+  """
+  lLMKey_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: LLMKey_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: LLMKey_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: LLMKey_Data!
+  ): LLMKey_KeyOutput @fdc_generated(from: "LLMKey", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `PartnerPreferences` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   partnerPreferences_update(
     """
@@ -336,7 +396,7 @@ extend type Mutation {
     data: PartnerPreferences_Data!
   ): PartnerPreferences_KeyOutput @fdc_generated(from: "PartnerPreferences", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `Profile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Profile` or `null` if not found.
+  ✨ Update a single `Profile` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   profile_update(
     """
@@ -360,7 +420,7 @@ extend type Mutation {
     data: Profile_Data!
   ): Profile_KeyOutput @fdc_generated(from: "Profile", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `User` or `null` if not found.
+  ✨ Update a single `User` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   user_update(
     """
@@ -389,7 +449,7 @@ extend type Mutation {
     data: User_Data!
   ): User_KeyOutput @fdc_generated(from: "User", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `Workspace` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Workspace` or `null` if not found.
+  ✨ Update a single `Workspace` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   workspace_update(
     """
@@ -413,7 +473,7 @@ extend type Mutation {
     data: Workspace_Data!
   ): Workspace_KeyOutput @fdc_generated(from: "Workspace", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `WorkspaceInvitation` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `WorkspaceInvitation` or `null` if not found.
+  ✨ Update a single `WorkspaceInvitation` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   workspaceInvitation_update(
     """
@@ -437,7 +497,7 @@ extend type Mutation {
     data: WorkspaceInvitation_Data!
   ): WorkspaceInvitation_KeyOutput @fdc_generated(from: "WorkspaceInvitation", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `WorkspaceMember` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `WorkspaceMember` or `null` if not found.
+  ✨ Update a single `WorkspaceMember` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   workspaceMember_update(
     """
@@ -456,7 +516,7 @@ extend type Mutation {
     data: WorkspaceMember_Data!
   ): WorkspaceMember_KeyOutput @fdc_generated(from: "WorkspaceMember", purpose: UPDATE_SINGLE)
   """
-  ✨ Update a single `WorkspaceUser` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `WorkspaceUser` or `null` if not found.
+  ✨ Update a single `WorkspaceUser` based on `id`, `key` or `first`, setting columns specified in `data`. Returns `null` if not found.
   """
   workspaceUser_update(
     """
@@ -493,6 +553,25 @@ extend type Mutation {
     """
     data: BusinessProfile_Data!
   ): Int! @fdc_generated(from: "BusinessProfile", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `LLMKey` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  lLMKey_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: LLMKey_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: LLMKey_Data!
+  ): Int! @fdc_generated(from: "LLMKey", purpose: UPDATE_MULTIPLE)
   """
   ✨ Update `PartnerPreferences` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
   """
@@ -646,6 +725,25 @@ extend type Mutation {
     first: BusinessProfile_FirstRow
   ): BusinessProfile_KeyOutput @fdc_generated(from: "BusinessProfile", purpose: DELETE_SINGLE)
   """
+  ✨ Delete a single `LLMKey` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  lLMKey_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: LLMKey_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: LLMKey_FirstRow
+  ): LLMKey_KeyOutput @fdc_generated(from: "LLMKey", purpose: DELETE_SINGLE)
+  """
   ✨ Delete a single `PartnerPreferences` based on `id`, `key` or `first` and return its key (or `null` if not found).
   """
   partnerPreferences_delete(
@@ -787,6 +885,20 @@ extend type Mutation {
     """
     all: Boolean = false
   ): Int! @fdc_generated(from: "BusinessProfile", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `LLMKey` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  lLMKey_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: LLMKey_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "LLMKey", purpose: DELETE_MULTIPLE)
   """
   ✨ Delete `PartnerPreferences` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
   """

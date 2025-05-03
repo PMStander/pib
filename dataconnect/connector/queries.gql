@@ -257,3 +257,97 @@ query GetPendingInvitations($email: String!) @auth(level: USER) {
     invitedBy
   }
 }
+
+# LLM Key queries
+query GetLLMKeysByEntity($entityType: String!, $entityId: String!) @auth(level: USER) {
+  lLMKeys(where: {
+    entityType: { eq: $entityType },
+    entityId: { eq: $entityId }
+  }) {
+    id
+    entityType
+    entityId
+    provider
+    config
+    createdAt
+    updatedAt
+  }
+}
+
+query GetLLMKeyByProviderAndEntity($provider: String!, $entityType: String!, $entityId: String!) @auth(level: USER) {
+  lLMKeys(where: {
+    provider: { eq: $provider },
+    entityType: { eq: $entityType },
+    entityId: { eq: $entityId }
+  }, limit: 1) {
+    id
+    entityType
+    entityId
+    provider
+    encryptedKey
+    encryptionIV
+    config
+    createdAt
+    updatedAt
+  }
+}
+
+# These queries implement the priority logic for retrieving LLM keys
+# The frontend will handle the priority logic by checking these queries in order
+
+# Get workspace LLM key for a specific provider
+query GetWorkspaceLLMKey($provider: String!, $workspaceId: String!) @auth(level: USER) {
+  lLMKeys(where: {
+    provider: { eq: $provider },
+    entityType: { eq: "workspace" },
+    entityId: { eq: $workspaceId }
+  }, limit: 1) {
+    id
+    entityType
+    entityId
+    provider
+    encryptedKey
+    encryptionIV
+    config
+    createdAt
+    updatedAt
+  }
+}
+
+# Get user LLM key for a specific provider
+query GetUserLLMKey($provider: String!) @auth(level: USER) {
+  lLMKeys(where: {
+    provider: { eq: $provider },
+    entityType: { eq: "user" },
+    entityId: { eq_expr: "auth.uid" }
+  }, limit: 1) {
+    id
+    entityType
+    entityId
+    provider
+    encryptedKey
+    encryptionIV
+    config
+    createdAt
+    updatedAt
+  }
+}
+
+# Get profile LLM keys for a specific provider
+query GetProfileLLMKeys($provider: String!, $profileIds: [String!]!) @auth(level: USER) {
+  lLMKeys(where: {
+    provider: { eq: $provider },
+    entityType: { eq: "profile" },
+    entityId: { in: $profileIds }
+  }) {
+    id
+    entityType
+    entityId
+    provider
+    encryptedKey
+    encryptionIV
+    config
+    createdAt
+    updatedAt
+  }
+}

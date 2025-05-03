@@ -15,14 +15,14 @@ import {
   searchPartnerPreferences as searchPartnerPreferencesConnector,
   matchProfileToBusinesses as matchProfileToBusinessesConnector,
   matchBusinessToProfiles as matchBusinessToProfilesConnector
-} from '@pib/connector';
+} from '@firebasegen/pib-connector';
 
 // Import types for the results
 import type {
   SearchProfilesByBioData,
   SearchBusinessProfilesByDescriptionData,
   SearchPartnerPreferencesData
-} from '@pib/connector';
+} from '@firebasegen/pib-connector';
 
 // Define result types with distance metadata
 interface SearchResult<T> {

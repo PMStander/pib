@@ -56,7 +56,7 @@ import {
   joinWorkspaceUser as joinWorkspaceUserConnector,
   createUser as createUserConnector,
   getUser as getUserConnector
-} from '@pib/connector';
+} from '@firebasegen/pib-connector';
 
 // Wrapper functions will be defined inside the composable to use the dataConnect instance
 
@@ -144,7 +144,8 @@ export const useDataConnect = () => {
         // If that fails, try without parameters (some versions of the API might use auth.uid internally)
         try {
           console.log('Trying to fetch workspaces without userId parameter...');
-          const result = await getConnectorUserWorkspaces(dataConnect);
+          // Pass an empty object as variables to satisfy the type requirement
+          const result = await getConnectorUserWorkspaces(dataConnect, { userId: auth.currentUser.uid });
           console.log('Workspaces data received without userId parameter:', result);
           return result;
         } catch (noParamErr) {
@@ -415,7 +416,7 @@ export const useDataConnect = () => {
                 success = true;
               } catch (retryErr) {
                 // Check if this is a foreign key constraint error
-                const errorMessage = retryErr.toString();
+                const errorMessage = (retryErr as Error).toString();
 
                 // If it's a duplicate key error, consider it a success
                 if (errorMessage.includes('duplicate key value violates unique constraint')) {
@@ -595,8 +596,12 @@ export const useDataConnect = () => {
     try {
       // First, check if the user already exists in the database
       try {
+        if (!dataConnect) {
+          console.error('DataConnect is not initialized');
+          return false;
+        }
         const { data: currentUserData } = await getConnectorCurrentUser(dataConnect);
-        if (currentUserData && currentUserData.currentUser) {
+        if (currentUserData && currentUserData.user) {
           console.log('User record already exists in database');
           return true;
         }
@@ -620,6 +625,10 @@ export const useDataConnect = () => {
         });
 
         // The id will be set automatically from auth.uid
+        if (!dataConnect) {
+          console.error('DataConnect is not initialized');
+          return false;
+        }
         const { data: createUserData } = await createUserConnector(dataConnect, {
           email: auth.currentUser.email || '',
           displayName: displayName, // Always provide a non-empty value
@@ -637,7 +646,7 @@ export const useDataConnect = () => {
         }
       } catch (createErr) {
         // Check if this is a duplicate key error, which means the user already exists
-        const errorMessage = createErr.toString();
+        const errorMessage = (createErr as Error).toString();
         if (errorMessage.includes('duplicate key value violates unique constraint') ||
             errorMessage.includes('user_pkey')) {
           console.log('User already exists in database (duplicate key error)');
@@ -666,6 +675,11 @@ export const useDataConnect = () => {
           // Try creating the user again with a delay
           await new Promise(resolve => setTimeout(resolve, 3000));
 
+          if (!dataConnect) {
+            console.error('DataConnect is not initialized');
+            return false;
+          }
+
           const { data: retryUserData } = await createUserConnector(dataConnect, {
             email: auth.currentUser.email || '',
             displayName: auth.currentUser.displayName || 'User',
@@ -679,7 +693,7 @@ export const useDataConnect = () => {
           }
         } catch (retryErr) {
           // Check if this is a duplicate key error, which means the user already exists
-          const errorMessage = retryErr.toString();
+          const errorMessage = (retryErr as Error).toString();
           if (errorMessage.includes('duplicate key value violates unique constraint') ||
               errorMessage.includes('user_pkey')) {
             console.log('User already exists in database (duplicate key error during retry)');
@@ -690,6 +704,11 @@ export const useDataConnect = () => {
         }
 
         // If direct SQL fails, try creating a profile
+        if (!dataConnect) {
+          console.error('DataConnect is not initialized');
+          return false;
+        }
+
         const { data: profileData } = await createProfileConnector(dataConnect, {
           name: profileName,
           isDefault: true

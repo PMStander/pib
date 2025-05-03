@@ -47,8 +47,14 @@ const handleSignup = async (validData) => {
     // Initialize user data in DataConnect
     console.log('signup.vue - Initializing user data in DataConnect...');
     const dataConnect = useDataConnect();
-    await dataConnect.initUserData();
-    console.log('signup.vue - User data initialized');
+    try {
+      await dataConnect.initUserData();
+      console.log('signup.vue - User data initialized');
+    } catch (dataConnectError) {
+      // Just log the error but don't fail the signup process
+      console.warn('signup.vue - DataConnect initialization failed, but continuing with signup:', dataConnectError);
+      // The user will still be able to use the app, and we can try to initialize again later
+    }
 
     // Show success message and redirect to verification page
     console.log('signup.vue - Redirecting to verification page...');

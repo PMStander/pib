@@ -8,10 +8,15 @@ overrides:
   '@firebasegen/default-connector': link:dataconnect-generated/js/default-connector
   '@firebasegen/pib-connector': link:dataconnect-generated/js/pib-connector
 
+pnpmfileChecksum: sha256-P69iJ3+ZQ8ucBofG7d/MEqvgZIVqLx3rtif1Tdya2BY=
+
 importers:
 
   .:
     dependencies:
+      '@esbuild/darwin-arm64':
+        specifier: ^0.25.3
+        version: 0.25.3
       '@firebasegen/pib-connector':
         specifier: link:dataconnect-generated/js/pib-connector
         version: link:dataconnect-generated/js/pib-connector
@@ -24,9 +29,6 @@ importers:
       '@nuxtjs/tailwindcss':
         specifier: ^6.14.0
         version: 6.14.0(magicast@0.3.5)
-      '@pib/connector':
-        specifier: file:dataconnect-generated/js/pib-connector
-        version: '@firebasegen/pib-connector@file:dataconnect-generated/js/pib-connector(firebase@11.6.1)'
       '@vee-validate/zod':
         specifier: ^4.15.0
         version: 4.15.0(vue@3.5.13(typescript@5.8.3))(zod@3.24.3)
@@ -730,12 +732,6 @@ packages:
 
   '@firebase/webchannel-wrapper@1.0.3':
     resolution: {integrity: sha512-2xCRM9q9FlzGZCdgDMJwc0gyUkWFtkosy7Xxr6sFgQwn+wMNIWd7xIvYNauU1r64B5L5rsGKy/n9TKJ0aAFeqQ==}
-
-  '@firebasegen/pib-connector@file:dataconnect-generated/js/pib-connector':
-    resolution: {directory: dataconnect-generated/js/pib-connector, type: directory}
-    engines: {node: ' >=18.0'}
-    peerDependencies:
-      firebase: ^10.14.0 || ^11.0.0
 
   '@google-cloud/firestore@7.11.0':
     resolution: {integrity: sha512-88uZ+jLsp1aVMj7gh3EKYH1aulTAMFAp8sH/v5a9w8q8iqSG27RiWLoxSAFr/XocZ9hGiWH1kEnBw+zl3xAgNA==}
@@ -5178,8 +5174,7 @@ snapshots:
   '@esbuild/darwin-arm64@0.19.11':
     optional: true
 
-  '@esbuild/darwin-arm64@0.25.3':
-    optional: true
+  '@esbuild/darwin-arm64@0.25.3': {}
 
   '@esbuild/darwin-x64@0.19.11':
     optional: true
@@ -5614,10 +5609,6 @@ snapshots:
       tslib: 2.8.1
 
   '@firebase/webchannel-wrapper@1.0.3': {}
-
-  '@firebasegen/pib-connector@file:dataconnect-generated/js/pib-connector(firebase@11.6.1)':
-    dependencies:
-      firebase: 11.6.1
 
   '@google-cloud/firestore@7.11.0':
     dependencies:

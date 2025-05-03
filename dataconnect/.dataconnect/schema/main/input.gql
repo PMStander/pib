@@ -5,6 +5,12 @@ It has the same format as `BusinessProfile_Key`, but is only used as mutation re
 """
 scalar BusinessProfile_KeyOutput
 """
+✨ `LLMKey_KeyOutput` returns the primary key fields of table type `LLMKey`.
+
+It has the same format as `LLMKey_Key`, but is only used as mutation return value.
+"""
+scalar LLMKey_KeyOutput
+"""
 ✨ `PartnerPreferences_KeyOutput` returns the primary key fields of table type `PartnerPreferences`.
 
 It has the same format as `PartnerPreferences_Key`, but is only used as mutation return value.
@@ -71,10 +77,6 @@ input BusinessProfile_Data {
   """
   createdAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `BusinessProfile`.`createdAt` of type `Timestamp!`)
-  """
-  createdAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `BusinessProfile`.`description` of type `String`
   """
   description: String
@@ -94,14 +96,6 @@ input BusinessProfile_Data {
   ✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`
   """
   employeeCount: Int
-  """
-  ✨ `_expr` server value variant of `employeeCount` (✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`)
-  """
-  employeeCount_expr: Int_Expr
-  """
-  ✨ `_update` server value variant of `employeeCount` (✨ Generated from Field `BusinessProfile`.`employeeCount` of type `Int`)
-  """
-  employeeCount_update: [Int_Update!]
   """
   ✨ Generated from Field `BusinessProfile`.`industry` of type `String`
   """
@@ -138,10 +132,6 @@ input BusinessProfile_Data {
   ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`)
   """
   updatedAt_time: Timestamp_Relative
-  """
-  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `BusinessProfile`.`updatedAt` of type `Timestamp!`)
-  """
-  updatedAt_update: [Timestamp_Update!]
   """
   ✨ Generated from Field `BusinessProfile`.`website` of type `String`
   """
@@ -234,107 +224,6 @@ input BusinessProfile_FirstRow {
   where: BusinessProfile_Filter
 }
 """
-✨ Generated having input type for table 'BusinessProfile'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input BusinessProfile_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [BusinessProfile_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: BusinessProfile_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [BusinessProfile_Having!]
-  """
-  ✨ Generated from Field `BusinessProfile`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`createdAt_count` of type `Int!`
-  """
-  createdAt_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`descriptionEmbedding_count` of type `Int!`
-  """
-  descriptionEmbedding_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`description_count` of type `Int!`
-  """
-  description_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`employeeCount_count` of type `Int!`
-  """
-  employeeCount_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`industry_count` of type `Int!`
-  """
-  industry_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`location_count` of type `Int!`
-  """
-  location_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`name_count` of type `Int!`
-  """
-  name_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`updatedAt_count` of type `Int!`
-  """
-  updatedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`website_count` of type `Int!`
-  """
-  website_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`workspaceId_count` of type `Int!`
-  """
-  workspaceId_count: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`employeeCount_sum` of type `Int`
-  """
-  employeeCount_sum: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`employeeCount_avg` of type `Float`
-  """
-  employeeCount_avg: Float_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`createdAt_min` of type `Timestamp`
-  """
-  createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`employeeCount_min` of type `Int`
-  """
-  employeeCount_min: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`updatedAt_min` of type `Timestamp`
-  """
-  updatedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`createdAt_max` of type `Timestamp`
-  """
-  createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`employeeCount_max` of type `Int`
-  """
-  employeeCount_max: Int_Filter
-  """
-  ✨ Generated from Field `BusinessProfile`.`updatedAt_max` of type `Timestamp`
-  """
-  updatedAt_max: Timestamp_Filter
-}
-"""
 ✨ Generated key input type for table 'BusinessProfile'. It represents the primary key fields used to uniquely identify a row in the table.
 """
 input BusinessProfile_Key {
@@ -410,6 +299,224 @@ input BusinessProfile_Order {
   workspaceId: OrderDirection
 }
 """
+✨ Generated data input type for table 'LLMKey'. It includes all necessary fields for creating or upserting rows into table.
+"""
+input LLMKey_Data {
+  """
+  ✨ Generated from Field `LLMKey`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `LLMKey`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`config` of type `String`
+  """
+  config: String
+  """
+  ✨ `_expr` server value variant of `config` (✨ Generated from Field `LLMKey`.`config` of type `String`)
+  """
+  config_expr: String_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `createdAt` (✨ Generated from Field `LLMKey`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `createdAt` (✨ Generated from Field `LLMKey`.`createdAt` of type `Timestamp!`)
+  """
+  createdAt_time: Timestamp_Relative
+  """
+  ✨ Generated from Field `LLMKey`.`encryptedKey` of type `String`
+  """
+  encryptedKey: String
+  """
+  ✨ `_expr` server value variant of `encryptedKey` (✨ Generated from Field `LLMKey`.`encryptedKey` of type `String`)
+  """
+  encryptedKey_expr: String_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`encryptionIV` of type `String`
+  """
+  encryptionIV: String
+  """
+  ✨ `_expr` server value variant of `encryptionIV` (✨ Generated from Field `LLMKey`.`encryptionIV` of type `String`)
+  """
+  encryptionIV_expr: String_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`entityId` of type `String!`
+  """
+  entityId: String
+  """
+  ✨ `_expr` server value variant of `entityId` (✨ Generated from Field `LLMKey`.`entityId` of type `String!`)
+  """
+  entityId_expr: String_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`entityType` of type `String!`
+  """
+  entityType: String
+  """
+  ✨ `_expr` server value variant of `entityType` (✨ Generated from Field `LLMKey`.`entityType` of type `String!`)
+  """
+  entityType_expr: String_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`provider` of type `String!`
+  """
+  provider: String
+  """
+  ✨ `_expr` server value variant of `provider` (✨ Generated from Field `LLMKey`.`provider` of type `String!`)
+  """
+  provider_expr: String_Expr
+  """
+  ✨ Generated from Field `LLMKey`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp
+  """
+  ✨ `_expr` server value variant of `updatedAt` (✨ Generated from Field `LLMKey`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_expr: Timestamp_Expr
+  """
+  ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `LLMKey`.`updatedAt` of type `Timestamp!`)
+  """
+  updatedAt_time: Timestamp_Relative
+}
+"""
+✨ Generated filter input type for table 'LLMKey'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
+"""
+input LLMKey_Filter {
+  """
+  Apply multiple filter conditions using `AND` logic.
+  """
+  _and: [LLMKey_Filter!]
+  """
+  Negate the result of the provided filter condition.
+  """
+  _not: LLMKey_Filter
+  """
+  Apply multiple filter conditions using `OR` logic.
+  """
+  _or: [LLMKey_Filter!]
+  """
+  ✨ Generated from Field `LLMKey`.`id` of type `UUID!`
+  """
+  id: UUID_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`config` of type `String`
+  """
+  config: String_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: Timestamp_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`encryptedKey` of type `String`
+  """
+  encryptedKey: String_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`encryptionIV` of type `String`
+  """
+  encryptionIV: String_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`entityId` of type `String!`
+  """
+  entityId: String_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`entityType` of type `String!`
+  """
+  entityType: String_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`provider` of type `String!`
+  """
+  provider: String_Filter
+  """
+  ✨ Generated from Field `LLMKey`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: Timestamp_Filter
+}
+"""
+✨ Generated first-row input type for table 'LLMKey'. This input selects the first row matching the filter criteria, ordered according to the specified conditions.
+"""
+input LLMKey_FirstRow {
+  """
+  Order the result by the specified fields.
+  """
+  orderBy: [LLMKey_Order!]
+  """
+  Filters rows based on the specified conditions.
+  """
+  where: LLMKey_Filter
+}
+"""
+✨ Generated key input type for table 'LLMKey'. It represents the primary key fields used to uniquely identify a row in the table.
+"""
+input LLMKey_Key {
+  """
+  ✨ Generated from Field `LLMKey`.`id` of type `UUID!`
+  """
+  id: UUID
+  """
+  ✨ `_expr` server value variant of `id` (✨ Generated from Field `LLMKey`.`id` of type `UUID!`)
+  """
+  id_expr: UUID_Expr
+}
+"""
+✨ Generated list filter input type for table 'LLMKey'. This input applies filtering logic based on the count or existence of related objects that matches certain criteria.
+"""
+input LLMKey_ListFilter {
+  """
+  The desired number of objects that match the condition (defaults to at least one).
+  """
+  count: Int_Filter = {gt:0}
+  """
+  Condition of the related objects to filter for.
+  """
+  exist: LLMKey_Filter
+}
+"""
+✨ Generated order input type for table 'LLMKey'. This input defines the sorting order of rows in query results based on one or more fields.
+"""
+input LLMKey_Order {
+  """
+  ✨ Generated from Field `LLMKey`.`id` of type `UUID!`
+  """
+  id: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`config` of type `String`
+  """
+  config: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`createdAt` of type `Timestamp!`
+  """
+  createdAt: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`encryptedKey` of type `String`
+  """
+  encryptedKey: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`encryptionIV` of type `String`
+  """
+  encryptionIV: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`entityId` of type `String!`
+  """
+  entityId: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`entityType` of type `String!`
+  """
+  entityType: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`provider` of type `String!`
+  """
+  provider: OrderDirection
+  """
+  ✨ Generated from Field `LLMKey`.`updatedAt` of type `Timestamp!`
+  """
+  updatedAt: OrderDirection
+}
+"""
 ✨ Generated data input type for table 'PartnerPreferences'. It includes all necessary fields for creating or upserting rows into table.
 """
 input PartnerPreferences_Data {
@@ -442,57 +549,25 @@ input PartnerPreferences_Data {
   """
   createdAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `PartnerPreferences`.`createdAt` of type `Timestamp!`)
-  """
-  createdAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `PartnerPreferences`.`industries` of type `[String]`
   """
   industries: [String!]
-  """
-  ✨ `_update` server value variant of `industries` (✨ Generated from Field `PartnerPreferences`.`industries` of type `[String]`)
-  """
-  industries_update: [String_ListUpdate!]
   """
   ✨ Generated from Field `PartnerPreferences`.`locations` of type `[String]`
   """
   locations: [String!]
   """
-  ✨ `_update` server value variant of `locations` (✨ Generated from Field `PartnerPreferences`.`locations` of type `[String]`)
-  """
-  locations_update: [String_ListUpdate!]
-  """
   ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`
   """
   maxEmployeeCount: Int
-  """
-  ✨ `_expr` server value variant of `maxEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`)
-  """
-  maxEmployeeCount_expr: Int_Expr
-  """
-  ✨ `_update` server value variant of `maxEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount` of type `Int`)
-  """
-  maxEmployeeCount_update: [Int_Update!]
   """
   ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`
   """
   minEmployeeCount: Int
   """
-  ✨ `_expr` server value variant of `minEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`)
-  """
-  minEmployeeCount_expr: Int_Expr
-  """
-  ✨ `_update` server value variant of `minEmployeeCount` (✨ Generated from Field `PartnerPreferences`.`minEmployeeCount` of type `Int`)
-  """
-  minEmployeeCount_update: [Int_Update!]
-  """
   ✨ Generated from Field `PartnerPreferences`.`skillsNeeded` of type `[String]`
   """
   skillsNeeded: [String!]
-  """
-  ✨ `_update` server value variant of `skillsNeeded` (✨ Generated from Field `PartnerPreferences`.`skillsNeeded` of type `[String]`)
-  """
-  skillsNeeded_update: [String_ListUpdate!]
   """
   ✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`
   """
@@ -505,10 +580,6 @@ input PartnerPreferences_Data {
   ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`)
   """
   updatedAt_time: Timestamp_Relative
-  """
-  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `PartnerPreferences`.`updatedAt` of type `Timestamp!`)
-  """
-  updatedAt_update: [Timestamp_Update!]
   """
   ✨ Generated from Field `PartnerPreferences`.`workspaceId` of type `UUID!`
   """
@@ -587,107 +658,6 @@ input PartnerPreferences_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: PartnerPreferences_Filter
-}
-"""
-✨ Generated having input type for table 'PartnerPreferences'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input PartnerPreferences_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [PartnerPreferences_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: PartnerPreferences_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [PartnerPreferences_Having!]
-  """
-  ✨ Generated from Field `PartnerPreferences`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`combinedEmbedding_count` of type `Int!`
-  """
-  combinedEmbedding_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`createdAt_count` of type `Int!`
-  """
-  createdAt_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_count` of type `Int!`
-  """
-  maxEmployeeCount_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_count` of type `Int!`
-  """
-  minEmployeeCount_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`updatedAt_count` of type `Int!`
-  """
-  updatedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`workspaceId_count` of type `Int!`
-  """
-  workspaceId_count: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_sum` of type `Int`
-  """
-  maxEmployeeCount_sum: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_sum` of type `Int`
-  """
-  minEmployeeCount_sum: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_avg` of type `Float`
-  """
-  maxEmployeeCount_avg: Float_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_avg` of type `Float`
-  """
-  minEmployeeCount_avg: Float_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`createdAt_min` of type `Timestamp`
-  """
-  createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_min` of type `Int`
-  """
-  maxEmployeeCount_min: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_min` of type `Int`
-  """
-  minEmployeeCount_min: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`updatedAt_min` of type `Timestamp`
-  """
-  updatedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`createdAt_max` of type `Timestamp`
-  """
-  createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`maxEmployeeCount_max` of type `Int`
-  """
-  maxEmployeeCount_max: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`minEmployeeCount_max` of type `Int`
-  """
-  minEmployeeCount_max: Int_Filter
-  """
-  ✨ Generated from Field `PartnerPreferences`.`updatedAt_max` of type `Timestamp`
-  """
-  updatedAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'PartnerPreferences'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -797,25 +767,13 @@ input Profile_Data {
   """
   createdAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Profile`.`createdAt` of type `Timestamp!`)
-  """
-  createdAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `Profile`.`interests` of type `[String]`
   """
   interests: [String!]
   """
-  ✨ `_update` server value variant of `interests` (✨ Generated from Field `Profile`.`interests` of type `[String]`)
-  """
-  interests_update: [String_ListUpdate!]
-  """
   ✨ Generated from Field `Profile`.`isDefault` of type `Boolean!`
   """
   isDefault: Boolean
-  """
-  ✨ `_expr` server value variant of `isDefault` (✨ Generated from Field `Profile`.`isDefault` of type `Boolean!`)
-  """
-  isDefault_expr: Boolean_Expr
   """
   ✨ Generated from Field `Profile`.`name` of type `String!`
   """
@@ -829,10 +787,6 @@ input Profile_Data {
   """
   skills: [String!]
   """
-  ✨ `_update` server value variant of `skills` (✨ Generated from Field `Profile`.`skills` of type `[String]`)
-  """
-  skills_update: [String_ListUpdate!]
-  """
   ✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`
   """
   updatedAt: Timestamp
@@ -844,10 +798,6 @@ input Profile_Data {
   ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`)
   """
   updatedAt_time: Timestamp_Relative
-  """
-  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Profile`.`updatedAt` of type `Timestamp!`)
-  """
-  updatedAt_update: [Timestamp_Update!]
   """
   ✨ Generated from Field `Profile`.`userId` of type `String!`
   """
@@ -934,83 +884,6 @@ input Profile_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: Profile_Filter
-}
-"""
-✨ Generated having input type for table 'Profile'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input Profile_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [Profile_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: Profile_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [Profile_Having!]
-  """
-  ✨ Generated from Field `Profile`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`avatarUrl_count` of type `Int!`
-  """
-  avatarUrl_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`bioEmbedding_count` of type `Int!`
-  """
-  bioEmbedding_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`bio_count` of type `Int!`
-  """
-  bio_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`createdAt_count` of type `Int!`
-  """
-  createdAt_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`isDefault_count` of type `Int!`
-  """
-  isDefault_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`name_count` of type `Int!`
-  """
-  name_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`updatedAt_count` of type `Int!`
-  """
-  updatedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`userId_count` of type `Int!`
-  """
-  userId_count: Int_Filter
-  """
-  ✨ Generated from Field `Profile`.`createdAt_min` of type `Timestamp`
-  """
-  createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `Profile`.`updatedAt_min` of type `Timestamp`
-  """
-  updatedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `Profile`.`createdAt_max` of type `Timestamp`
-  """
-  createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `Profile`.`updatedAt_max` of type `Timestamp`
-  """
-  updatedAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'Profile'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1104,10 +977,6 @@ input User_Data {
   """
   createdAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `User`.`createdAt` of type `Timestamp!`)
-  """
-  createdAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `User`.`displayName` of type `String`
   """
   displayName: String
@@ -1143,10 +1012,6 @@ input User_Data {
   ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
   """
   updatedAt_time: Timestamp_Relative
-  """
-  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `User`.`updatedAt` of type `Timestamp!`)
-  """
-  updatedAt_update: [Timestamp_Update!]
 }
 """
 ✨ Generated filter input type for table 'User'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
@@ -1217,71 +1082,6 @@ input User_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: User_Filter
-}
-"""
-✨ Generated having input type for table 'User'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input User_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [User_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: User_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [User_Having!]
-  """
-  ✨ Generated from Field `User`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`createdAt_count` of type `Int!`
-  """
-  createdAt_count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`displayName_count` of type `Int!`
-  """
-  displayName_count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`email_count` of type `Int!`
-  """
-  email_count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`photoUrl_count` of type `Int!`
-  """
-  photoUrl_count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`updatedAt_count` of type `Int!`
-  """
-  updatedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `User`.`createdAt_min` of type `Timestamp`
-  """
-  createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `User`.`updatedAt_min` of type `Timestamp`
-  """
-  updatedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `User`.`createdAt_max` of type `Timestamp`
-  """
-  createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `User`.`updatedAt_max` of type `Timestamp`
-  """
-  updatedAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'User'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1363,10 +1163,6 @@ input Workspace_Data {
   """
   createdAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `Workspace`.`createdAt` of type `Timestamp!`)
-  """
-  createdAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `Workspace`.`createdBy` of type `String!`
   """
   createdBy: String
@@ -1410,10 +1206,6 @@ input Workspace_Data {
   ✨ `_time` server value variant of `updatedAt` (✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`)
   """
   updatedAt_time: Timestamp_Relative
-  """
-  ✨ `_update` server value variant of `updatedAt` (✨ Generated from Field `Workspace`.`updatedAt` of type `Timestamp!`)
-  """
-  updatedAt_update: [Timestamp_Update!]
 }
 """
 ✨ Generated filter input type for table 'Workspace'. This input allows filtering objects using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
@@ -1488,75 +1280,6 @@ input Workspace_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: Workspace_Filter
-}
-"""
-✨ Generated having input type for table 'Workspace'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input Workspace_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [Workspace_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: Workspace_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [Workspace_Having!]
-  """
-  ✨ Generated from Field `Workspace`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`createdAt_count` of type `Int!`
-  """
-  createdAt_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`createdBy_count` of type `Int!`
-  """
-  createdBy_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`description_count` of type `Int!`
-  """
-  description_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`logoUrl_count` of type `Int!`
-  """
-  logoUrl_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`name_count` of type `Int!`
-  """
-  name_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`updatedAt_count` of type `Int!`
-  """
-  updatedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `Workspace`.`createdAt_min` of type `Timestamp`
-  """
-  createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `Workspace`.`updatedAt_min` of type `Timestamp`
-  """
-  updatedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `Workspace`.`createdAt_max` of type `Timestamp`
-  """
-  createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `Workspace`.`updatedAt_max` of type `Timestamp`
-  """
-  updatedAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'Workspace'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1642,10 +1365,6 @@ input WorkspaceInvitation_Data {
   """
   createdAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `createdAt` (✨ Generated from Field `WorkspaceInvitation`.`createdAt` of type `Timestamp!`)
-  """
-  createdAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `WorkspaceInvitation`.`email` of type `String!`
   """
   email: String
@@ -1665,10 +1384,6 @@ input WorkspaceInvitation_Data {
   ✨ `_time` server value variant of `expiresAt` (✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`)
   """
   expiresAt_time: Timestamp_Relative
-  """
-  ✨ `_update` server value variant of `expiresAt` (✨ Generated from Field `WorkspaceInvitation`.`expiresAt` of type `Timestamp`)
-  """
-  expiresAt_update: [Timestamp_Update!]
   """
   ✨ Generated from Field `WorkspaceInvitation`.`invitedBy` of type `String!`
   """
@@ -1763,79 +1478,6 @@ input WorkspaceInvitation_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: WorkspaceInvitation_Filter
-}
-"""
-✨ Generated having input type for table 'WorkspaceInvitation'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input WorkspaceInvitation_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [WorkspaceInvitation_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: WorkspaceInvitation_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [WorkspaceInvitation_Having!]
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`createdAt_count` of type `Int!`
-  """
-  createdAt_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`email_count` of type `Int!`
-  """
-  email_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt_count` of type `Int!`
-  """
-  expiresAt_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`id_count` of type `Int!`
-  """
-  id_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`invitedBy_count` of type `Int!`
-  """
-  invitedBy_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`role_count` of type `Int!`
-  """
-  role_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`status_count` of type `Int!`
-  """
-  status_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`workspaceId_count` of type `Int!`
-  """
-  workspaceId_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`createdAt_min` of type `Timestamp`
-  """
-  createdAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt_min` of type `Timestamp`
-  """
-  expiresAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`createdAt_max` of type `Timestamp`
-  """
-  createdAt_max: Timestamp_Filter
-  """
-  ✨ Generated from Field `WorkspaceInvitation`.`expiresAt_max` of type `Timestamp`
-  """
-  expiresAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'WorkspaceInvitation'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -1953,10 +1595,6 @@ input WorkspaceMember_Data {
   """
   joinedAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `joinedAt` (✨ Generated from Field `WorkspaceMember`.`joinedAt` of type `Timestamp!`)
-  """
-  joinedAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `WorkspaceMember`.`role` of type `String!`
   """
   role: String
@@ -2026,59 +1664,6 @@ input WorkspaceMember_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: WorkspaceMember_Filter
-}
-"""
-✨ Generated having input type for table 'WorkspaceMember'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input WorkspaceMember_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [WorkspaceMember_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: WorkspaceMember_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [WorkspaceMember_Having!]
-  """
-  ✨ Generated from Field `WorkspaceMember`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`joinedAt_count` of type `Int!`
-  """
-  joinedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`profileId_count` of type `Int!`
-  """
-  profileId_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`role_count` of type `Int!`
-  """
-  role_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`userId_count` of type `Int!`
-  """
-  userId_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`workspaceId_count` of type `Int!`
-  """
-  workspaceId_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`joinedAt_min` of type `Timestamp`
-  """
-  joinedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `WorkspaceMember`.`joinedAt_max` of type `Timestamp`
-  """
-  joinedAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'WorkspaceMember'. It represents the primary key fields used to uniquely identify a row in the table.
@@ -2192,10 +1777,6 @@ input WorkspaceUser_Data {
   """
   joinedAt_time: Timestamp_Relative
   """
-  ✨ `_update` server value variant of `joinedAt` (✨ Generated from Field `WorkspaceUser`.`joinedAt` of type `Timestamp!`)
-  """
-  joinedAt_update: [Timestamp_Update!]
-  """
   ✨ Generated from Field `WorkspaceUser`.`role` of type `String!`
   """
   role: String
@@ -2257,55 +1838,6 @@ input WorkspaceUser_FirstRow {
   Filters rows based on the specified conditions.
   """
   where: WorkspaceUser_Filter
-}
-"""
-✨ Generated having input type for table 'WorkspaceUser'. This input allows you to filter groups during aggregate queries using various conditions. Use `_or`, `_and`, and `_not` to compose complex filters.
-"""
-input WorkspaceUser_Having {
-  """
-  Apply multiple Having conditions using `AND` logic.
-  """
-  _and: [WorkspaceUser_Having!]
-  """
-  Whether to apply DISTINCT to the aggregate function.
-  """
-  _distinct: Boolean
-  """
-  Negate the result of the provided Having condition.
-  """
-  _not: WorkspaceUser_Having
-  """
-  Apply multiple Having conditions using `OR` logic.
-  """
-  _or: [WorkspaceUser_Having!]
-  """
-  ✨ Generated from Field `WorkspaceUser`.`_count` of type `Int!`
-  """
-  _count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceUser`.`joinedAt_count` of type `Int!`
-  """
-  joinedAt_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceUser`.`role_count` of type `Int!`
-  """
-  role_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceUser`.`userId_count` of type `Int!`
-  """
-  userId_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceUser`.`workspaceId_count` of type `Int!`
-  """
-  workspaceId_count: Int_Filter
-  """
-  ✨ Generated from Field `WorkspaceUser`.`joinedAt_min` of type `Timestamp`
-  """
-  joinedAt_min: Timestamp_Filter
-  """
-  ✨ Generated from Field `WorkspaceUser`.`joinedAt_max` of type `Timestamp`
-  """
-  joinedAt_max: Timestamp_Filter
 }
 """
 ✨ Generated key input type for table 'WorkspaceUser'. It represents the primary key fields used to uniquely identify a row in the table.

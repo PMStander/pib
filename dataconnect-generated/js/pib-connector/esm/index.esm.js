@@ -306,6 +306,42 @@ export function updatePartnerPreferencesWithEmbeddingRef(dcOrVars, vars) {
 export function updatePartnerPreferencesWithEmbedding(dcOrVars, vars) {
   return executeMutation(updatePartnerPreferencesWithEmbeddingRef(dcOrVars, vars));
 }
+export function createLlmKeyRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return mutationRef(dcInstance, 'CreateLLMKey', inputVars);
+}
+export function createLlmKey(dcOrVars, vars) {
+  return executeMutation(createLlmKeyRef(dcOrVars, vars));
+}
+export function updateLlmKeyRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return mutationRef(dcInstance, 'UpdateLLMKey', inputVars);
+}
+export function updateLlmKey(dcOrVars, vars) {
+  return executeMutation(updateLlmKeyRef(dcOrVars, vars));
+}
+export function deleteLlmKeyRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return mutationRef(dcInstance, 'DeleteLLMKey', inputVars);
+}
+export function deleteLlmKey(dcOrVars, vars) {
+  return executeMutation(deleteLlmKeyRef(dcOrVars, vars));
+}
 export function getAllUsersRef(dc) {
   const { dc: dcInstance} = validateArgs(connectorConfig, dc, undefined);
   if('_useGeneratedSdk' in dcInstance) {
@@ -521,4 +557,64 @@ export function getPendingInvitationsRef(dcOrVars, vars) {
 }
 export function getPendingInvitations(dcOrVars, vars) {
   return executeQuery(getPendingInvitationsRef(dcOrVars, vars));
+}
+export function getLlmKeysByEntityRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetLLMKeysByEntity', inputVars);
+}
+export function getLlmKeysByEntity(dcOrVars, vars) {
+  return executeQuery(getLlmKeysByEntityRef(dcOrVars, vars));
+}
+export function getLlmKeyByProviderAndEntityRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetLLMKeyByProviderAndEntity', inputVars);
+}
+export function getLlmKeyByProviderAndEntity(dcOrVars, vars) {
+  return executeQuery(getLlmKeyByProviderAndEntityRef(dcOrVars, vars));
+}
+export function getWorkspaceLlmKeyRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetWorkspaceLLMKey', inputVars);
+}
+export function getWorkspaceLlmKey(dcOrVars, vars) {
+  return executeQuery(getWorkspaceLlmKeyRef(dcOrVars, vars));
+}
+export function getUserLlmKeyRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetUserLLMKey', inputVars);
+}
+export function getUserLlmKey(dcOrVars, vars) {
+  return executeQuery(getUserLlmKeyRef(dcOrVars, vars));
+}
+export function getProfileLlmKeysRef(dcOrVars, vars) {
+  const { dc: dcInstance, vars: inputVars} = validateArgs(connectorConfig, dcOrVars, vars, true);
+  if('_useGeneratedSdk' in dcInstance) {
+    dcInstance._useGeneratedSdk();
+  } else {
+    console.error('Please update to the latest version of the Data Connect SDK by running `npm install firebase@dataconnect-preview`.');
+  }
+  return queryRef(dcInstance, 'GetProfileLLMKeys', inputVars);
+}
+export function getProfileLlmKeys(dcOrVars, vars) {
+  return executeQuery(getProfileLlmKeysRef(dcOrVars, vars));
 }

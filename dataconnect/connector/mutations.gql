@@ -436,3 +436,45 @@ mutation UpdatePartnerPreferencesWithEmbedding(
     }
   )
 }
+
+# LLM Key mutations
+mutation CreateLLMKey(
+  $entityType: String!,
+  $entityId: String!,
+  $provider: String!,
+  $encryptedKey: String,
+  $encryptionIV: String,
+  $config: String
+) @auth(level: USER) {
+  createLLMKey: lLMKey_insert(
+    data: {
+      entityType: $entityType,
+      entityId: $entityId,
+      provider: $provider,
+      encryptedKey: $encryptedKey,
+      encryptionIV: $encryptionIV,
+      config: $config
+    }
+  )
+}
+
+mutation UpdateLLMKey(
+  $id: UUID!,
+  $encryptedKey: String,
+  $encryptionIV: String,
+  $config: String
+) @auth(level: USER) {
+  updateLLMKey: lLMKey_update(
+    key: { id: $id },
+    data: {
+      encryptedKey: $encryptedKey,
+      encryptionIV: $encryptionIV,
+      config: $config,
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+mutation DeleteLLMKey($id: UUID!) @auth(level: USER) {
+  deleteLLMKey: lLMKey_delete(key: { id: $id })
+}

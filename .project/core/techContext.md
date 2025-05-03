@@ -41,7 +41,7 @@ This document outlines the technology stack, setup, and dependencies for the "Pa
     "zod": "^3.22.4",
     "vee-validate": "^4.12.5",
     "@vee-validate/zod": "^4.12.5",
-    "@pib/connector": "file:dataconnect-generated/js/pib-connector",
+    "@firebasegen/pib-connector": "file:dataconnect-generated/js/pib-connector",
     "@firebasegen/pib-connector": "file:dataconnect-generated/js/pib-connector"
   }
 }

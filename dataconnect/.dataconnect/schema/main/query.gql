@@ -19,6 +19,25 @@ extend type Query {
     first: BusinessProfile_FirstRow
   ): BusinessProfile @fdc_generated(from: "BusinessProfile", purpose: QUERY_SINGLE)
   """
+  ✨ Look up a single `LLMKey` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
+  """
+  lLMKey(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: LLMKey_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: LLMKey_FirstRow
+  ): LLMKey @fdc_generated(from: "LLMKey", purpose: QUERY_SINGLE)
+  """
   ✨ Look up a single `PartnerPreferences` based on `id`, `key` or `first` and return selected fields (or `null` if not found).
   """
   partnerPreferences(
@@ -147,7 +166,7 @@ extend type Query {
     first: WorkspaceUser_FirstRow
   ): WorkspaceUser @fdc_generated(from: "WorkspaceUser", purpose: QUERY_SINGLE)
   """
-  ✨ List `BusinessProfile` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `BusinessProfile` objects in the table, optionally filtered by `where` conditions.
   """
   businessProfiles(
     """
@@ -169,19 +188,33 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: BusinessProfile_Having
   ): [BusinessProfile!]! @fdc_generated(from: "BusinessProfile", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `PartnerPreferences` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `LLMKey` objects in the table, optionally filtered by `where` conditions.
+  """
+  lLMKeys(
+    """
+    Filter condition to narrow down the query results.
+    """
+    where: LLMKey_Filter
+
+    """
+    Order the query results by specific fields.
+    """
+    orderBy: [LLMKey_Order!]
+
+    """
+    Number of rows to skip before starting to return the results.
+    """
+    offset: Int
+
+    """
+    Maximum number of rows to return (defaults to 100 rows).
+    """
+    limit: Int = 100
+  ): [LLMKey!]! @fdc_generated(from: "LLMKey", purpose: QUERY_MULTIPLE)
+  """
+  ✨ List `PartnerPreferences` objects in the table, optionally filtered by `where` conditions.
   """
   partnerPreferencess(
     """
@@ -203,19 +236,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: PartnerPreferences_Having
   ): [PartnerPreferences!]! @fdc_generated(from: "PartnerPreferences", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `Profile` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `Profile` objects in the table, optionally filtered by `where` conditions.
   """
   profiles(
     """
@@ -237,19 +260,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: Profile_Having
   ): [Profile!]! @fdc_generated(from: "Profile", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `User` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `User` objects in the table, optionally filtered by `where` conditions.
   """
   users(
     """
@@ -271,19 +284,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: User_Having
   ): [User!]! @fdc_generated(from: "User", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `Workspace` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `Workspace` objects in the table, optionally filtered by `where` conditions.
   """
   workspaces(
     """
@@ -305,19 +308,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: Workspace_Having
   ): [Workspace!]! @fdc_generated(from: "Workspace", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `WorkspaceInvitation` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `WorkspaceInvitation` objects in the table, optionally filtered by `where` conditions.
   """
   workspaceInvitations(
     """
@@ -339,19 +332,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: WorkspaceInvitation_Having
   ): [WorkspaceInvitation!]! @fdc_generated(from: "WorkspaceInvitation", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `WorkspaceMember` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `WorkspaceMember` objects in the table, optionally filtered by `where` conditions.
   """
   workspaceMembers(
     """
@@ -373,19 +356,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: WorkspaceMember_Having
   ): [WorkspaceMember!]! @fdc_generated(from: "WorkspaceMember", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `WorkspaceUser` objects in the table and return selected fields, optionally filtered by `where` conditions
+  ✨ List `WorkspaceUser` objects in the table, optionally filtered by `where` conditions.
   """
   workspaceUsers(
     """
@@ -407,19 +380,9 @@ extend type Query {
     Maximum number of rows to return (defaults to 100 rows).
     """
     limit: Int = 100
-
-    """
-    Set to true to return distinct results.
-    """
-    distinct: Boolean = false
-
-    """
-    Filter condition to apply to the groups of aggregate queries.
-    """
-    having: WorkspaceUser_Having
   ): [WorkspaceUser!]! @fdc_generated(from: "WorkspaceUser", purpose: QUERY_MULTIPLE)
   """
-  ✨ List `BusinessProfile` objects and return selected fields, ordered by vector similarity between the `descriptionEmbedding` field and `compare_embed`.
+  ✨ List `BusinessProfile` objects ordered by vector similarity between the `descriptionEmbedding` field and `compare_embed`.
   (Alternatively, `compare` can be used if the input is a raw Vector.)
   """
   businessProfiles_descriptionEmbedding_similarity(
@@ -454,7 +417,7 @@ extend type Query {
     limit: Int = 100
   ): [BusinessProfile!]! @fdc_generated(from: "BusinessProfile.descriptionEmbedding", purpose: QUERY_MULTIPLE_BY_SIMILARITY)
   """
-  ✨ List `PartnerPreferences` objects and return selected fields, ordered by vector similarity between the `combinedEmbedding` field and `compare_embed`.
+  ✨ List `PartnerPreferences` objects ordered by vector similarity between the `combinedEmbedding` field and `compare_embed`.
   (Alternatively, `compare` can be used if the input is a raw Vector.)
   """
   partnerPreferencess_combinedEmbedding_similarity(
@@ -489,7 +452,7 @@ extend type Query {
     limit: Int = 100
   ): [PartnerPreferences!]! @fdc_generated(from: "PartnerPreferences.combinedEmbedding", purpose: QUERY_MULTIPLE_BY_SIMILARITY)
   """
-  ✨ List `Profile` objects and return selected fields, ordered by vector similarity between the `bioEmbedding` field and `compare_embed`.
+  ✨ List `Profile` objects ordered by vector similarity between the `bioEmbedding` field and `compare_embed`.
   (Alternatively, `compare` can be used if the input is a raw Vector.)
   """
   profiles_bioEmbedding_similarity(

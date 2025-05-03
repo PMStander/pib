@@ -15,13 +15,13 @@
     },
     "ui": {
       "enabled": true,
-      "port": 4002
+      "port": 4000
     },
     "hub": {
-      "port": 4402
+      "port": 4400
     },
     "logging": {
-      "port": 4502
+      "port": 4500
     },
     "singleProjectMode": true
   },

@@ -8,7 +8,7 @@
       </div>
 
       <LoginForm
-        :auth-error="authError"
+        :auth-error="authError || undefined"
         @submit="handleLogin"
         @forgot-password="showForgotPassword = true"
       />

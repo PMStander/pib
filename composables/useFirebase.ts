@@ -10,7 +10,7 @@ import { connectFirestoreEmulator, getFirestore } from "firebase/firestore"
 import { connectStorageEmulator, getStorage } from "firebase/storage"
 import { getMessaging } from "firebase/messaging"
 import { connectDataConnectEmulator, getDataConnect } from "firebase/data-connect"
-import { connectorConfig } from "@pib/connector"
+import { connectorConfig } from "@firebasegen/pib-connector"
 
 export const useFirebase = () => {
   const config = useRuntimeConfig()
@@ -69,7 +69,7 @@ export const useFirebase = () => {
     // Connect to Auth emulator
     try {
       // Always use localhost for consistency
-      connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true })
+      connectAuthEmulator(auth, "http://localhost:9199", { disableWarnings: true })
       console.log("Connected to Auth Emulator")
     } catch (error) {
       console.error("Error connecting to Auth Emulator:", error)
@@ -79,16 +79,34 @@ export const useFirebase = () => {
       }
     }
 
-    // Initialize and connect to DataConnect emulator
+    // Initialize DataConnect and connect to emulator in development
     try {
       dataConnect = getDataConnect(connectorConfig)
-      connectDataConnectEmulator(dataConnect, "localhost", 9399)
-      console.log("Connected to DataConnect Emulator")
+
+      // Connect to DataConnect emulator in development
+      if (isDev) {
+        try {
+          // Get the project ID from the Firebase config
+          const projectId = firebaseConfig.projectId || 'partners-in-biz'
+
+          // Connect to the DataConnect emulator with the project ID
+          // This ensures the correct URL format is used
+          connectDataConnectEmulator(dataConnect, 'localhost', 9499)
+          console.log(`Connected to DataConnect Emulator on localhost:9499 for project ${projectId}`)
+        } catch (emulatorError) {
+          console.error("Error connecting to DataConnect Emulator:", emulatorError)
+          if (emulatorError instanceof Error) {
+            console.error("DataConnect Emulator Error Details:", emulatorError.message, emulatorError.stack)
+          }
+        }
+      } else {
+        console.log("Connected to DataConnect Production Service")
+      }
     } catch (error) {
-      console.error("Error connecting to DataConnect Emulator:", error)
+      console.error("Error initializing DataConnect:", error)
       // Log more detailed error information
       if (error instanceof Error) {
-        console.error("DataConnect Emulator Error Details:", error.message, error.stack)
+        console.error("DataConnect Initialization Error Details:", error.message, error.stack)
       }
     }
   }

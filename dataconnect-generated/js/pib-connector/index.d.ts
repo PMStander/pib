@@ -81,6 +81,19 @@ export interface CreateBusinessProfileWithDescriptionVariables {
   employeeCount?: number | null;
 }
 
+export interface CreateLlmKeyData {
+  createLLMKey: LLMKey_Key;
+}
+
+export interface CreateLlmKeyVariables {
+  entityType: string;
+  entityId: string;
+  provider: string;
+  encryptedKey?: string | null;
+  encryptionIV?: string | null;
+  config?: string | null;
+}
+
 export interface CreatePartnerPreferencesData {
   createPartnerPreferences: PartnerPreferences_Key;
 }
@@ -162,6 +175,14 @@ export interface DeclineInvitationVariables {
   invitationId: UUIDString;
 }
 
+export interface DeleteLlmKeyData {
+  deleteLLMKey?: LLMKey_Key | null;
+}
+
+export interface DeleteLlmKeyVariables {
+  id: UUIDString;
+}
+
 export interface DeleteProfileData {
   deleteProfile?: Profile_Key | null;
 }
@@ -219,6 +240,43 @@ export interface GetCurrentUserData {
   } & User_Key;
 }
 
+export interface GetLlmKeyByProviderAndEntityData {
+  lLMKeys: ({
+    id: UUIDString;
+    entityType: string;
+    entityId: string;
+    provider: string;
+    encryptedKey?: string | null;
+    encryptionIV?: string | null;
+    config?: string | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & LLMKey_Key)[];
+}
+
+export interface GetLlmKeyByProviderAndEntityVariables {
+  provider: string;
+  entityType: string;
+  entityId: string;
+}
+
+export interface GetLlmKeysByEntityData {
+  lLMKeys: ({
+    id: UUIDString;
+    entityType: string;
+    entityId: string;
+    provider: string;
+    config?: string | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & LLMKey_Key)[];
+}
+
+export interface GetLlmKeysByEntityVariables {
+  entityType: string;
+  entityId: string;
+}
+
 export interface GetPartnerPreferencesData {
   partnerPreferences?: {
     id: UUIDString;
@@ -254,6 +312,25 @@ export interface GetPendingInvitationsVariables {
   email: string;
 }
 
+export interface GetProfileLlmKeysData {
+  lLMKeys: ({
+    id: UUIDString;
+    entityType: string;
+    entityId: string;
+    provider: string;
+    encryptedKey?: string | null;
+    encryptionIV?: string | null;
+    config?: string | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & LLMKey_Key)[];
+}
+
+export interface GetProfileLlmKeysVariables {
+  provider: string;
+  profileIds: string[];
+}
+
 export interface GetUserData {
   user?: {
     id: string;
@@ -263,6 +340,24 @@ export interface GetUserData {
     createdAt: TimestampString;
     updatedAt: TimestampString;
   } & User_Key;
+}
+
+export interface GetUserLlmKeyData {
+  lLMKeys: ({
+    id: UUIDString;
+    entityType: string;
+    entityId: string;
+    provider: string;
+    encryptedKey?: string | null;
+    encryptionIV?: string | null;
+    config?: string | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & LLMKey_Key)[];
+}
+
+export interface GetUserLlmKeyVariables {
+  provider: string;
 }
 
 export interface GetUserProfilesData {
@@ -331,6 +426,25 @@ export interface GetWorkspaceInvitationsVariables {
   workspaceId: UUIDString;
 }
 
+export interface GetWorkspaceLlmKeyData {
+  lLMKeys: ({
+    id: UUIDString;
+    entityType: string;
+    entityId: string;
+    provider: string;
+    encryptedKey?: string | null;
+    encryptionIV?: string | null;
+    config?: string | null;
+    createdAt: TimestampString;
+    updatedAt: TimestampString;
+  } & LLMKey_Key)[];
+}
+
+export interface GetWorkspaceLlmKeyVariables {
+  provider: string;
+  workspaceId: string;
+}
+
 export interface GetWorkspaceMembersData {
   workspaceMembers: ({
     role: string;
@@ -375,6 +489,11 @@ export interface JoinWorkspaceUserVariables {
   workspaceId: UUIDString;
   userId: string;
   role: string;
+}
+
+export interface LLMKey_Key {
+  id: UUIDString;
+  __typename?: 'LLMKey_Key';
 }
 
 export interface MatchBusinessToProfilesData {
@@ -517,6 +636,17 @@ export interface UpdateBusinessProfileWithDescriptionVariables {
   location?: string | null;
   website?: string | null;
   employeeCount?: number | null;
+}
+
+export interface UpdateLlmKeyData {
+  updateLLMKey?: LLMKey_Key | null;
+}
+
+export interface UpdateLlmKeyVariables {
+  id: UUIDString;
+  encryptedKey?: string | null;
+  encryptionIV?: string | null;
+  config?: string | null;
 }
 
 export interface UpdatePartnerPreferencesData {
@@ -860,6 +990,33 @@ export function updatePartnerPreferencesWithEmbedding(dc: DataConnect, vars: Upd
 
 
 /* Allow users to create refs without passing in DataConnect */
+export function createLlmKeyRef(vars: CreateLlmKeyVariables): MutationRef<CreateLlmKeyData, CreateLlmKeyVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function createLlmKeyRef(dc: DataConnect, vars: CreateLlmKeyVariables): MutationRef<CreateLlmKeyData,CreateLlmKeyVariables>;
+
+export function createLlmKey(vars: CreateLlmKeyVariables): MutationPromise<CreateLlmKeyData, CreateLlmKeyVariables>;
+export function createLlmKey(dc: DataConnect, vars: CreateLlmKeyVariables): MutationPromise<CreateLlmKeyData,CreateLlmKeyVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function updateLlmKeyRef(vars: UpdateLlmKeyVariables): MutationRef<UpdateLlmKeyData, UpdateLlmKeyVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function updateLlmKeyRef(dc: DataConnect, vars: UpdateLlmKeyVariables): MutationRef<UpdateLlmKeyData,UpdateLlmKeyVariables>;
+
+export function updateLlmKey(vars: UpdateLlmKeyVariables): MutationPromise<UpdateLlmKeyData, UpdateLlmKeyVariables>;
+export function updateLlmKey(dc: DataConnect, vars: UpdateLlmKeyVariables): MutationPromise<UpdateLlmKeyData,UpdateLlmKeyVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function deleteLlmKeyRef(vars: DeleteLlmKeyVariables): MutationRef<DeleteLlmKeyData, DeleteLlmKeyVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function deleteLlmKeyRef(dc: DataConnect, vars: DeleteLlmKeyVariables): MutationRef<DeleteLlmKeyData,DeleteLlmKeyVariables>;
+
+export function deleteLlmKey(vars: DeleteLlmKeyVariables): MutationPromise<DeleteLlmKeyData, DeleteLlmKeyVariables>;
+export function deleteLlmKey(dc: DataConnect, vars: DeleteLlmKeyVariables): MutationPromise<DeleteLlmKeyData,DeleteLlmKeyVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
 export function getAllUsersRef(): QueryRef<GetAllUsersData, undefined>;/* Allow users to pass in custom DataConnect instances */
 export function getAllUsersRef(dc: DataConnect): QueryRef<GetAllUsersData,undefined>;
 
@@ -1016,5 +1173,50 @@ export function getPendingInvitationsRef(dc: DataConnect, vars: GetPendingInvita
 
 export function getPendingInvitations(vars: GetPendingInvitationsVariables): QueryPromise<GetPendingInvitationsData, GetPendingInvitationsVariables>;
 export function getPendingInvitations(dc: DataConnect, vars: GetPendingInvitationsVariables): QueryPromise<GetPendingInvitationsData,GetPendingInvitationsVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getLlmKeysByEntityRef(vars: GetLlmKeysByEntityVariables): QueryRef<GetLlmKeysByEntityData, GetLlmKeysByEntityVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getLlmKeysByEntityRef(dc: DataConnect, vars: GetLlmKeysByEntityVariables): QueryRef<GetLlmKeysByEntityData,GetLlmKeysByEntityVariables>;
+
+export function getLlmKeysByEntity(vars: GetLlmKeysByEntityVariables): QueryPromise<GetLlmKeysByEntityData, GetLlmKeysByEntityVariables>;
+export function getLlmKeysByEntity(dc: DataConnect, vars: GetLlmKeysByEntityVariables): QueryPromise<GetLlmKeysByEntityData,GetLlmKeysByEntityVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getLlmKeyByProviderAndEntityRef(vars: GetLlmKeyByProviderAndEntityVariables): QueryRef<GetLlmKeyByProviderAndEntityData, GetLlmKeyByProviderAndEntityVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getLlmKeyByProviderAndEntityRef(dc: DataConnect, vars: GetLlmKeyByProviderAndEntityVariables): QueryRef<GetLlmKeyByProviderAndEntityData,GetLlmKeyByProviderAndEntityVariables>;
+
+export function getLlmKeyByProviderAndEntity(vars: GetLlmKeyByProviderAndEntityVariables): QueryPromise<GetLlmKeyByProviderAndEntityData, GetLlmKeyByProviderAndEntityVariables>;
+export function getLlmKeyByProviderAndEntity(dc: DataConnect, vars: GetLlmKeyByProviderAndEntityVariables): QueryPromise<GetLlmKeyByProviderAndEntityData,GetLlmKeyByProviderAndEntityVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getWorkspaceLlmKeyRef(vars: GetWorkspaceLlmKeyVariables): QueryRef<GetWorkspaceLlmKeyData, GetWorkspaceLlmKeyVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getWorkspaceLlmKeyRef(dc: DataConnect, vars: GetWorkspaceLlmKeyVariables): QueryRef<GetWorkspaceLlmKeyData,GetWorkspaceLlmKeyVariables>;
+
+export function getWorkspaceLlmKey(vars: GetWorkspaceLlmKeyVariables): QueryPromise<GetWorkspaceLlmKeyData, GetWorkspaceLlmKeyVariables>;
+export function getWorkspaceLlmKey(dc: DataConnect, vars: GetWorkspaceLlmKeyVariables): QueryPromise<GetWorkspaceLlmKeyData,GetWorkspaceLlmKeyVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getUserLlmKeyRef(vars: GetUserLlmKeyVariables): QueryRef<GetUserLlmKeyData, GetUserLlmKeyVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getUserLlmKeyRef(dc: DataConnect, vars: GetUserLlmKeyVariables): QueryRef<GetUserLlmKeyData,GetUserLlmKeyVariables>;
+
+export function getUserLlmKey(vars: GetUserLlmKeyVariables): QueryPromise<GetUserLlmKeyData, GetUserLlmKeyVariables>;
+export function getUserLlmKey(dc: DataConnect, vars: GetUserLlmKeyVariables): QueryPromise<GetUserLlmKeyData,GetUserLlmKeyVariables>;
+
+
+/* Allow users to create refs without passing in DataConnect */
+export function getProfileLlmKeysRef(vars: GetProfileLlmKeysVariables): QueryRef<GetProfileLlmKeysData, GetProfileLlmKeysVariables>;
+/* Allow users to pass in custom DataConnect instances */
+export function getProfileLlmKeysRef(dc: DataConnect, vars: GetProfileLlmKeysVariables): QueryRef<GetProfileLlmKeysData,GetProfileLlmKeysVariables>;
+
+export function getProfileLlmKeys(vars: GetProfileLlmKeysVariables): QueryPromise<GetProfileLlmKeysData, GetProfileLlmKeysVariables>;
+export function getProfileLlmKeys(dc: DataConnect, vars: GetProfileLlmKeysVariables): QueryPromise<GetProfileLlmKeysData,GetProfileLlmKeysVariables>;
 
 
