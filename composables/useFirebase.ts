@@ -9,13 +9,18 @@ import {
 import { connectFirestoreEmulator, getFirestore } from "firebase/firestore"
 import { connectStorageEmulator, getStorage } from "firebase/storage"
 import { getMessaging } from "firebase/messaging"
-import { connectDataConnectEmulator, getDataConnect } from "firebase/data-connect"
-import { connectorConfig } from "@firebasegen/pib-connector"
 
 export const useFirebase = () => {
   const config = useRuntimeConfig()
   const isDev = process.env.NODE_ENV === "development"
   const firebaseConfig = config.public.firebaseConfig
+
+  console.log("Firebase config:", firebaseConfig)
+
+  // In development, clear any existing credentials
+  if (isDev && typeof window !== 'undefined') {
+    process.env.GOOGLE_APPLICATION_CREDENTIALS = ''
+  }
 
   // Initialize Firebase
   const firebaseApp = initializeApp(firebaseConfig)
@@ -27,10 +32,9 @@ export const useFirebase = () => {
   let messaging = null
   let vertexAI = null
   let model = null
-  let dataConnect = null
 
   // Check if we're in the browser
-  if (process.client) {
+  if (typeof window !== 'undefined') {
     // Initialize storage
     storage = getStorage(firebaseApp)
 
@@ -44,10 +48,12 @@ export const useFirebase = () => {
     // Connect to emulators in development
     if (isDev) {
       // Connect to Storage emulator
-      try {
-        connectStorageEmulator(storage, "localhost", 9199)
-      } catch (error) {
-        console.warn("Error connecting to Storage Emulator:", error)
+      if (storage) {
+        try {
+          connectStorageEmulator(storage, "localhost", 9199)
+        } catch (error) {
+          console.warn("Error connecting to Storage Emulator:", error)
+        }
       }
     }
   }
@@ -78,41 +84,10 @@ export const useFirebase = () => {
         console.error("Auth Emulator Error Details:", error.message, error.stack)
       }
     }
-
-    // Initialize DataConnect and connect to emulator in development
-    try {
-      dataConnect = getDataConnect(connectorConfig)
-
-      // Connect to DataConnect emulator in development
-      if (isDev) {
-        try {
-          // Get the project ID from the Firebase config
-          const projectId = firebaseConfig.projectId || 'partners-in-biz'
-
-          // Connect to the DataConnect emulator with the project ID
-          // This ensures the correct URL format is used
-          connectDataConnectEmulator(dataConnect, 'localhost', 9499)
-          console.log(`Connected to DataConnect Emulator on localhost:9499 for project ${projectId}`)
-        } catch (emulatorError) {
-          console.error("Error connecting to DataConnect Emulator:", emulatorError)
-          if (emulatorError instanceof Error) {
-            console.error("DataConnect Emulator Error Details:", emulatorError.message, emulatorError.stack)
-          }
-        }
-      } else {
-        console.log("Connected to DataConnect Production Service")
-      }
-    } catch (error) {
-      console.error("Error initializing DataConnect:", error)
-      // Log more detailed error information
-      if (error instanceof Error) {
-        console.error("DataConnect Initialization Error Details:", error.message, error.stack)
-      }
-    }
   }
 
   // Set persistence for auth
-  if (process.client) {
+  if (typeof window !== 'undefined') {
     setPersistence(auth, browserSessionPersistence).catch((err) => {
       console.error("Error enabling persistence:", err)
     })
@@ -126,7 +101,6 @@ export const useFirebase = () => {
     messaging,
     vertexAI,
     model,
-    dataConnect,
     onAuthStateChanged,
   }
 }

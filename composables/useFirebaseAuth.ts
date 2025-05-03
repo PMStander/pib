@@ -1,4 +1,3 @@
-import { ref, reactive, computed } from 'vue';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,

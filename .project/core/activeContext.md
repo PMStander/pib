@@ -1,10 +1,12 @@
-# Active Context: Firebase DataConnect Emulator Integration
+# Active Context: Server-Side Data Management Integration
 
 ## Context
 This document tracks the current work focus and state of the "Partners in Biz" project.
 
 ## Current Focus
-- Fixing signup process by properly connecting to Firebase DataConnect emulator
+- Integrating server-side data management for all CRUD operations
+- Ensuring proper authentication token flow from client to server
+- Implementing vector search capabilities through server API
 - Ensuring proper development environment setup with Firebase emulators
 - Resolving authentication and data persistence issues
 - Implementing secure LLM key management system
@@ -102,45 +104,68 @@ This document tracks the current work focus and state of the "Partners in Biz" p
    - Optimize performance and bundle size
 
 ## Last Updated
-- Date: May 5, 2024
-- Session: Firebase DataConnect Emulator Integration
+- Date: May 7, 2024
+- Session: Server API Integration for Database Operations
 
-## Session Summary (2024-05-05)
-In this session, we fixed the signup process by properly connecting to the Firebase DataConnect emulator in development mode. This resolved the 403 Forbidden errors that were occurring when trying to create user records in DataConnect after successful Firebase Authentication.
+## Session Summary (2024-05-07)
+In this session, we successfully updated the `useFirestore.ts` composable to use server API endpoints instead of direct Firestore access. This architectural improvement enhances security by ensuring all database operations go through the server API.
+
+### Key Accomplishments:
+1. Removed direct Firestore imports and dependencies
+2. Updated all methods to use the `/api/data/` endpoints:
+   - `read.post.ts` for fetching data
+   - `write.post.ts` for creating data
+   - `update.post.ts` for updating data
+3. Added proper type handling and error management
+4. Ensured compatibility with both camelCase and snake_case field names
+5. Fixed date conversions and authentication handling
+
+### Technical Details:
+- Server API endpoints were already implemented, which made this transition smoother
+- The endpoints handle authentication, data validation, vector search capabilities, and all CRUD operations
+- Updated methods include:
+  - `fetchCurrentUser`
+  - `fetchUserProfiles`
+  - `fetchUserWorkspaces`
+  - `createWorkspace`
+  - `createProfile`
+  - `inviteToWorkspace`
+  - `ensureUserExists`
+  - `vectorSearch`
+
+### Implementation Approach:
+- Analyzed existing server API endpoints to understand their structure and requirements
+- Updated each method in useFirestore.ts to use the appropriate endpoint
+- Added proper error handling and type casting for API responses
+- Ensured backward compatibility with existing code that uses the composable
+- Fixed TypeScript errors and warnings
+
+### Next Steps:
+1. Test the updated functionality to ensure all operations work correctly
+2. Consider updating other components that might still use direct Firestore access
+3. Add comprehensive error handling for API responses
+4. Continue implementing vector search capabilities for AI-data interaction
+
+## Session Summary (2024-05-06)
+In this session, we first migrated from Firebase DataConnect to Firestore due to persistent emulator issues, and then analyzed the server-side data management system to understand how to integrate it with our client-side code.
 
 ### Key Observations:
-1. Authentication Flow Issues:
-   - Firebase Authentication was working correctly (creating users)
-   - DataConnect operations were failing with 403 Forbidden errors
-   - The application was trying to use the production DataConnect service instead of the local emulator
+1. DataConnect Emulator Issues:
+   - DataConnect emulator was crashing with SIGINT signals
+   - Multiple attempts to fix the emulator issues were unsuccessful
+   - Port mismatch between firebase.json (9499) and useFirebase.ts (9498) was identified but fixing it didn't resolve the issues
 
-2. Implementation Challenges:
-   - Identifying the correct emulator port from firebase.json (9499)
-   - Adding proper error handling for both initialization and emulator connection
-   - Ensuring the emulator connection is only attempted in development mode
+2. Server-Side Data Management:
+   - The application has a robust server-side API for CRUD operations
+   - Authentication tokens from Firebase need to be passed to the server
+   - Vector search capabilities are implemented through embedding generation
+   - Session management is handled through cookies
 
 3. Implementation Approach:
-   - Updated useFirebase.ts to connect to the DataConnect emulator in development mode
-   - Added nested try/catch blocks to handle different types of errors
-   - Added detailed logging to help with troubleshooting
-   - Maintained consistency with how other Firebase services connect to emulators
-
-### Implementation Details:
-1. DataConnect Emulator Connection:
-   - Used connectDataConnectEmulator function to connect to the local emulator on port 9499
-   - Added conditional logic to only connect to the emulator in development mode
-   - Improved error handling with separate try/catch blocks for initialization and emulator connection
-
-2. Error Handling:
-   - Added more detailed error logging for both initialization and emulator connection
-   - Included error stack traces for better debugging
-   - Ensured the application can continue even if emulator connection fails
-
-3. Previous Session Work (LLM Key Management):
-   - Implemented secure LLM key management system with AES-256-GCM encryption
-   - Created UI components for managing LLM keys at user, profile, and workspace levels
-   - Added support for multiple LLM providers (OpenAI, Anthropic, Gemini, Ollama, XAI)
-   - Implemented provider-specific configuration options
+   - Created a new useFirestore.ts composable that implements the same functionality as useDataConnect.ts
+   - Updated useDataConnect.ts to serve as a compatibility layer that uses useFirestore.ts internally
+   - Added vector search capability to both composables
+   - Documented the server-side data management system for future reference
 
 ## Session Summary (2024-05-04)
 In this session, we fixed authentication issues in the chat page and workspaces display issues in the workspaces tab. We also implemented an AI chat interface for interacting with the vector search functionality.
@@ -182,32 +207,39 @@ In this session, we fixed authentication issues in the chat page and workspaces 
    - Added proper loading states and error handling
 
 ## Current State
-The application now has proper Firebase DataConnect emulator integration for local development, which resolves the signup process issues. The Firebase Authentication system works correctly to create users, and the DataConnect emulator is properly connected to store user data, profiles, and workspaces. The application also has a secure LLM key management system that allows users to store and manage API keys for various LLM providers, and a functional AI chat interface that allows users to interact with the vector search functionality using natural language.
+The application has been successfully updated to use server API endpoints for all database operations instead of direct Firestore access. This architectural improvement enhances security by ensuring all database operations go through the server API. The server-side data management system is set up with endpoints for CRUD operations (`/api/data/write`, `/api/data/read`, `/api/data/update`) and includes embedding generation for vector search. The Firebase Authentication system works correctly to create users, and the authentication token is now properly passed to the server for authenticated operations.
 
 ## Next Steps
-1. Test the signup process with the DataConnect emulator:
-   - Verify that user creation works correctly
+1. Test the updated functionality:
+   - Verify that user creation works correctly through the server API
    - Ensure profiles and workspaces are created properly
    - Test the entire authentication flow from signup to login
+   - Verify that vector search functionality works correctly
 
-2. Improve Firebase emulator integration:
+2. Improve error handling and user experience:
+   - Add comprehensive error handling for server API responses
+   - Implement loading states for all API calls
+   - Add retry mechanisms for failed API calls
+   - Improve error messages for better user experience
+
+3. Improve Firebase emulator integration:
    - Add a startup script to ensure all emulators are running
    - Create better error handling for when emulators are not available
    - Add documentation for setting up the development environment
 
-3. Integrate LLM key management with chat interface:
+4. Integrate LLM key management with chat interface:
    - Connect the chat interface to use the configured LLM providers
    - Implement fallback mechanisms when keys are not available
    - Add provider selection in the chat interface
    - Implement streaming responses for supported providers
 
-4. Enhance LLM key management:
+5. Enhance LLM key management:
    - Implement key validation before saving
    - Add key usage analytics to track API usage
    - Consider adding key rotation and expiration features
    - Implement more robust error handling for encryption/decryption failures
 
-5. Enhance AI chat interface:
+6. Enhance AI chat interface:
    - Improve NLP capabilities with more sophisticated techniques
    - Add support for follow-up questions and conversation context
    - Implement more advanced response generation with better explanations

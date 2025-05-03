@@ -19,7 +19,7 @@
   - The emulator requires a specific URL format that includes the project ID
 - **Decisions**: 
   - Added the project ID parameter to the connectDataConnectEmulator function call
-  - Used the Firebase config's projectId or defaulted to 'partners-in-biz' if not available
+  - Used the Firebase config's projectId or defaulted to 'partners-in-biz-85059' if not available
   - Added more detailed logging to help with troubleshooting
 
 ## Performance Evaluation
