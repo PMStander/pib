@@ -9,17 +9,23 @@ A modern web application for entrepreneurs to find business partners, investors,
 - **Project Collaboration**: Create and manage business projects with multiple collaborators
 - **Investor Connections**: Connect with potential investors for your business ideas
 - **Messaging System**: Communicate directly with potential partners and investors
-- **AI Chat Interface**: Interact with your data using natural language through various LLM providers
+- **AI Chat Interface**: Interact with your data using natural language through LangChain's LangGraph
 - **LLM Key Management**: Securely store and manage API keys for multiple LLM providers
+- **WebSocket Communication**: Real-time chat with AI agents using WebSocket connections
+- **Multi-Agent System**: Supervisor and specialized agents working together to solve complex tasks
 
 ## Technology Stack
 
 - **Frontend**: Nuxt.js 3.17.1 (Vue.js 3.5.13)
 - **Styling**: Tailwind CSS 4.1.5 with custom Neumorphic Design System
 - **Authentication**: Firebase Authentication
-- **Database**: Firebase Data Connect (PostgreSQL)
+- **Database**: Firebase Firestore
 - **Storage**: Firebase Storage
-- **AI Integration**: Support for OpenAI, Anthropic, Gemini, Ollama, and XAI
+- **AI Integration**:
+  - LangChain for AI orchestration
+  - LangGraph for multi-agent workflows
+  - Support for OpenAI, Anthropic, Gemini, Vertex AI, Mistral, and more
+- **Real-time Communication**: WebSockets for chat interface
 - **Security**: AES-256-GCM encryption for API keys
 
 ## Neumorphic UI
@@ -118,19 +124,29 @@ pnpm preview
 ├── composables/         # Shared composition functions
 │   ├── useAppState.ts   # Application state management
 │   ├── useChat.ts       # Chat functionality
+│   ├── useChatAgency.ts # WebSocket-based chat agency
 │   ├── useDataConnect.ts # Database connection
 │   ├── useFirebaseAuth.ts # Authentication
 │   ├── useLLMKeys.ts    # LLM key management
 │   └── useVectorSearch.ts # Vector search functionality
-├── dataconnect/         # Firebase Data Connect configuration
-│   ├── connector/       # GraphQL operations
-│   └── schema/          # Database schema
+├── docs/                # Documentation
+│   ├── chat-system.md   # Chat system documentation
+│   └── ...              # Other documentation files
 ├── layouts/             # Page layouts
 ├── pages/               # Application pages and routes
 │   ├── settings/        # Settings pages
 │   └── workspaces/      # Workspace pages
 ├── public/              # Public static files
 ├── server/              # Server-side code
+│   ├── ai/              # AI application components
+│   │   ├── departments/ # Department-level AI components
+│   │   ├── teams/       # Team-level AI components
+│   │   ├── tools/       # Tools for AI agents
+│   │   └── types/       # TypeScript types for AI components
+│   └── api/             # API endpoints
+│       ├── auth/        # Authentication endpoints
+│       ├── chat/        # Chat WebSocket endpoint
+│       └── data/        # Data CRUD endpoints
 └── utils/               # Utility functions
     ├── encryption.ts    # Encryption utilities
     ├── llm.ts           # LLM integration utilities

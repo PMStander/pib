@@ -1,5 +1,5 @@
-import { H3Event } from 'h3'
-import type { Profile, Workspace, WorkspaceRole } from '../../types/auth'
+import { H3Event, setCookie, getCookie, deleteCookie } from 'h3'
+import type { Profile, Workspace, WorkspaceRole } from './types/auth'
 import type { Timestamp } from 'firebase/firestore'
 import { VertexAIEmbeddings } from "@langchain/google-vertexai";
 import { readFileSync } from 'fs';
@@ -59,12 +59,12 @@ export async function setUserSession(event: H3Event, session: UserSession) {
 
 export async function getUserSession(event: H3Event): Promise<UserSession | null> {
   const cookie = getCookie(event, SESSION_NAME)
-  
+
   if (!cookie) {
     console.log('[Session] No session cookie found')
     return null
   }
-  
+
   try {
     const session = JSON.parse(cookie) as UserSession
     // console.log('[Session] Successfully parsed session:', {
@@ -110,7 +110,7 @@ export async function createEmbeddings(data: any, col_vec: any) {
       textLength: text.length,
       textPreview: text.substring(0, 100)
     });
+    // Return null or a default vector when there's an error
+    return null;
   }
-  const vector = await embeddings.embedQuery(text);
-  return vector
 }

@@ -35,9 +35,6 @@ importers:
       '@esbuild/darwin-arm64':
         specifier: ^0.25.3
         version: 0.25.3
-      '@firebasegen/pib-connector':
-        specifier: link:dataconnect-generated/js/pib-connector
-        version: link:dataconnect-generated/js/pib-connector
       '@google-cloud/text-to-speech':
         specifier: ^6.0.1
         version: 6.0.1
@@ -131,6 +128,9 @@ importers:
       '@vueuse/nuxt':
         specifier: ^13.1.0
         version: 13.1.0(magicast@0.3.5)(nuxt@3.17.1(@netlify/blobs@8.2.0)(@parcel/watcher@2.5.1)(@types/node@22.15.3)(db0@0.3.2)(ioredis@5.6.1)(lightningcss@1.29.2)(magicast@0.3.5)(rollup@4.40.1)(terser@5.39.0)(typescript@5.8.3)(vite@6.3.4(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(yaml@2.7.1))(yaml@2.7.1))(vue@3.5.13(typescript@5.8.3))
+      crossws:
+        specifier: ^0.3.4
+        version: 0.3.4
       duck-duck-scrape:
         specifier: ^2.2.7
         version: 2.2.7
@@ -11323,7 +11323,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.2
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.9.0)
+      retry-axios: 2.6.0(axios@1.9.0(debug@4.4.0))
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -12957,7 +12957,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  retry-axios@2.6.0(axios@1.9.0):
+  retry-axios@2.6.0(axios@1.9.0(debug@4.4.0)):
     dependencies:
       axios: 1.9.0(debug@4.4.0)
 

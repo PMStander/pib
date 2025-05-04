@@ -1,13 +1,15 @@
-# Active Context: Server-Side Vector Search with Cloud Functions
+# Active Context: LangGraph Multi-Agent System with WebSocket Communication
 
 ## Context
 This document tracks the current work focus and state of the "Partners in Biz" project.
 
 ## Current Focus
-- Implementing server-side vector search using Firebase Cloud Functions
-- Testing and optimizing vector search for profiles, businesses, and partner preferences
-- Enhancing AI chat interface to leverage vector search capabilities
-- Implementing embedding generation using Google's Vertex AI
+- Implementing LangGraph-based multi-agent system for AI chat
+- Creating WebSocket communication layer between frontend and backend
+- Developing department and team structure for AI agents
+- Enhancing AI chat interface with real-time communication
+- Implementing specialized agents for different business functions
+- Integrating vector search capabilities with LangGraph agents
 - Implementing secure LLM key management system
 - Creating UI components for managing LLM keys
 - Integrating with multiple LLM providers

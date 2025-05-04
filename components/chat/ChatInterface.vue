@@ -1,8 +1,14 @@
 <template>
   <NeumorphicCard title="AI Chat Assistant" variant="flat" class="mb-8">
     <div class="flex flex-col h-[500px]">
+      <!-- Connection Status -->
+      <div v-if="connectionStatus !== 'Connected'" class="bg-[rgb(var(--color-neumorphic-accent))/10] text-[rgb(var(--color-neumorphic-text))/70] text-xs p-2 rounded-lg mb-2 flex items-center">
+        <div class="w-2 h-2 rounded-full mr-2" :class="connectionStatus === 'Connecting...' ? 'bg-yellow-500 animate-pulse' : 'bg-red-500'"></div>
+        {{ connectionStatus }}
+      </div>
+
       <!-- Chat Messages -->
-      <div 
+      <div
         ref="messagesContainer"
         class="flex-1 overflow-y-auto p-4 nm-pressed rounded-lg mb-4"
       >
@@ -14,15 +20,15 @@
             Start a conversation with the AI assistant to find partners, search profiles, or get recommendations.
           </p>
         </div>
-        
+
         <div v-else class="space-y-4">
-          <div 
-            v-for="(message, index) in messages" 
+          <div
+            v-for="(message, index) in messages"
             :key="index"
             :class="[
               'max-w-[85%] rounded-lg p-3',
-              message.sender === 'user' 
-                ? 'ml-auto nm-flat bg-[rgb(var(--color-neumorphic-accent))/10] text-[rgb(var(--color-neumorphic-text))]' 
+              message.sender === 'user'
+                ? 'ml-auto nm-flat bg-[rgb(var(--color-neumorphic-accent))/10] text-[rgb(var(--color-neumorphic-text))]'
                 : 'mr-auto nm-flat bg-[rgb(var(--color-neumorphic-bg))] text-[rgb(var(--color-neumorphic-text))]'
             ]"
           >
@@ -30,19 +36,19 @@
             <div v-if="!message.hasResults" class="text-sm">
               {{ message.text }}
             </div>
-            
+
             <!-- Message with search results -->
             <div v-else>
               <div class="text-sm mb-3">{{ message.text }}</div>
-              
+
               <!-- Profile Results -->
               <div v-if="message.profileResults && message.profileResults.length > 0" class="mt-4">
                 <div class="text-xs font-medium text-[rgb(var(--color-neumorphic-text))/70] mb-2">
                   Profiles
                 </div>
-                
-                <div 
-                  v-for="(result, resultIndex) in message.profileResults" 
+
+                <div
+                  v-for="(result, resultIndex) in message.profileResults"
                   :key="'profile-' + resultIndex"
                   class="nm-flat p-3 rounded-lg mb-2 text-xs"
                 >
@@ -69,15 +75,15 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Business Results -->
               <div v-if="message.businessResults && message.businessResults.length > 0" class="mt-4">
                 <div class="text-xs font-medium text-[rgb(var(--color-neumorphic-text))/70] mb-2">
                   Businesses
                 </div>
-                
-                <div 
-                  v-for="(result, resultIndex) in message.businessResults" 
+
+                <div
+                  v-for="(result, resultIndex) in message.businessResults"
                   :key="'business-' + resultIndex"
                   class="nm-flat p-3 rounded-lg mb-2 text-xs"
                 >
@@ -96,15 +102,15 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Partner Preference Results -->
               <div v-if="message.preferenceResults && message.preferenceResults.length > 0" class="mt-4">
                 <div class="text-xs font-medium text-[rgb(var(--color-neumorphic-text))/70] mb-2">
                   Partner Preferences
                 </div>
-                
-                <div 
-                  v-for="(result, resultIndex) in message.preferenceResults" 
+
+                <div
+                  v-for="(result, resultIndex) in message.preferenceResults"
                   :key="'pref-' + resultIndex"
                   class="nm-flat p-3 rounded-lg mb-2 text-xs"
                 >
@@ -112,8 +118,8 @@
                     <div v-if="result.item.industries && result.item.industries.length">
                       <div class="text-xs font-medium text-[rgb(var(--color-neumorphic-text))/70]">Industries</div>
                       <div class="flex flex-wrap gap-1 mt-1">
-                        <span 
-                          v-for="(industry, i) in result.item.industries" 
+                        <span
+                          v-for="(industry, i) in result.item.industries"
                           :key="i"
                           class="px-2 py-0.5 text-xs rounded-full nm-flat text-[rgb(var(--color-neumorphic-text))/70]"
                         >
@@ -121,12 +127,12 @@
                         </span>
                       </div>
                     </div>
-                    
+
                     <div v-if="result.item.skillsNeeded && result.item.skillsNeeded.length">
                       <div class="text-xs font-medium text-[rgb(var(--color-neumorphic-text))/70]">Skills Needed</div>
                       <div class="flex flex-wrap gap-1 mt-1">
-                        <span 
-                          v-for="(skill, i) in result.item.skillsNeeded" 
+                        <span
+                          v-for="(skill, i) in result.item.skillsNeeded"
                           :key="i"
                           class="px-2 py-0.5 text-xs rounded-full nm-flat text-[rgb(var(--color-neumorphic-accent))/70]"
                         >
@@ -134,7 +140,7 @@
                         </span>
                       </div>
                     </div>
-                    
+
                     <div class="mt-1 text-xs text-[rgb(var(--color-neumorphic-accent))]">
                       Match score: {{ Math.round(result.distance * 100) }}%
                     </div>
@@ -144,7 +150,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Loading indicator -->
         <div v-if="isLoading" class="flex items-center space-x-2 mt-4">
           <div class="w-2 h-2 rounded-full bg-[rgb(var(--color-neumorphic-accent))] animate-bounce"></div>
@@ -152,7 +158,7 @@
           <div class="w-2 h-2 rounded-full bg-[rgb(var(--color-neumorphic-accent))] animate-bounce" style="animation-delay: 0.4s"></div>
         </div>
       </div>
-      
+
       <!-- Message Input -->
       <div class="flex">
         <NeumorphicInput
@@ -182,19 +188,33 @@ import NeumorphicCard from '~/components/neumorphic/Card.vue';
 import NeumorphicButton from '~/components/neumorphic/Button.vue';
 import NeumorphicInput from '~/components/neumorphic/Input.vue';
 import { useChat } from '~/composables/useChat';
+import { useChatAgency } from '~/composables/useChatAgency';
 import type { ChatMessage } from '~/types/chat';
 
 // Chat state
 const newMessage = ref('');
 const messagesContainer = ref<HTMLElement | null>(null);
+const connectionStatus = ref<string>('Connecting...');
 
 // Get chat composable
 const { messages, isLoading, sendMessage: sendChatMessage, error } = useChat();
 
+// Import useChatAgency directly to access connection state
+const { connectionState } = useChatAgency();
+
+// Update connection status based on connectionState
+watch(() => connectionState.value.isConnected, (isConnected) => {
+  connectionStatus.value = isConnected ? 'Connected' : 'Disconnected';
+
+  if (connectionState.value.error) {
+    connectionStatus.value = `Error: ${connectionState.value.error}`;
+  }
+});
+
 // Send a message
 const sendMessage = async () => {
   if (!newMessage.value.trim() || isLoading.value) return;
-  
+
   await sendChatMessage(newMessage.value);
   newMessage.value = '';
 };
@@ -217,6 +237,16 @@ watch(() => messages.value.length, async () => {
 onMounted(() => {
   if (messagesContainer.value) {
     messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+  }
+
+  // Add a welcome message if no messages exist
+  if (messages.value.length === 0) {
+    messages.value.push({
+      id: 'welcome',
+      text: 'Hello! I\'m your AI assistant for Partners in Biz. I can help you find potential business partners, search profiles, or get recommendations. How can I assist you today?',
+      sender: 'ai',
+      timestamp: new Date()
+    });
   }
 });
 </script>

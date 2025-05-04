@@ -51,6 +51,7 @@
     "@vee-validate/zod": "^4.15.0",
     "@vueuse/core": "^13.1.0",
     "@vueuse/nuxt": "^13.1.0",
+    "crossws": "^0.3.4",
     "duck-duck-scrape": "^2.2.7",
     "firebase": "^11.6.1",
     "firebase-admin": "^13.3.0",

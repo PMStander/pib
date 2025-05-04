@@ -16,7 +16,8 @@ The project is in the active development phase with the following components in 
 - Dark mode support
 - Workspace management features
 - Vector search functionality with mock data
-- AI chat interface for natural language interaction
+- LangGraph-based multi-agent AI system
+- WebSocket-based chat interface for real-time communication
 - Navigation component for improved user experience
 
 ## Completed Features
@@ -33,17 +34,22 @@ The project is in the active development phase with the following components in 
 - Reusable page components structure
 - Workspace management features (creation, editing, deletion, invitations)
 - Vector search functionality with mock data for profiles, businesses, and partner preferences
-- AI chat interface with natural language processing for query understanding
+- LangGraph-based multi-agent AI system with supervisor and specialized agents
+- WebSocket-based chat interface for real-time communication with AI agents
+- Connection status indicator for WebSocket communication
 - Navigation component for improved user experience
 - Standardized authentication handling across pages
 - Consistent state management using Nuxt's useState
 
 ## In Progress
-- Enhancing AI chat interface with more sophisticated NLP capabilities
+- Developing more sophisticated LangGraph workflows with specialized agents
+- Creating department and team structure for AI agents
 - Implementing workspace detail page
 - Developing partner matching algorithm
 - Enhancing UI/UX with animations and transitions
 - Improving error handling and user experience
+- Adding support for attachments and multi-modal interactions in chat
+- Implementing chat history persistence
 
 ## Upcoming Tasks
 1. **Phase 1: Foundation (Complete)**
@@ -63,9 +69,12 @@ The project is in the active development phase with the following components in 
    - ✅ Create workspace management features
    - 🔄 Implement workspace detail page
 
-3. **Phase 3: Partner Matching (In Progress)**
+3. **Phase 3: Partner Matching and AI Integration (In Progress)**
    - ✅ Implement vector search functionality
-   - ✅ Create AI chat interface for natural language interaction
+   - ✅ Create LangGraph-based multi-agent AI system
+   - ✅ Implement WebSocket-based chat interface for real-time communication
+   - 🔄 Develop more sophisticated agent workflows
+   - 🔄 Create department and team structure for AI agents
    - 🔄 Develop matching algorithm
    - 🔄 Build connection request system
 

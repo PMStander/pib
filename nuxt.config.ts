@@ -37,11 +37,14 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext'
       }
-    }
+    },
+    experimental: {
+      websocket: true,
+    },
   },
   // Changed from 'parcel' to 'chokidar' to avoid oxc-parser native binding issues
   experimental: {
-    watcher: 'chokidar' 
+    watcher: 'chokidar',
   },
   runtimeConfig: {
     // Private keys that are exposed to the server
