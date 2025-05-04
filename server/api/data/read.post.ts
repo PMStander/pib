@@ -14,7 +14,8 @@ import {
   CollectionReference,
   type DocumentData,
   type Query,
-  type WhereFilterOp
+  type WhereFilterOp,
+  FieldValue
 } from 'firebase/firestore';
 import { createEmbeddings } from '../../ai/session';
 
@@ -39,10 +40,20 @@ function getFirestoreOperator(operator: string): WhereFilterOp {
 // Placeholder function for vector search
 // In a real app, this would use Firestore's vector search capabilities
 function vectorSearch(field: string, embedding: number[], _dimensions: number, _distance: number) {
-  // This would be replaced with the actual Firestore vector search implementation
-  // For now, we'll return a dummy where clause to avoid type errors
-  // In a real implementation, this would use Firebase's vector search capabilities
-  return where(field, '==', embedding[0]) as any; // Type assertion as a temporary solution
+  // This is a placeholder implementation for the client-side SDK
+  // In a production environment with the server-side Node.js SDK, you would use:
+  // import { findNearest } from '@google-cloud/firestore';
+  // return findNearest({ field, vector: embedding, limit: 20, distance: 'COSINE' });
+
+  // For now, we'll log the request and return a dummy where clause
+  console.log(`Vector search requested for field ${field} with embedding of length ${embedding.length}`);
+
+  // In a real implementation with the client SDK, we would need to:
+  // 1. Use a custom Firebase Function that implements vector search
+  // 2. Or use the REST API directly with the proper vector search parameters
+
+  // For now, we'll return a dummy where clause that will match documents with the embedding field
+  return where(field, '!=', null) as any; // Type assertion as a temporary solution
 }
 
 export default defineEventHandler(async (event) => {
@@ -104,14 +115,22 @@ export default defineEventHandler(async (event) => {
 
     // Add filters
     Object.entries(filters).forEach(([field, value]) => {
-      if (typeof value === 'object' && value !== null) {
+      // Special handling for userId in workspaceMembers collection
+      if (field === 'userId' && collectionName === 'workspaceMembers') {
+        console.log('API - read.post.ts: Special handling for userId in workspaceMembers collection');
+        // Try both camelCase and snake_case versions of the field
+        dbQuery = query(dbQuery, where('user_id', '==', value));
+        console.log('API - read.post.ts: Added filter user_id ==', value);
+      } else if (typeof value === 'object' && value !== null) {
         // Handle range queries like { $gte: '2023-01-01' }
         Object.entries(value).forEach(([operator, operandValue]) => {
           const firestoreOperator = getFirestoreOperator(operator);
           dbQuery = query(dbQuery, where(field, firestoreOperator, operandValue));
+          console.log(`API - read.post.ts: Added filter ${field} ${firestoreOperator} ${operandValue}`);
         });
       } else {
         dbQuery = query(dbQuery, where(field, '==', value));
+        console.log(`API - read.post.ts: Added filter ${field} == ${value}`);
       }
     });
 
@@ -125,18 +144,34 @@ export default defineEventHandler(async (event) => {
         distance: vec.distance || 0.5,
       };
 
-      // Generate embeddings for the search query using the existing createEmbeddings function
-      // Create a temporary object with the query text and a key for createEmbeddings to use
-      const tempData = { queryText: vec.query };
-      const embedding = await createEmbeddings(tempData, ['queryText']);
+      try {
+        // Generate embeddings for the search query using the existing createEmbeddings function
+        // Create a temporary object with the query text and a key for createEmbeddings to use
+        const tempData = { queryText: vec.query };
+        const embedding = await createEmbeddings(tempData, ['queryText']);
 
-      // Add vector search parameters
-      dbQuery = query(
-        dbQuery,
-        // Using a placeholder for Firestore vector search feature
-        // This would use the actual Firestore vector search syntax
-        vectorSearch(vectorQuery.field, embedding, vectorQuery.dimensions, vectorQuery.distance)
-      );
+        console.log(`Generated embedding for vector search: length=${embedding.length}`);
+
+        // Add vector search parameters
+        dbQuery = query(
+          dbQuery,
+          // Using a placeholder for Firestore vector search feature
+          // This would use the actual Firestore vector search syntax in a server-side implementation
+          vectorSearch(vectorQuery.field, embedding, vectorQuery.dimensions, vectorQuery.distance)
+        );
+      } catch (embeddingError) {
+        console.error('Error generating embeddings for vector search:', embeddingError);
+        // If embedding generation fails, fall back to a text-based search
+        // This is a simple fallback that looks for the query text in relevant fields
+        const searchFields = ['name', 'description', 'bio', 'content'];
+
+        // Find a field that exists in the collection and might contain the search text
+        for (const field of searchFields) {
+          // Add a simple text-based filter as a fallback
+          dbQuery = query(dbQuery, where(field, '>=', vec.query));
+          break; // Just use the first field for simplicity
+        }
+      }
     }
 
     // Add ordering
@@ -157,13 +192,20 @@ export default defineEventHandler(async (event) => {
     }
 
     // Execute the query
+    console.log(`API - read.post.ts: Executing query on collection '${collectionName}'`);
     const querySnapshot = await getDocs(dbQuery);
+    console.log(`API - read.post.ts: Query returned ${querySnapshot.docs.length} documents`);
 
-    const results = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const results = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      console.log(`API - read.post.ts: Document ${doc.id} data:`, data);
+      return {
+        id: doc.id,
+        ...data,
+      };
+    });
 
+    console.log(`API - read.post.ts: Returning ${results.length} results`);
     return { statusCode: 200, data: results}
   } catch (error: any) {
     throw createError({

@@ -343,7 +343,8 @@ const props = defineProps({
   },
   workspaces: {
     type: Array as () => Workspace[],
-    default: () => []
+    default: () => [],
+    required: true
   },
   activities: {
     type: Array as () => Activity[],

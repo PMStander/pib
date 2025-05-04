@@ -9,10 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "clean": "rm -rf .nuxt .output node_modules",
-    "dataconnectCheck": "firebase init dataconnect:sdk",
     "emulators": "firebase emulators:start --project partners-in-biz-85059",
-    "emulators:dataconnect": "firebase emulators:start --only dataconnect --project partners-in-biz-85059",
-    "emulators:dataconnect:simple": "./scripts/start-dataconnect-simple.sh",
     "dev:emulators": "concurrently \"pnpm emulators\" \"pnpm dev\""
   },
   "dependencies": {
@@ -23,7 +20,6 @@
     "@aws-sdk/credential-provider-node": "^3.799.0",
     "@aws-sdk/types": "^3.775.0",
     "@esbuild/darwin-arm64": "^0.25.3",
-    "@firebasegen/pib-connector": "file:dataconnect-generated/js/pib-connector",
     "@google-cloud/text-to-speech": "^6.0.1",
     "@google-cloud/vertexai": "^1.10.0",
     "@google/genai": "^0.12.0",

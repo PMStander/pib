@@ -7,6 +7,12 @@ import type {
   Workspace
 } from '~/types/dataconnect';
 
+// Define API response types
+interface ApiResponse<T> {
+  statusCode: number;
+  data?: T;
+}
+
 export const useFirestore = () => {
   // Get Firebase instance
   const { auth } = useFirebase();
@@ -35,7 +41,7 @@ export const useFirestore = () => {
       error.value = null;
 
       // Get user document from server API
-      const response = await $fetch('/api/data/read', {
+      const response = await $fetch<ApiResponse<any>>('/api/data/read', {
         method: 'POST',
         body: {
           collection: 'users',
@@ -62,51 +68,23 @@ export const useFirestore = () => {
         appState.setCurrentUser(user);
         return user;
       } else {
-        // User doesn't exist, create a new record
-        const userData: User = {
+        // User doesn't exist in the database
+        console.log('User not found in database during fetchCurrentUser');
+
+        // Create a temporary user object from Firebase Auth data
+        // but don't save it to the database (that's handled by ensureUserExists)
+        const tempUserData: User = {
           id: auth.currentUser.uid,
           email: auth.currentUser.email || '',
-          displayName: auth.currentUser.displayName || null,
+          displayName: auth.currentUser.displayName || 'User',
           photoUrl: auth.currentUser.photoURL || null,
           createdAt: new Date(),
           updatedAt: new Date()
         };
 
-        // Create the user document via server API
-        const createResponse = await $fetch('/api/data/write', {
-          method: 'POST',
-          body: {
-            collection: 'users',
-            data: {
-              ...userData,
-              id: auth.currentUser.uid,
-              created_at: new Date(),
-              updated_at: new Date()
-            }
-          }
-        });
-
-        if (createResponse?.data) {
-          const userData = createResponse.data as any;
-
-          const createdUser: User = {
-            id: userData.id,
-            email: userData.email,
-            displayName: userData.display_name || userData.displayName,
-            photoUrl: userData.photo_url || userData.photoUrl,
-            createdAt: userData.created_at ? new Date(userData.created_at) :
-                      userData.createdAt ? new Date(userData.createdAt) : new Date(),
-            updatedAt: userData.updated_at ? new Date(userData.updated_at) :
-                      userData.updatedAt ? new Date(userData.updatedAt) : new Date()
-          };
-
-          appState.setCurrentUser(createdUser);
-          return createdUser;
-        }
-
-        // Fallback to local data if server API fails
-        appState.setCurrentUser(userData);
-        return userData;
+        // Set the temporary user in app state
+        appState.setCurrentUser(tempUserData);
+        return tempUserData;
       }
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch user data';
@@ -128,7 +106,7 @@ export const useFirestore = () => {
       error.value = null;
 
       // Query profiles for the current user via server API
-      const response = await $fetch('/api/data/read', {
+      const response = await $fetch<ApiResponse<any[]>>('/api/data/read', {
         method: 'POST',
         body: {
           collection: 'profiles',
@@ -175,7 +153,7 @@ export const useFirestore = () => {
         };
 
         // Create the profile document via server API
-        const createResponse = await $fetch('/api/data/write', {
+        const createResponse = await $fetch<ApiResponse<any>>('/api/data/write', {
           method: 'POST',
           body: {
             collection: 'profiles',
@@ -229,6 +207,7 @@ export const useFirestore = () => {
   // Get user workspaces
   const fetchUserWorkspaces = async () => {
     if (!auth.currentUser) {
+      console.log('useFirestore - fetchUserWorkspaces: No authenticated user');
       return [];
     }
 
@@ -236,8 +215,11 @@ export const useFirestore = () => {
       isLoading.value = true;
       error.value = null;
 
+      console.log('useFirestore - fetchUserWorkspaces: Fetching workspaces for user:', auth.currentUser.uid);
+
       // First, get workspace members for the current user via server API
-      const membersResponse = await $fetch('/api/data/read', {
+      console.log('useFirestore - fetchUserWorkspaces: Fetching workspace memberships');
+      const membersResponse = await $fetch<ApiResponse<any[]>>('/api/data/read', {
         method: 'POST',
         body: {
           collection: 'workspaceMembers',
@@ -247,16 +229,20 @@ export const useFirestore = () => {
         }
       });
 
+      console.log('useFirestore - fetchUserWorkspaces: Membership response:', membersResponse);
+
       if (membersResponse?.data && Array.isArray(membersResponse.data) && membersResponse.data.length > 0) {
         // Get all workspace IDs the user is a member of
         const workspaceIds = membersResponse.data.map((member: any) => member.workspace_id || member.workspaceId);
+        console.log('useFirestore - fetchUserWorkspaces: Found workspace IDs:', workspaceIds);
 
         // Fetch all these workspaces
         const workspaces: Workspace[] = [];
 
         // Get workspaces by IDs
         for (const workspaceId of workspaceIds) {
-          const workspaceResponse = await $fetch('/api/data/read', {
+          console.log('useFirestore - fetchUserWorkspaces: Fetching workspace details for ID:', workspaceId);
+          const workspaceResponse = await $fetch<ApiResponse<any>>('/api/data/read', {
             method: 'POST',
             body: {
               collection: 'workspaces',
@@ -264,9 +250,11 @@ export const useFirestore = () => {
             }
           });
 
+          console.log('useFirestore - fetchUserWorkspaces: Workspace response for ID', workspaceId, ':', workspaceResponse);
+
           if (workspaceResponse?.data) {
             const data = workspaceResponse.data as any;
-            workspaces.push({
+            const workspace = {
               id: data.id,
               name: data.name,
               description: data.description || null,
@@ -276,16 +264,23 @@ export const useFirestore = () => {
                         data.createdAt ? new Date(data.createdAt) : new Date(),
               updatedAt: data.updated_at ? new Date(data.updated_at) :
                         data.updatedAt ? new Date(data.updatedAt) : new Date()
-            });
+            };
+            console.log('useFirestore - fetchUserWorkspaces: Processed workspace:', workspace);
+            workspaces.push(workspace);
+          } else {
+            console.log('useFirestore - fetchUserWorkspaces: No data found for workspace ID:', workspaceId);
           }
         }
 
-        console.log('Processed workspaces:', workspaces);
+        console.log('useFirestore - fetchUserWorkspaces: All processed workspaces:', workspaces);
+        console.log('useFirestore - fetchUserWorkspaces: Setting workspaces in app state');
         appState.setUserWorkspaces(workspaces);
         return workspaces;
       } else {
         // No workspaces found
+        console.log('useFirestore - fetchUserWorkspaces: No workspace memberships found for user');
         const workspaces: Workspace[] = [];
+        console.log('useFirestore - fetchUserWorkspaces: Setting empty workspaces array in app state');
         appState.setUserWorkspaces(workspaces);
         return workspaces;
       }
@@ -301,6 +296,7 @@ export const useFirestore = () => {
   // Create a new workspace
   const createWorkspace = async (data: { name: string; description?: string; logo_url?: string }) => {
     if (!auth.currentUser) {
+      console.error('Cannot create workspace: No authenticated user');
       error.value = 'You must be logged in to create a workspace';
       return null;
     }
@@ -309,8 +305,12 @@ export const useFirestore = () => {
       isLoading.value = true;
       error.value = null;
 
-      // Create workspace data
+      console.log('useFirestore - Creating workspace with data:', data);
+
+      // Create workspace data with a UUID
       const workspaceId = crypto.randomUUID();
+      console.log('useFirestore - Generated workspace ID:', workspaceId);
+
       const workspace: Workspace = {
         id: workspaceId,
         name: data.name,
@@ -321,8 +321,11 @@ export const useFirestore = () => {
         updatedAt: new Date()
       };
 
+      console.log('useFirestore - Prepared workspace object:', workspace);
+
       // Create the workspace document via server API
-      const workspaceResponse = await $fetch('/api/data/write', {
+      console.log('useFirestore - Sending workspace creation request to server API');
+      const workspaceResponse = await $fetch<ApiResponse<any>>('/api/data/write', {
         method: 'POST',
         body: {
           collection: 'workspaces',
@@ -339,13 +342,15 @@ export const useFirestore = () => {
         }
       });
 
-      console.log('Workspace created successfully:', workspaceResponse?.data);
+      console.log('useFirestore - Workspace created successfully:', workspaceResponse?.data);
 
       // Create workspace member relationship
       const membershipId = crypto.randomUUID();
+      console.log('useFirestore - Generated membership ID:', membershipId);
 
       // Create the workspace member document via server API
-      const membershipResponse = await $fetch('/api/data/write', {
+      console.log('useFirestore - Creating workspace membership for user:', auth.currentUser.uid);
+      const membershipResponse = await $fetch<ApiResponse<any>>('/api/data/write', {
         method: 'POST',
         body: {
           collection: 'workspaceMembers',
@@ -360,10 +365,13 @@ export const useFirestore = () => {
         }
       });
 
-      console.log('User linked to workspace successfully:', membershipResponse?.data);
+      console.log('useFirestore - User linked to workspace successfully:', membershipResponse?.data);
 
       // Refresh workspaces after creation
-      await fetchUserWorkspaces();
+      console.log('useFirestore - Refreshing workspaces list after creation');
+      const updatedWorkspaces = await fetchUserWorkspaces();
+      console.log('useFirestore - Updated workspaces after creation:', updatedWorkspaces);
+
       return workspace;
     } catch (err: any) {
       error.value = err.message || 'Failed to create workspace';
@@ -408,7 +416,7 @@ export const useFirestore = () => {
       };
 
       // Create the profile document via server API
-      const profileResponse = await $fetch('/api/data/write', {
+      const profileResponse = await $fetch<ApiResponse<any>>('/api/data/write', {
         method: 'POST',
         body: {
           collection: 'profiles',
@@ -433,7 +441,7 @@ export const useFirestore = () => {
       // If this is the default profile, update other profiles to not be default
       if (profile.isDefault) {
         // Get all profiles for the current user
-        const profilesResponse = await $fetch('/api/data/read', {
+        const profilesResponse = await $fetch<ApiResponse<any[]>>('/api/data/read', {
           method: 'POST',
           body: {
             collection: 'profiles',
@@ -448,7 +456,7 @@ export const useFirestore = () => {
           // Update each profile that is not the newly created one
           for (const otherProfile of profilesResponse.data) {
             if (otherProfile.id !== profileId) {
-              await $fetch('/api/data/update', {
+              await $fetch<ApiResponse<any>>('/api/data/update', {
                 method: 'POST',
                 body: {
                   collection: 'profiles',
@@ -496,7 +504,7 @@ export const useFirestore = () => {
       const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
 
       // Create the invitation via server API
-      const invitationResponse = await $fetch('/api/data/write', {
+      const invitationResponse = await $fetch<ApiResponse<any>>('/api/data/write', {
         method: 'POST',
         body: {
           collection: 'workspaceInvitations',
@@ -542,7 +550,7 @@ export const useFirestore = () => {
 
     try {
       // Check if the user already exists via server API
-      const userResponse = await $fetch('/api/data/read', {
+      const userResponse = await $fetch<ApiResponse<any>>('/api/data/read', {
         method: 'POST',
         body: {
           collection: 'users',
@@ -562,7 +570,7 @@ export const useFirestore = () => {
       const displayName = auth.currentUser.displayName || 'User';
 
       // Create the user via server API
-      const createResponse = await $fetch('/api/data/write', {
+      const createResponse = await $fetch<ApiResponse<any>>('/api/data/write', {
         method: 'POST',
         body: {
           collection: 'users',
@@ -595,14 +603,31 @@ export const useFirestore = () => {
 
     console.log('Initializing user data for:', auth.currentUser.email);
 
-    // Ensure the user record exists in Firestore
-    const userExists = await ensureUserExists();
-    if (!userExists) {
-      console.error('Could not ensure user exists in Firestore, aborting initialization');
-      return;
+    // First, check if the user already exists by trying to fetch it
+    console.log('Checking if user already exists in database...');
+    try {
+      const userResponse = await $fetch<ApiResponse<any>>('/api/data/read', {
+        method: 'POST',
+        body: {
+          collection: 'users',
+          id: auth.currentUser.uid
+        }
+      });
+
+      // If user exists, we can skip the user creation step
+      if (userResponse?.data) {
+        console.log('User record already exists in database, skipping creation');
+      } else {
+        // User doesn't exist, create it
+        console.log('User record not found, creating new user record');
+        await ensureUserExists();
+      }
+    } catch (err) {
+      console.error('Error checking if user exists:', err);
+      // Continue with initialization even if this check fails
     }
 
-    console.log('User record confirmed in Firestore, proceeding with initialization');
+    console.log('Proceeding with user data initialization');
 
     // Fetch user data from Firestore
     const user = await fetchCurrentUser();

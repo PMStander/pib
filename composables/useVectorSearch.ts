@@ -1,5 +1,7 @@
 import { ref, computed } from 'vue';
 import { useFirebase } from './useFirebase';
+import { useFirestore } from './useFirestore';
+import { useCloudFunctions } from './useCloudFunctions';
 
 // Import types
 import type {
@@ -7,22 +9,6 @@ import type {
   BusinessProfile,
   PartnerPreferences
 } from '~/types/dataconnect';
-
-// Import DataConnect connector functions for vector search
-import {
-  searchProfilesByBio as searchProfilesByBioConnector,
-  searchBusinessProfilesByDescription as searchBusinessProfilesByDescriptionConnector,
-  searchPartnerPreferences as searchPartnerPreferencesConnector,
-  matchProfileToBusinesses as matchProfileToBusinessesConnector,
-  matchBusinessToProfiles as matchBusinessToProfilesConnector
-} from '@firebasegen/pib-connector';
-
-// Import types for the results
-import type {
-  SearchProfilesByBioData,
-  SearchBusinessProfilesByDescriptionData,
-  SearchPartnerPreferencesData
-} from '@firebasegen/pib-connector';
 
 // Define result types with distance metadata
 interface SearchResult<T> {
@@ -161,6 +147,8 @@ const calculateTextSimilarity = (text1: string, text2: string): number => {
 
 export const useVectorSearch = () => {
   const { auth } = useFirebase();
+  const firestoreService = useFirestore();
+  const cloudFunctions = useCloudFunctions();
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const useMockData = ref(true); // Set to true to use mock data instead of real API calls
@@ -195,30 +183,40 @@ export const useVectorSearch = () => {
           .slice(0, limit);
       }
 
-      // Use real API if mock data is disabled
-      const result = await searchProfilesByBioConnector({
-        searchText,
-        limit
-      });
+      // Try to use Cloud Functions for vector search first
+      try {
+        // Use the Cloud Function for vector search
+        return await cloudFunctions.searchProfilesByText(searchText, limit);
+      } catch (cloudFunctionError) {
+        console.warn('Cloud Function search failed, falling back to Firestore:', cloudFunctionError);
 
-      const profilesData = result.data?.profiles_bioEmbedding_similarity || [];
+        // Fall back to Firestore vector search
+        const results = await firestoreService.vectorSearch('profiles', searchText, limit);
 
-      if (Array.isArray(profilesData)) {
-        return profilesData.map(profile => ({
-          item: {
-            id: profile.id,
-            userId: profile.userId,
-            name: profile.name,
-            bio: profile.bio || '',
-            avatarUrl: profile.avatarUrl || '',
-            skills: profile.skills || [],
-            interests: profile.interests || [],
-            isDefault: false, // Default value since it's not returned in the query
-            createdAt: new Date(),
-            updatedAt: new Date()
-          } as Profile,
-          distance: 0 // Since _metadata is not available
-        }));
+        if (Array.isArray(results)) {
+          return results.map(profile => {
+            // Type assertion to avoid TypeScript errors
+            const profileData = profile as any;
+
+            return {
+              item: {
+                id: profileData.id,
+                userId: profileData.user_id || profileData.userId,
+                name: profileData.name,
+                bio: profileData.bio || '',
+                avatarUrl: profileData.avatar_url || profileData.avatarUrl || '',
+                skills: profileData.skills || [],
+                interests: profileData.interests || [],
+                isDefault: profileData.is_default || profileData.isDefault || false,
+                createdAt: profileData.created_at ? new Date(profileData.created_at) :
+                          profileData.createdAt ? new Date(profileData.createdAt) : new Date(),
+                updatedAt: profileData.updated_at ? new Date(profileData.updated_at) :
+                          profileData.updatedAt ? new Date(profileData.updatedAt) : new Date()
+              } as Profile,
+              distance: profileData._distance || 0
+            };
+          });
+        }
       }
 
       return [];
@@ -266,30 +264,40 @@ export const useVectorSearch = () => {
           .slice(0, limit);
       }
 
-      // Use real API if mock data is disabled
-      const result = await searchBusinessProfilesByDescriptionConnector({
-        searchText,
-        limit
-      });
+      // Try to use Cloud Functions for vector search first
+      try {
+        // Use the Cloud Function for vector search
+        return await cloudFunctions.searchBusinessProfilesByText(searchText, limit);
+      } catch (cloudFunctionError) {
+        console.warn('Cloud Function search failed, falling back to Firestore:', cloudFunctionError);
 
-      const businessesData = result.data?.businessProfiles_descriptionEmbedding_similarity || [];
+        // Fall back to Firestore vector search
+        const results = await firestoreService.vectorSearch('businessProfiles', searchText, limit);
 
-      if (Array.isArray(businessesData)) {
-        return businessesData.map(business => ({
-          item: {
-            id: business.id,
-            workspaceId: business.workspaceId,
-            name: business.name,
-            industry: business.industry || '',
-            description: business.description || '',
-            location: business.location || '',
-            website: business.website || '',
-            employeeCount: business.employeeCount || 0,
-            createdAt: new Date(),
-            updatedAt: new Date()
-          } as BusinessProfile,
-          distance: 0 // Since _metadata is not available
-        }));
+        if (Array.isArray(results)) {
+          return results.map(business => {
+            // Type assertion to avoid TypeScript errors
+            const businessData = business as any;
+
+            return {
+              item: {
+                id: businessData.id,
+                workspaceId: businessData.workspace_id || businessData.workspaceId,
+                name: businessData.name,
+                industry: businessData.industry || '',
+                description: businessData.description || '',
+                location: businessData.location || '',
+                website: businessData.website || '',
+                employeeCount: businessData.employee_count || businessData.employeeCount || 0,
+                createdAt: businessData.created_at ? new Date(businessData.created_at) :
+                          businessData.createdAt ? new Date(businessData.createdAt) : new Date(),
+                updatedAt: businessData.updated_at ? new Date(businessData.updated_at) :
+                          businessData.updatedAt ? new Date(businessData.updatedAt) : new Date()
+              } as BusinessProfile,
+              distance: businessData._distance || 0
+            };
+          });
+        }
       }
 
       return [];
@@ -337,29 +345,39 @@ export const useVectorSearch = () => {
           .slice(0, limit);
       }
 
-      // Use real API if mock data is disabled
-      const result = await searchPartnerPreferencesConnector({
-        searchText,
-        limit
-      });
+      // Try to use Cloud Functions for vector search first
+      try {
+        // Use the Cloud Function for vector search
+        return await cloudFunctions.searchPartnerPreferencesByText(searchText, limit);
+      } catch (cloudFunctionError) {
+        console.warn('Cloud Function search failed, falling back to Firestore:', cloudFunctionError);
 
-      const prefsData = result.data?.partnerPreferencess_combinedEmbedding_similarity || [];
+        // Fall back to Firestore vector search
+        const results = await firestoreService.vectorSearch('partnerPreferences', searchText, limit);
 
-      if (Array.isArray(prefsData)) {
-        return prefsData.map(prefs => ({
-          item: {
-            id: prefs.id,
-            workspaceId: prefs.workspaceId,
-            industries: prefs.industries || [],
-            locations: prefs.locations || [],
-            minEmployeeCount: prefs.minEmployeeCount || 0,
-            maxEmployeeCount: prefs.maxEmployeeCount || 0,
-            skillsNeeded: prefs.skillsNeeded || [],
-            createdAt: new Date(),
-            updatedAt: new Date()
-          } as PartnerPreferences,
-          distance: 0 // Since _metadata is not available
-        }));
+        if (Array.isArray(results)) {
+          return results.map(prefs => {
+            // Type assertion to avoid TypeScript errors
+            const prefsData = prefs as any;
+
+            return {
+              item: {
+                id: prefsData.id,
+                workspaceId: prefsData.workspace_id || prefsData.workspaceId,
+                industries: prefsData.industries || [],
+                locations: prefsData.locations || [],
+                minEmployeeCount: prefsData.min_employee_count || prefsData.minEmployeeCount || 0,
+                maxEmployeeCount: prefsData.max_employee_count || prefsData.maxEmployeeCount || 0,
+                skillsNeeded: prefsData.skills_needed || prefsData.skillsNeeded || [],
+                createdAt: prefsData.created_at ? new Date(prefsData.created_at) :
+                          prefsData.createdAt ? new Date(prefsData.createdAt) : new Date(),
+                updatedAt: prefsData.updated_at ? new Date(prefsData.updated_at) :
+                          prefsData.updatedAt ? new Date(prefsData.updatedAt) : new Date()
+              } as PartnerPreferences,
+              distance: prefsData._distance || 0
+            };
+          });
+        }
       }
 
       return [];

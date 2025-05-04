@@ -53,11 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
 import { useDataConnect } from '~/composables/useDataConnect';
 import { useAppState } from '~/composables/useAppState';
+import { useSessionServer } from '~/composables/useSessionServer';
 import DashboardPage from '~/components/pages/DashboardPage.vue';
 
 const router = useRouter();
@@ -95,9 +96,35 @@ const userActivities = ref([
 const fetchUserData = async () => {
   if (isAuthenticated.value) {
     try {
-      // Fetch user workspaces - this will update dataConnect.currentUserWorkspaces
-      await dataConnect.fetchUserWorkspaces();
-      console.log('dashboard.vue - Fetched workspaces, computed userWorkspaces:', userWorkspaces.value);
+      console.log('dashboard.vue - Fetching user data...');
+
+      // First, make sure we have the current user data
+      const userData = await dataConnect.fetchCurrentUser();
+      console.log('dashboard.vue - Fetched user data:', userData);
+
+      // Then fetch user profiles
+      const profiles = await dataConnect.fetchUserProfiles();
+      console.log('dashboard.vue - Fetched profiles:', profiles);
+
+      // Finally fetch user workspaces
+      const workspaces = await dataConnect.fetchUserWorkspaces();
+      console.log('dashboard.vue - Fetched workspaces:', workspaces);
+      console.log('dashboard.vue - Computed userWorkspaces:', userWorkspaces.value);
+
+      // If no workspaces exist, create a default one
+      if (!workspaces || workspaces.length === 0) {
+        console.log('dashboard.vue - No workspaces found, creating default workspace');
+        const userName = userData?.displayName || 'My';
+        const newWorkspace = await dataConnect.createWorkspace({
+          name: `${userName}'s Workspace`,
+          description: 'Default workspace'
+        });
+        console.log('dashboard.vue - Created default workspace:', newWorkspace);
+
+        // Refresh workspaces list
+        await dataConnect.fetchUserWorkspaces();
+        console.log('dashboard.vue - Updated workspaces after creation:', userWorkspaces.value);
+      }
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -107,7 +134,19 @@ const fetchUserData = async () => {
 // Handle sign out
 const handleSignOut = async () => {
   try {
+    console.log('dashboard.vue - Signing out...');
+
+    // Clear server-side session
+    console.log('dashboard.vue - Clearing server-side session...');
+    const sessionServer = useSessionServer();
+    await sessionServer.clearSessionServer();
+
+    // Sign out from Firebase
+    console.log('dashboard.vue - Signing out from Firebase...');
     await signOut();
+
+    // Redirect to login page
+    console.log('dashboard.vue - Redirecting to login page...');
     router.push('/login');
   } catch (error) {
     console.error('Sign out failed:', error);
@@ -122,10 +161,29 @@ const handleEditProfile = () => {
 };
 
 // Handle create workspace
-const handleCreateWorkspace = () => {
-  // This would open a modal or navigate to a workspace creation page
-  console.log('Create workspace clicked');
-  // router.push('/workspaces/create');
+const handleCreateWorkspace = async () => {
+  console.log('dashboard.vue - Create workspace clicked');
+
+  try {
+    // In a real implementation, this would open a modal to get workspace details
+    // For now, we'll create a workspace with a default name
+    const userName = user.value?.displayName || 'New';
+    const workspaceName = `${userName}'s Workspace ${userWorkspaces.value.length + 1}`;
+
+    console.log('dashboard.vue - Creating workspace:', workspaceName);
+    const newWorkspace = await dataConnect.createWorkspace({
+      name: workspaceName,
+      description: 'Created from dashboard'
+    });
+
+    console.log('dashboard.vue - Workspace created:', newWorkspace);
+
+    // Refresh workspaces list
+    await dataConnect.fetchUserWorkspaces();
+    console.log('dashboard.vue - Updated workspaces after creation:', userWorkspaces.value);
+  } catch (error) {
+    console.error('dashboard.vue - Error creating workspace:', error);
+  }
 };
 
 // Handle view all activity
@@ -137,8 +195,28 @@ const handleViewAllActivity = () => {
 
 // Fetch user data on mount
 onMounted(async () => {
+  console.log('dashboard.vue - Component mounted');
+  console.log('dashboard.vue - Auth state:', { isLoading: isLoading.value, isAuthenticated: isAuthenticated.value });
+
+  // If already authenticated, fetch data immediately
   if (!isLoading.value && isAuthenticated.value) {
+    console.log('dashboard.vue - User already authenticated, fetching data');
     await fetchUserData();
+  } else if (isLoading.value) {
+    // If still loading auth state, wait for it to complete
+    console.log('dashboard.vue - Auth state still loading, waiting...');
+
+    // Watch for changes to isLoading
+    const unwatch = watch(isLoading, async (newIsLoading) => {
+      if (!newIsLoading && isAuthenticated.value) {
+        console.log('dashboard.vue - Auth state loaded, user authenticated, fetching data');
+        await fetchUserData();
+        unwatch(); // Stop watching once we've fetched data
+      } else if (!newIsLoading && !isAuthenticated.value) {
+        console.log('dashboard.vue - Auth state loaded, user not authenticated');
+        unwatch(); // Stop watching if not authenticated
+      }
+    });
   }
 });
 </script>

@@ -46,6 +46,7 @@ import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
 import { useDataConnect } from '~/composables/useDataConnect';
 import { useAppState } from '~/composables/useAppState';
+import { useSessionServer } from '~/composables/useSessionServer';
 import LoginForm from '~/components/forms/LoginForm.vue';
 import ForgotPasswordForm from '~/components/forms/ForgotPasswordForm.vue';
 import NeumorphicModal from '~/components/neumorphic/Modal.vue';
@@ -90,6 +91,12 @@ const handleLogin = async (validData: { email: string; password: string; remembe
     const dataConnect = useDataConnect();
     const userData = await dataConnect.initUserData();
     console.log('login.vue - User data initialized:', userData);
+
+    // Set server-side session
+    console.log('login.vue - Setting server-side session...');
+    const sessionServer = useSessionServer();
+    const sessionSet = await sessionServer.setSessionServer();
+    console.log('login.vue - Server session set:', sessionSet);
 
     // Log the user's workspaces and profiles
     console.log('login.vue - User workspaces:', appState.userWorkspaces.value);
@@ -136,6 +143,12 @@ const debugDirectLogin = async () => {
     const dataConnect = useDataConnect();
     const userData = await dataConnect.initUserData();
     console.log('login.vue - User data initialized:', userData);
+
+    // Set server-side session
+    console.log('login.vue - Setting server-side session...');
+    const sessionServer = useSessionServer();
+    const sessionSet = await sessionServer.setSessionServer();
+    console.log('login.vue - Server session set:', sessionSet);
 
     // Log the user's workspaces and profiles
     console.log('login.vue - User workspaces:', appState.userWorkspaces.value);

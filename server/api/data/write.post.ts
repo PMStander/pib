@@ -11,7 +11,7 @@ import {
 
 export default defineEventHandler(async (event) => {
   try {
-    
+
     // Get user session
     const session: UserSession | null = await getUserSession(event)
     if (!session) {
@@ -27,10 +27,25 @@ export default defineEventHandler(async (event) => {
     const data = body.data as any
     const collection = body.collection
     const embed = body.embed // Use the same parameter name as in useCreatorData
-    console.log("write.post: ", data)
-    console.log("write.post: ", collection)
-    console.log("write.post: ", embed)
-    if (!workspaceId || !data || !collection) {
+
+    console.log("API - write.post.ts: Request data:", {
+      collection,
+      data,
+      embed,
+      workspaceId: workspaceId
+    })
+
+    // Only require workspaceId for collections that need it
+    const requiresWorkspace = ['documents', 'tasks', 'projects'];
+    const needsWorkspaceId = requiresWorkspace.includes(collection);
+
+    if ((!workspaceId && needsWorkspaceId) || !data || !collection) {
+      console.error("API - write.post.ts: Missing required parameters", {
+        hasWorkspaceId: !!workspaceId,
+        needsWorkspaceId,
+        hasData: !!data,
+        hasCollection: !!collection
+      });
       throw createError({
         statusCode: 400,
         message: 'Missing required parameters'
@@ -47,34 +62,63 @@ console.log("-----------------------")
     const { firestore } = await useFirebaseServer(session.user?.token?.idToken as string);
 
     // Create new document
-    const newWriteId = uuidv4()
-    const newWriteRef = doc(firestore, collection, newWriteId)
-    const newWriteData = {
-      workspace_id: workspaceId,
-      owner_id: session.user?.id,
-      ...data,
-      status: 'in_progress',
-      created_at: serverTimestamp(),
-      updated_at: serverTimestamp(),
-      deleted_at: null,
-      id: newWriteId
+    // Use provided ID if available, otherwise generate a new one
+    const documentId = data.id || uuidv4();
+    console.log(`API - write.post.ts: Using document ID: ${documentId}`);
+
+    const documentRef = doc(firestore, collection, documentId);
+
+    // Prepare document data
+    let documentData = { ...data };
+
+    // Only add workspace_id if needed
+    if (needsWorkspaceId) {
+      documentData.workspace_id = workspaceId;
     }
-    console.log("write.post newWriteData: ", newWriteData)
+
+    // Add standard fields if they don't exist
+    if (!documentData.owner_id) {
+      documentData.owner_id = session.user?.id;
+    }
+
+    // Only add status for certain collections
+    if (['tasks', 'projects', 'documents'].includes(collection) && !documentData.status) {
+      documentData.status = 'in_progress';
+    }
+
+    // Add timestamps if not provided
+    if (!documentData.created_at) {
+      documentData.created_at = serverTimestamp();
+    }
+
+    if (!documentData.updated_at) {
+      documentData.updated_at = serverTimestamp();
+    }
+
+    // Ensure ID is set
+    documentData.id = documentId;
+
+    console.log("API - write.post.ts: Final document data:", documentData);
+
     try {
-     let setDocResult = await setDoc(newWriteRef, newWriteData)
-     console.log("------> setDocResult: ", setDocResult)
+      console.log(`API - write.post.ts: Writing document to collection '${collection}'`);
+      await setDoc(documentRef, documentData);
+      console.log(`API - write.post.ts: Document written successfully with ID: ${documentId}`);
     } catch (error) {
-      console.error('Error writing document:', error)
+      console.error('API - write.post.ts: Error writing document:', error);
       throw createError({
         statusCode: 500,
         message: 'Failed to create document'
-      })
+      });
     }
-   
-    console.log(">>>>>>>>>>")
+
+    console.log(`API - write.post.ts: Returning success response with document ID: ${documentId}`);
     return {
       statusCode: 200,
-      data: newWriteId
+      data: {
+        id: documentId,
+        ...documentData
+      }
     }
   } catch (error: any) {
     throw createError({
@@ -83,42 +127,3 @@ console.log("-----------------------")
     })
   }
 })
-
-// Helper function to extract text from specified fields
-function getTextFromFields(data: any, fields: string[]): string {
-  if (!data) return '';
-  
-  // Collect text from all fields
-  const texts: string[] = [];
-  
-  fields.forEach(field => {
-    // Handle nested fields (e.g., metadata.tags)
-    const fieldParts = field.split('.');
-    let value = data;
-    
-    // Navigate through nested objects
-    for (const part of fieldParts) {
-      if (value && typeof value === 'object' && part in value) {
-        value = value[part];
-      } else {
-        value = undefined;
-        break;
-      }
-    }
-    
-    // Add field value to texts if it exists
-    if (value !== undefined) {
-      if (Array.isArray(value)) {
-        // Join array values with space
-        texts.push(value.join(' '));
-      } else if (typeof value === 'string') {
-        texts.push(value);
-      } else {
-        // Convert to string
-        texts.push(String(value));
-      }
-    }
-  });
-  
-  return texts.join(' ').trim();
-}

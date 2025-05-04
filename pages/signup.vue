@@ -8,7 +8,7 @@
       </div>
 
       <SignupForm
-        :auth-error="authError"
+        :auth-error="authError || undefined"
         @submit="handleSignup"
       />
     </NeumorphicCard>
@@ -20,6 +20,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFirebaseAuth } from '~/composables/useFirebaseAuth';
 import { useDataConnect } from '~/composables/useDataConnect';
+import { useSessionServer } from '~/composables/useSessionServer';
 import SignupForm from '~/components/forms/SignupForm.vue';
 
 const router = useRouter();
@@ -29,7 +30,7 @@ const authError = ref<string | null>(null);
 const { signUp, sendVerificationEmail } = useFirebaseAuth();
 
 // Handle form submission
-const handleSignup = async (validData) => {
+const handleSignup = async (validData: { email: string; password: string; name: string; terms: boolean }) => {
   console.log('signup.vue - handleSignup called with:', validData);
   try {
     authError.value = null;
@@ -50,6 +51,12 @@ const handleSignup = async (validData) => {
     try {
       await dataConnect.initUserData();
       console.log('signup.vue - User data initialized');
+
+      // Set server-side session
+      console.log('signup.vue - Setting server-side session...');
+      const sessionServer = useSessionServer();
+      const sessionSet = await sessionServer.setSessionServer();
+      console.log('signup.vue - Server session set:', sessionSet);
     } catch (dataConnectError) {
       // Just log the error but don't fail the signup process
       console.warn('signup.vue - DataConnect initialization failed, but continuing with signup:', dataConnectError);
