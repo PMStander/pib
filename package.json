@@ -58,6 +58,7 @@
     "google-auth-library": "^9.15.1",
     "googleapis": "^148.0.0",
     "langchain": "^0.3.24",
+    "marked": "^15.0.11",
     "nuxt": "^3.17.1",
     "nuxt-icons": "^3.2.1",
     "nuxt-mcp": "^0.1.2",

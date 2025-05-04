@@ -16,9 +16,11 @@ The project is in the active development phase with the following components in 
 - Dark mode support
 - Workspace management features
 - Vector search functionality with mock data
-- LangGraph-based multi-agent AI system
+- LangGraph-based multi-agent AI system with departments, teams, and specialized agents
 - WebSocket-based chat interface for real-time communication
 - Navigation component for improved user experience
+- Document creation and management capabilities
+- Chat session registration and persistence
 
 ## Completed Features
 - Project initialization with Nuxt.js
@@ -40,16 +42,20 @@ The project is in the active development phase with the following components in 
 - Navigation component for improved user experience
 - Standardized authentication handling across pages
 - Consistent state management using Nuxt's useState
+- Organizational structure with CEO, departments, teams, and specialized agents
+- Document creation and management capabilities with specialized agents
+- Chat session registration and persistence in Firestore
+- Reusable Firebase CRUD tools for AI agents
 
 ## In Progress
 - Developing more sophisticated LangGraph workflows with specialized agents
-- Creating department and team structure for AI agents
 - Implementing workspace detail page
 - Developing partner matching algorithm
 - Enhancing UI/UX with animations and transitions
 - Improving error handling and user experience
 - Adding support for attachments and multi-modal interactions in chat
-- Implementing chat history persistence
+- Implementing additional departments and teams for other business functions
+- Creating a UI for managing documents
 
 ## Upcoming Tasks
 1. **Phase 1: Foundation (Complete)**
@@ -73,8 +79,10 @@ The project is in the active development phase with the following components in 
    - ✅ Implement vector search functionality
    - ✅ Create LangGraph-based multi-agent AI system
    - ✅ Implement WebSocket-based chat interface for real-time communication
+   - ✅ Create department and team structure for AI agents
+   - ✅ Implement document creation and management capabilities
+   - ✅ Implement chat session registration and persistence
    - 🔄 Develop more sophisticated agent workflows
-   - 🔄 Create department and team structure for AI agents
    - 🔄 Develop matching algorithm
    - 🔄 Build connection request system
 
@@ -123,6 +131,6 @@ The project is in the active development phase with the following components in 
 - Budget: Internal resources
 
 ## Last Updated
-- Date: May 4, 2024
+- Date: May 15, 2024
 - By: Project Team
-- Changes: Updated project status with completed vector search functionality, AI chat interface, and bug fixes
+- Changes: Updated project status with completed organizational structure, document creation capabilities, chat session persistence, and refactored agents and tools architecture

@@ -7,10 +7,10 @@ import { CohereEmbeddings } from "@langchain/cohere";
 import type { EmbeddingConfig, EmbeddingResult, GoogleCredentials } from './types/embeddings';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import process from 'process';
 
 export class EmbeddingsHandler {
   private config: EmbeddingConfig;
-  private runtimeConfig = useRuntimeConfig();
   private isDev = process.env.NODE_ENV === 'development';
 
   constructor(config?: Partial<EmbeddingConfig>) {
@@ -18,8 +18,8 @@ export class EmbeddingsHandler {
       // Default to system config (VertexAI)
       this.config = {
         provider: this.isDev ? 'openai' : 'vertexai', // Use OpenAI in dev for better emulation
-        projectId: this.runtimeConfig.vertexProjectId as string,
-        model: this.runtimeConfig.vertexEmbeddingModel as string || 'text-embedding-005',
+        projectId: process.env.VERTEX_PROJECT_ID || '',
+        model: process.env.VERTEX_EMBEDDING_MODEL || 'text-embedding-005',
         ...config
       } as EmbeddingConfig;
 
@@ -27,10 +27,10 @@ export class EmbeddingsHandler {
       if (this.config.provider === 'vertexai' && !this.isDev) {
         try {
           const credentialsPath = join(process.cwd(), 'google-credentials.json');
-          
+
           const credentials = JSON.parse(readFileSync(credentialsPath, 'utf-8')) as GoogleCredentials;
-          
-     
+
+
 
           // Use project ID from credentials if not provided in config
           if (!this.config.projectId && credentials.project_id) {
@@ -69,10 +69,10 @@ export class EmbeddingsHandler {
         return this.config.apiKey;
       }
 
-      // Then check runtime config
+      // Then check environment variables
       const configKey = `${provider.toUpperCase()}_API_KEY`;
-      const key = this.runtimeConfig[configKey];
-      
+      const key = process.env[configKey];
+
       if (key && typeof key === 'string') {
         return key;
       }
@@ -95,14 +95,14 @@ export class EmbeddingsHandler {
           if (!this.config.projectId) {
             throw new Error('Project ID is required for VertexAI embeddings');
           }
-          
+
           if (!this.config.googleCredentials) {
             throw new Error('Google credentials are required for VertexAI embeddings');
           }
 
-          const location = this.runtimeConfig.vertexLocation || 'us-central1';
+          const location = process.env.VERTEX_LOCATION || 'us-central1';
 
-      
+
 
           return new VertexAIEmbeddings({
             model: this.config.model || 'text-embedding-005',
@@ -111,7 +111,7 @@ export class EmbeddingsHandler {
 
         case 'openai':
           const apiKey = this.getApiKey('openai');
-          
+
           return new OpenAIEmbeddings({
             openAIApiKey: apiKey,
             modelName: this.config.model || 'text-embedding-3-large'
@@ -127,7 +127,7 @@ export class EmbeddingsHandler {
 
         case 'bedrock':
           return new BedrockEmbeddings({
-            region: this.config.awsRegion || this.runtimeConfig.bedrockAwsRegion,
+            region: this.config.awsRegion || process.env.BEDROCK_AWS_REGION || 'us-east-1',
             model: this.config.model || 'amazon.titan-embed-text-v1'
           });
 
@@ -158,14 +158,14 @@ export class EmbeddingsHandler {
 
   async getEmbedding(text: string): Promise<EmbeddingResult> {
     try {
-     
+
 
       const model = await this.getEmbeddingModel();
-      
-      const embedding = await model.embedQuery(text);
-      
 
-     
+      const embedding = await model.embedQuery(text);
+
+
+
 
       return { embedding };
     } catch (error) {
@@ -186,11 +186,11 @@ export class EmbeddingsHandler {
   async getEmbeddings(texts: string[]): Promise<EmbeddingResult[]> {
     try {
       const model = await this.getEmbeddingModel();
-      
+
       let embeddings;
       try {
         embeddings = await model.embedDocuments(texts);
-       
+
       } catch (embedError) {
         console.error('[Embeddings] Error in embedDocuments:', {
           error: embedError instanceof Error ? embedError.message : embedError,

@@ -15,10 +15,10 @@ import { HuggingFaceInference } from "@langchain/community/llms/hf";
 import { MistralAI } from "@langchain/mistralai";
 import { SageMakerEndpoint } from "@langchain/community/llms/sagemaker_endpoint";
 import type { LLMConfig } from '../types/llm';
+import process from 'process';
 
 export class LLMHandler {
   private config: LLMConfig;
-  private runtimeConfig = useRuntimeConfig();
 
   constructor(config?: Partial<LLMConfig>) {
     this.config = {
@@ -34,7 +34,8 @@ export class LLMHandler {
       return this.config.apiKey;
     }
 
-    const key = this.runtimeConfig[`${provider.toUpperCase()}_API_KEY`];
+    const envKey = `${provider.toUpperCase()}_API_KEY`;
+    const key = process.env[envKey];
     if (key) {
       return key;
     }
@@ -101,8 +102,8 @@ export class LLMHandler {
           model: this.config.model || 'anthropic.claude-v2',
           region: this.config.awsRegion,
           credentials: {
-            accessKeyId: this.config.awsAccessKeyId || this.runtimeConfig.AWS_ACCESS_KEY_ID,
-            secretAccessKey: this.config.awsSecretAccessKey || this.runtimeConfig.AWS_SECRET_ACCESS_KEY
+            accessKeyId: this.config.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: this.config.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY
           },
           endpointUrl: this.config.endpointUrl
         });
@@ -165,10 +166,10 @@ export class LLMHandler {
           endpointName: this.config.model || 'gpt-4',
           contentHandler: this.config.contentHandler,
           clientOptions: {
-            region: this.config.awsRegion || this.runtimeConfig.AWS_REGION,
+            region: this.config.awsRegion || process.env.AWS_REGION,
             credentials: {
-              accessKeyId: this.config.awsAccessKeyId || this.runtimeConfig.AWS_ACCESS_KEY_ID,
-              secretAccessKey: this.config.awsSecretAccessKey || this.runtimeConfig.AWS_SECRET_ACCESS_KEY
+              accessKeyId: this.config.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID,
+              secretAccessKey: this.config.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY
             }
           }
         });
@@ -193,7 +194,7 @@ export class LLMHandler {
           apiKey: this.getApiKey('openai'),
           modelName: this.config.model || 'gpt-4-turbo-preview'
         });
-      
+
       case 'vertexai':
         // For VertexAI, we need to use OpenAI as a fallback for the supervisor
         console.warn('VertexAI is not compatible with the supervisor. Using OpenAI as a fallback.');
@@ -202,7 +203,7 @@ export class LLMHandler {
           apiKey: this.getApiKey('openai'),
           modelName: 'gpt-4-turbo-preview'
         });
-      
+
       default:
         // Default to OpenAI for all other providers
         console.warn(`${this.config.provider} is not compatible with the supervisor. Using OpenAI as a fallback.`);
@@ -233,4 +234,4 @@ export class LLMHandler {
       throw error;
     }
   }
-} 
+}

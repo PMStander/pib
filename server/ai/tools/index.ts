@@ -2,16 +2,17 @@ import { Calculator } from "@langchain/community/tools/calculator";
 import { WebBrowser } from "langchain/tools/webbrowser";
 import { SerpAPI } from "@langchain/community/tools/serpapi";
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
-import { LLMHandler } from '../utils/llm'; 
+import { LLMHandler } from '../utils/llm';
+import process from 'process';
 
 // Import the correct ToolConfig from the shared types
 import type { ToolConfig, ToolResult } from '../types/tools'; // Corrected import path
 
 import { EmbeddingsHandler } from '../utils/embeddings';
 import { FirecrawlTool } from './firecrawl';
-import { 
-  PerplexitySearchTool, 
-  PerplexityChatTool, 
+import {
+  PerplexitySearchTool,
+  PerplexityChatTool,
   PerplexityDocumentAnalysisTool,
   PerplexityNewsSearchTool,
   PerplexityWeatherTool
@@ -27,7 +28,7 @@ import {
   DataAnalysisTool,
   DataVisualizationTool
 } from './data-analysis';
-import { 
+import {
   FirestoreTool,
   FirestoreVectorTool,
   FirestoreTransactionTool
@@ -84,7 +85,7 @@ export class ToolsHandler {
 
   constructor(config: ToolConfig) {
     this.config = config;
-    this.runtimeConfig = typeof useRuntimeConfig === 'function' ? useRuntimeConfig() : {};
+    this.runtimeConfig = {};
   }
 
   private getApiKey(provider: string): string {
@@ -92,7 +93,8 @@ export class ToolsHandler {
       return this.config.apiKey;
     }
 
-    const key = this.runtimeConfig[`${provider.toUpperCase()}_API_KEY`];
+    const envKey = `${provider.toUpperCase()}_API_KEY`;
+    const key = process.env[envKey];
     if (key) {
       return key;
     }
@@ -111,7 +113,7 @@ export class ToolsHandler {
       case 'webbrowser':
         const embeddingsHandler = new EmbeddingsHandler();
         const llmHandler = new LLMHandler();
-        return new WebBrowser({ 
+        return new WebBrowser({
           model: await llmHandler.getLLMModel(),
           embeddings: await embeddingsHandler.getEmbeddingModel()
         });
@@ -141,36 +143,36 @@ export class ToolsHandler {
 
       case 'vertex_image':
         return new VertexImageAnalysisTool(
-          this.config.projectId || (this.runtimeConfig.vertexProjectId as string),
-          this.config.location || (this.runtimeConfig.vertexLocation as string),
+          this.config.projectId || process.env.VERTEX_PROJECT_ID || '',
+          this.config.location || process.env.VERTEX_LOCATION || '',
           this.config.model as string
         );
 
       case 'vertex_audio':
         return new VertexAudioAnalysisTool(
-          this.config.projectId || (this.runtimeConfig.vertexProjectId as string),
-          this.config.location || (this.runtimeConfig.vertexLocation as string),
+          this.config.projectId || process.env.VERTEX_PROJECT_ID || '',
+          this.config.location || process.env.VERTEX_LOCATION || '',
           this.config.model as string
         );
 
       case 'vertex_video':
         return new VertexVideoAnalysisTool(
-          this.config.projectId || (this.runtimeConfig.vertexProjectId as string),
-          this.config.location || (this.runtimeConfig.vertexLocation as string),
+          this.config.projectId || process.env.VERTEX_PROJECT_ID || '',
+          this.config.location || process.env.VERTEX_LOCATION || '',
           this.config.model as string
         );
 
       case 'vertex_document':
         return new VertexDocumentAnalysisTool(
-          this.config.projectId || (this.runtimeConfig.vertexProjectId as string),
-          this.config.location || (this.runtimeConfig.vertexLocation as string),
+          this.config.projectId || process.env.VERTEX_PROJECT_ID || '',
+          this.config.location || process.env.VERTEX_LOCATION || '',
           this.config.model as string
         );
 
       case 'vertex_multimodal_chat':
         return new VertexMultiModalChatTool(
-          this.config.projectId || (this.runtimeConfig.vertexProjectId as string),
-          this.config.location || (this.runtimeConfig.vertexLocation as string),
+          this.config.projectId || process.env.VERTEX_PROJECT_ID || '',
+          this.config.location || process.env.VERTEX_LOCATION || '',
           this.config.model as string
         );
 
@@ -308,7 +310,7 @@ export class ToolsHandler {
           this.config.options.userId,
           this.config.options.workspaceId
         );
-        
+
       // SendGrid tools
       case 'sendgrid_email':
         if (!this.config.options?.apiKey || !this.config.options?.defaultFrom) {
@@ -318,7 +320,7 @@ export class ToolsHandler {
           this.config.options.apiKey,
           this.config.options.defaultFrom
         );
-        
+
       case 'sendgrid_template_email':
         if (!this.config.options?.apiKey || !this.config.options?.defaultFrom) {
           throw new Error('SendGrid template email tool requires apiKey and defaultFrom');
@@ -327,7 +329,7 @@ export class ToolsHandler {
           this.config.options.apiKey,
           this.config.options.defaultFrom
         );
-        
+
       case 'sendgrid_contacts':
         if (!this.config.options?.apiKey) {
           throw new Error('SendGrid contacts tool requires apiKey');
@@ -335,7 +337,7 @@ export class ToolsHandler {
         return new SendGridContactsTool(
           this.config.options.apiKey
         );
-        
+
       case 'sendgrid_lists':
         if (!this.config.options?.apiKey) {
           throw new Error('SendGrid lists tool requires apiKey');
@@ -343,7 +345,7 @@ export class ToolsHandler {
         return new SendGridListsTool(
           this.config.options.apiKey
         );
-        
+
       // Twilio tools
       case 'twilio_sms':
         if (!this.config.options?.accountSid || !this.config.options?.authToken || !this.config.options?.defaultFrom) {
@@ -354,7 +356,7 @@ export class ToolsHandler {
           this.config.options.authToken,
           this.config.options.defaultFrom
         );
-        
+
       case 'twilio_whatsapp':
         if (!this.config.options?.accountSid || !this.config.options?.authToken || !this.config.options?.defaultFrom) {
           throw new Error('Twilio WhatsApp tool requires accountSid, authToken, and defaultFrom');
@@ -364,7 +366,7 @@ export class ToolsHandler {
           this.config.options.authToken,
           this.config.options.defaultFrom
         );
-        
+
       case 'twilio_voice':
         if (!this.config.options?.accountSid || !this.config.options?.authToken || !this.config.options?.defaultFrom) {
           throw new Error('Twilio Voice tool requires accountSid, authToken, and defaultFrom');
@@ -374,7 +376,7 @@ export class ToolsHandler {
           this.config.options.authToken,
           this.config.options.defaultFrom
         );
-        
+
       case 'twilio_verify':
         if (!this.config.options?.accountSid || !this.config.options?.authToken || !this.config.options?.serviceSid) {
           throw new Error('Twilio Verify tool requires accountSid, authToken, and serviceSid');
@@ -384,7 +386,7 @@ export class ToolsHandler {
           this.config.options.authToken,
           this.config.options.serviceSid
         );
-        
+
       case 'twilio_lookup':
         if (!this.config.options?.accountSid || !this.config.options?.authToken) {
           throw new Error('Twilio Lookup tool requires accountSid and authToken');
@@ -393,13 +395,13 @@ export class ToolsHandler {
           this.config.options.accountSid,
           this.config.options.authToken
         );
-        
+
       // Language tools
       case 'language_detection':
         return new LanguageDetectionTool(
           this.config.options?.apiKey
         );
-        
+
       case 'translation':
         return new TranslationTool(
           this.config.options?.apiKey
@@ -414,7 +416,7 @@ export class ToolsHandler {
     try {
       const tool = await this.getTool();
       const result = await tool.invoke(input);
-      
+
       return {
         success: true,
         data: result

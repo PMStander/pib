@@ -17,6 +17,10 @@ This document tracks the current work focus and state of the "Partners in Biz" p
 - Improving security for sensitive API keys
 - Fixing message duplication in chat interface
 - Refining LLM handler for multiple provider support
+- Deploying and testing Cloud Functions for vector search
+- Integrating document artifacts into the chat interface
+- Implementing LLM model selector in the chat interface
+- Adding chat privacy and participant management features
 
 ## Project State
 - Basic Nuxt.js application structure is in place
@@ -117,8 +121,189 @@ This document tracks the current work focus and state of the "Partners in Biz" p
    - Optimize performance and bundle size
 
 ## Last Updated
-- Date: May 14, 2024
-- Session: WebSocket Implementation for Real-time Chat
+- Date: May 15, 2024
+- Session: Refactor Agents and Tools for Better Reusability
+
+## Session Summary (2024-05-15 - Refactor Agents and Tools)
+In this session, we refactored the agents and tools architecture to improve reusability and follow best practices. We created reusable Firebase CRUD tools, moved agents to a dedicated directory, and updated the teams, departments, and CEO to use the new agents.
+
+### Key Accomplishments:
+- Created reusable Firebase CRUD tools that leverage the existing server/firebase.ts
+- Moved agents to a dedicated /server/ai/agents directory
+- Updated the document tools to use the Firebase tools
+- Modified the teams, departments, and CEO to use the new agents
+- Updated the WebSocket handler to pass the authToken
+
+### Technical Details:
+- Created a base FirebaseCrudTool class for common functionality
+- Implemented specialized CRUD tools for different operations
+- Used the existing server/firebase.ts for Firestore initialization
+- Moved agents to a dedicated directory for better organization
+- Maintained the hierarchical structure while improving reusability
+
+### Implementation Approach:
+- Created a base class for common functionality
+- Implemented specialized tools for different operations
+- Used the existing server-side Firebase implementation
+- Moved agents to a dedicated directory for better organization
+- Updated all components to use the new architecture
+
+### Next Steps:
+1. Test the refactored architecture with document creation
+2. Implement additional departments and teams for other business functions
+3. Add more specialized agents for different tasks
+4. Create additional Firebase tools for more complex operations
+5. Implement a UI for managing documents
+
+## Session Summary (2024-05-15 - Organizational Structure)
+In this session, we created a comprehensive organizational structure with departments, teams, and agents, focusing on document creation functionality. We implemented a hierarchical structure with a CEO that coordinates departments, which in turn manage teams of specialized agents.
+
+### Key Accomplishments:
+- Created document-related tools for creation, editing, polishing, suggestion, and retrieval
+- Implemented a writing team with specialized agents for document management
+- Created a content department that includes the writing team
+- Implemented a CEO that coordinates all departments
+- Updated the WebSocket handler to use the CEO instead of the test workflow
+- Added support for chat ID, user ID, workspace ID, and API key in the WebSocket handler
+
+### Technical Details:
+- Used LangGraph's supervisor framework to create the hierarchical structure
+- Created specialized tools for document management using Firestore
+- Integrated with the chat ID to link documents to chat sessions
+- Used Zod for schema validation of responses
+- Implemented proper error handling and TypeScript type safety
+
+### Implementation Approach:
+- Used a hierarchical structure with CEO, departments, teams, and agents
+- Created specialized tools for document management
+- Used Firestore for document storage
+- Integrated with the chat ID to link documents to chat sessions
+- Updated the WebSocket handler to use the CEO
+
+### Next Steps:
+1. Test the organizational structure with document creation
+2. Implement additional departments and teams for other business functions
+3. Add more specialized agents for different tasks
+4. Enhance the document tools with more features
+5. Implement a UI for managing documents
+
+## Session Summary (2024-05-15 - Chat Session Registration)
+In this session, we implemented chat session registration in the database when the first message is sent, and added functionality to send the chat ID to the server to set it in the server-side state. This ensures that chat sessions are properly tracked and can be retrieved later.
+
+### Key Accomplishments:
+- Created a new useChatSession.ts composable for managing chat sessions in Firestore
+- Updated useChatAgency.ts to create a chat session when the first message is sent
+- Added chat ID to WebSocket messages
+- Updated server-side WebSocket handler to store and use the chat ID
+- Added support for 'set_chat_id' message type
+
+### Technical Details:
+- Used Firestore for storing chat sessions and messages
+- Implemented proper error handling and TypeScript type safety
+- Used a Map to store chat IDs for each peer on the server
+- Added chat ID to the workflow configuration
+- Created a dedicated composable for chat session management
+
+### Implementation Approach:
+- Created a reusable composable for chat session management
+- Integrated with existing WebSocket communication
+- Used a clean separation of concerns between client and server
+- Implemented efficient state management on both sides
+- Added proper error handling and type safety
+
+### Next Steps:
+1. Test chat session registration and server-side state management
+2. Implement chat session retrieval for returning users
+3. Add UI for displaying and managing chat sessions
+4. Implement chat history loading from the database
+5. Add chat session deletion functionality
+
+## Session Summary (2024-05-15 - Fix Missing Dependency)
+In this session, we fixed a missing dependency issue that was preventing the document artifacts from rendering properly. We identified that the `marked` package, which is used for rendering Markdown content in the DocumentView and DocumentPreview components, was missing from the project dependencies.
+
+### Key Accomplishments:
+- Identified the error: "Failed to resolve import 'marked' from 'components/chat/DocumentView.vue'"
+- Checked package.json and confirmed the dependency was missing
+- Installed the marked package using pnpm
+
+### Technical Details:
+- Used pnpm to install the marked package: `pnpm add marked`
+- The marked package is used for rendering Markdown content in document artifacts
+- No code changes were required, only the addition of the dependency
+
+### Implementation Approach:
+- Used the correct package manager (pnpm) to maintain consistency with the project
+- Verified the installation was successful
+- Documented the fix in the task log
+
+### Next Steps:
+1. Continue with server-side document generation tool implementation
+2. Update useChatAgency.ts to handle document artifacts
+3. Test document creation, viewing, and editing functionality
+4. Implement LLM model selector integration
+5. Add chat privacy and participant management features
+
+## Session Summary (2024-05-15 - Document Artifacts Integration)
+In this session, we successfully integrated document artifacts into the chat interface. We created a new DocumentModal component and updated the ChatInterface component to handle document artifacts in messages. We also implemented command parsing for document creation and editing.
+
+### Key Accomplishments:
+- Created a new DocumentModal.vue component for displaying and editing documents
+- Updated ChatInterface.vue to handle document artifacts in messages
+- Added document-related methods to ChatInterface.vue
+- Implemented command parsing for document creation and editing
+- Added document update, polish, and suggestion functionality
+
+### Technical Details:
+- Used a modal approach for document viewing and editing
+- Implemented command-based interface for document creation and management
+- Added document polish and suggestion functionality through commands
+- Integrated with existing DocumentPreview and DocumentView components
+- Updated the welcome message to inform users about document capabilities
+
+### Implementation Approach:
+- Focused on client-side integration first
+- Used existing document artifact types and components
+- Added command parsing for document management
+- Implemented document-related methods in ChatInterface.vue
+- Prepared for server-side integration
+
+### Next Steps:
+1. Implement server-side document generation tool
+2. Update useChatAgency.ts to handle document artifacts
+3. Implement document polishing and suggestion tools
+4. Add document suggestions component
+5. Test document creation, viewing, and editing functionality
+6. Implement LLM model selector integration
+7. Add chat privacy and participant management features
+
+## Session Summary (2024-05-15 - Chat Enhancements Analysis)
+In this session, we analyzed the current state of chat enhancement implementations and created a detailed plan for completing the remaining features. We identified that some components for document artifacts, LLM model selection, and chat privacy have already been implemented but need to be integrated into the chat interface.
+
+### Key Accomplishments:
+- Analyzed four implementation plans for chat enhancements
+- Identified partially implemented features and integration gaps
+- Created a detailed document artifacts integration plan
+- Updated the Memory Bank with current implementation status
+- Prioritized the implementation sequence for remaining features
+
+### Technical Details:
+- Document artifact components (DocumentPreview.vue, DocumentView.vue) are implemented but not integrated
+- LLM model selector component is implemented but not integrated into the chat interface
+- Chat privacy and participant types are defined but components need to be created
+- All features need server-side implementation and WebSocket integration
+
+### Implementation Approach:
+- Focus on integrating already implemented components first
+- Prioritize document artifacts as they appear to be the most complete
+- Follow with model selector integration, then privacy and participants
+- Create detailed integration plans for each feature
+
+### Next Steps:
+1. Implement document artifacts integration according to the new plan
+2. Create integration plans for LLM model selector and chat privacy features
+3. Update the chat interface to accommodate all new features
+4. Implement server-side support for all features
+5. Test and refine the implementations
 
 ## Session Summary (2024-05-14)
 In this session, we successfully implemented WebSocket functionality in the Nuxt.js application by adding the necessary configuration to the nuxt.config.ts file. This enables real-time communication for the chat interface and supports the LangGraph multi-agent system.

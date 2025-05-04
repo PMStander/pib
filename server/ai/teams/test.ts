@@ -5,6 +5,7 @@ import { createReactAgent } from "@langchain/langgraph/prebuilt";
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
 import { MemorySaver } from "@langchain/langgraph";
+import process from 'process';
 
 // Zod schema for supervisor response
 export const SupervisorResponseSchema = z.object({
@@ -43,10 +44,8 @@ const webSearch = tool(
     schema: z.object({ query: z.string() }),
   }
 );
-const cnf = useRuntimeConfig();
-console.log('======> CONFIG KEY', cnf.openaiKey)
 // Initialize model and agents
-const model = new ChatOpenAI({ apiKey: cnf.openaiKey, modelName: "gpt-4o" });
+const model = new ChatOpenAI({ apiKey: process.env.OPENAI_API_KEY || '', modelName: "gpt-4o" });
 const mathAgent = createReactAgent({  name: "math_expert",
     prompt: "You are a math expert. Always use one tool at a time.", llm: model, tools: [add, multiply] });
 const researchAgent = createReactAgent({name: "research_expert",

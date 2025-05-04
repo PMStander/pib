@@ -39,7 +39,7 @@ export const useSessionServer = () => {
         isAuthenticated: true,
         id: user.value.uid
       };
-
+console.log('---------------->', sessionData);
       // Send session data to server
       const response = await $fetch('/api/auth/set', {
         method: 'POST',

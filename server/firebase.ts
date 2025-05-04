@@ -9,6 +9,8 @@ import {
     type Auth
 } from "firebase/auth"
 import { connectFirestoreEmulator, getFirestore, type Firestore, doc, setDoc } from "firebase/firestore"
+import process from 'process'
+import { getFirebaseConfig } from "./utils/firebase"
 
 let firebaseApp: FirebaseApp | null = null
 let firestoreInstance: Firestore | null = null
@@ -16,9 +18,8 @@ let authInstance: Auth | null = null
 let isEmulatorConnected = false
 
 export const useFirebaseServer = async (authIdToken: string | undefined) => {
-    const config = useRuntimeConfig()
     const isDevelopment = process.env.NODE_ENV === "development"
-    const firebaseConfig: any = config.firebaseConfig
+    const firebaseConfig: any = getFirebaseConfig()
     // console.log("firebaseConfig: ", firebaseConfig)
     console.log("authIdToken: ", authIdToken)
     console.log("isDevelopment: ", isDevelopment)
@@ -40,7 +41,7 @@ export const useFirebaseServer = async (authIdToken: string | undefined) => {
         if (!firestoreInstance) {
             firestoreInstance = getFirestore(firebaseApp)
         }
-     
+
         // Connect to emulators only once in development
         if (isDevelopment && !isEmulatorConnected) {
             console.log('******----------********')

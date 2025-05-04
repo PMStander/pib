@@ -13,15 +13,6 @@
         @forgot-password="showForgotPassword = true"
       />
 
-      <!-- Debug button for direct login -->
-      <div class="mt-4">
-        <button
-          @click="debugDirectLogin"
-          class="text-xs text-[rgb(var(--color-neumorphic-accent))] hover:underline"
-        >
-          Debug: Direct Login
-        </button>
-      </div>
     </NeumorphicCard>
 
     <!-- Forgot Password Modal -->
@@ -86,17 +77,19 @@ const handleLogin = async (validData: { email: string; password: string; remembe
     // This would require additional configuration in a real app
     console.log('login.vue - Remember me:', validData.rememberMe);
 
+       // Set server-side session
+       console.log('login.vue - Setting server-side session...');
+    const sessionServer = useSessionServer();
+    const sessionSet = await sessionServer.setSessionServer();
+    console.log('login.vue - Server session set:', sessionSet);
+
     // Initialize user data from DataConnect
     console.log('login.vue - Initializing user data from DataConnect...');
     const dataConnect = useDataConnect();
     const userData = await dataConnect.initUserData();
     console.log('login.vue - User data initialized:', userData);
 
-    // Set server-side session
-    console.log('login.vue - Setting server-side session...');
-    const sessionServer = useSessionServer();
-    const sessionSet = await sessionServer.setSessionServer();
-    console.log('login.vue - Server session set:', sessionSet);
+ 
 
     // Log the user's workspaces and profiles
     console.log('login.vue - User workspaces:', appState.userWorkspaces.value);
@@ -120,57 +113,6 @@ const handleLogin = async (validData: { email: string; password: string; remembe
   }
 };
 
-// Debug direct login function
-const debugDirectLogin = async () => {
-  console.log('login.vue - Debug direct login clicked');
-  try {
-    // Use test credentials
-    const testEmail = 'standerpm@omni-biz.com';
-    const testPassword = 'Password123';
-
-    console.log('login.vue - Attempting direct login with Firebase:', { email: testEmail });
-
-    // Bypass the form and directly call Firebase
-    authError.value = null;
-
-    // Sign in with Firebase directly
-    console.log('login.vue - Calling Firebase signIn directly...');
-    const user = await signIn(testEmail, testPassword);
-    console.log('login.vue - Firebase sign-in successful:', user);
-
-    // Initialize user data from DataConnect
-    console.log('login.vue - Initializing user data from DataConnect...');
-    const dataConnect = useDataConnect();
-    const userData = await dataConnect.initUserData();
-    console.log('login.vue - User data initialized:', userData);
-
-    // Set server-side session
-    console.log('login.vue - Setting server-side session...');
-    const sessionServer = useSessionServer();
-    const sessionSet = await sessionServer.setSessionServer();
-    console.log('login.vue - Server session set:', sessionSet);
-
-    // Log the user's workspaces and profiles
-    console.log('login.vue - User workspaces:', appState.userWorkspaces.value);
-    console.log('login.vue - User workspaces length:', appState.userWorkspaces.value.length);
-    console.log('login.vue - User profiles:', appState.userProfiles.value);
-
-    // Redirect to dashboard
-    console.log('login.vue - Redirecting to dashboard...');
-    router.push('/dashboard');
-  } catch (error: any) {
-    console.error('login.vue - Debug direct login failed:', error);
-    authError.value = 'Debug login failed: ' + (error.message || 'Unknown error');
-
-    // Log more detailed error information
-    if (error.code) {
-      console.error('login.vue - Error code:', error.code);
-    }
-    if (error.stack) {
-      console.error('login.vue - Error stack:', error.stack);
-    }
-  }
-};
 
 // Handle password reset
 const handleResetPassword = async (email: string) => {

@@ -1,11 +1,12 @@
 import type { Peer } from "crossws";
-import { defineWebSocketHandler, getQuery } from "h3";
-import { createWorkflow, SupervisorResponseSchema } from "../../ai/teams/test";
+import { defineWebSocketHandler } from "h3";
+import { createCEO, CEOResponseSchema } from "../../ai/ceo";
 import logger from "../../ai/logger";
+import process from 'process';
 
 interface ChatMessage {
-  type: 'message' | 'system' | 'error' | 'human_feedback' | 'state_update' | 'init';
-  content: string;
+  type: 'message' | 'system' | 'error' | 'human_feedback' | 'state_update' | 'init' | 'set_chat_id';
+  content?: string;
   message?: string;
   agency?: string;
   timestamp?: string;
@@ -35,21 +36,18 @@ interface ChatMessage {
   };
 }
 
-// Store user information and conversation threads
-const users = new Map<string, { online: boolean }>();
 // Store thread IDs for each peer to maintain conversation context
 const peerThreads = new Map<string, string>();
 // Store message history for each peer
 const peerMessages = new Map<string, Array<{ role: string, content: string }>>();
-const DEFAULT_ROOM = "AI_AGENCY";
-
-// Helper function to get user ID from query parameters
-function getUserId(peer: Peer): string {
-  const url = peer.request?.url || '';
-  const query = getQuery(url);
-  const userId = query.userId;
-  return typeof userId === 'string' ? userId : (Array.isArray(userId) ? userId[0] : 'anonymous');
-}
+// Store chat IDs for each peer
+const peerChatIds = new Map<string, string>();
+// Store user IDs for each peer
+const peerUserIds = new Map<string, string>();
+// Store OpenAI API keys for each peer
+const peerApiKeys = new Map<string, string>();
+// Store workspace IDs for each peer
+const peerWorkspaceIds = new Map<string, string>();
 
 // Helper function to get or create a thread ID for a peer
 function getThreadId(peerId: string): string {
@@ -127,9 +125,48 @@ export default defineWebSocketHandler({
       // Handle initialization messages
       if (parsedMessage.type === 'init') {
         console.log("[WebSocket] Initialization message received");
+
+        // Store chat ID if provided
+        if (parsedMessage.data?.chatId) {
+          peerChatIds.set(peer.id, parsedMessage.data.chatId);
+          console.log(`[WebSocket] Chat ID set for peer ${peer.id}: ${parsedMessage.data.chatId}`);
+        }
+
+        // Store user ID if provided
+        if (parsedMessage.data?.userId) {
+          peerUserIds.set(peer.id, parsedMessage.data.userId);
+          console.log(`[WebSocket] User ID set for peer ${peer.id}: ${parsedMessage.data.userId}`);
+        }
+
+        // Store workspace ID if provided
+        if (parsedMessage.data?.workspace) {
+          peerWorkspaceIds.set(peer.id, parsedMessage.data.workspace);
+          console.log(`[WebSocket] Workspace ID set for peer ${peer.id}: ${parsedMessage.data.workspace}`);
+        }
+
+        // Get OpenAI API key from environment variables
+        const openaiKey = process.env.OPENAI_API_KEY;
+        if (openaiKey) {
+          peerApiKeys.set(peer.id, openaiKey);
+          console.log(`[WebSocket] API key set for peer ${peer.id} from environment variables`);
+        }
+
         peer.send(JSON.stringify({
           type: 'system',
           message: 'Initialization successful',
+          timestamp: new Date().toISOString()
+        }));
+        return;
+      }
+
+      // Handle set_chat_id messages
+      if (parsedMessage.type === 'set_chat_id' && parsedMessage.data?.chatId) {
+        peerChatIds.set(peer.id, parsedMessage.data.chatId);
+        console.log(`[WebSocket] Chat ID set for peer ${peer.id}: ${parsedMessage.data.chatId}`);
+
+        peer.send(JSON.stringify({
+          type: 'system',
+          message: 'Chat ID set successfully',
           timestamp: new Date().toISOString()
         }));
         return;
@@ -142,23 +179,39 @@ export default defineWebSocketHandler({
 
         console.log(`[WebSocket] Processing user message: ${userText}`);
 
-        // Initialize the workflow
-        const app = createWorkflow();
-
         // Get or create a thread ID for this peer to maintain conversation context
         const threadId = getThreadId(peer.id);
+
+        // Get chat ID, user ID, workspace ID, and API key
+        const chatId = peerChatIds.get(peer.id);
+        const userId = peerUserIds.get(peer.id) || 'anonymous';
+        const workspaceId = peerWorkspaceIds.get(peer.id) || null;
+
+        // Get API key from peer or environment variables
+        const openaiKey = process.env.OPENAI_API_KEY;
+        const apiKey = peerApiKeys.get(peer.id) || openaiKey;
+
+        if (!apiKey) {
+          throw new Error("No API key available for LLM");
+        }
+
+        // Initialize the CEO
+        const app = createCEO(userId, workspaceId, apiKey, apiKey, chatId);
 
         // Update message history with the user's message
         const userMessageForHistory = { role: "user", content: userText };
         const messageHistory = updateMessageHistory(peer.id, userMessageForHistory);
 
-        // Stream workflow responses with message history and thread_id
+        // Stream CEO responses with message history, thread_id, and chat_id
         const stream = await app.stream(
           { messages: messageHistory },
           {
             streamMode: "values",
             configurable: {
-              thread_id: threadId
+              thread_id: threadId,
+              chat_id: chatId || null,
+              user_id: userId,
+              workspace_id: workspaceId
             }
           }
         );
@@ -177,7 +230,7 @@ export default defineWebSocketHandler({
                 try {
                   // First try to parse as JSON and validate with zod
                   const jsonContent = JSON.parse(latestMessage.content);
-                  parsedResponse = SupervisorResponseSchema.parse(jsonContent);
+                  parsedResponse = CEOResponseSchema.parse(jsonContent);
                   responseContent = JSON.stringify(parsedResponse);
                 } catch (parseError) {
                   console.log("[WebSocket] Response is not valid JSON, treating as plain text");
@@ -188,7 +241,7 @@ export default defineWebSocketHandler({
                   parsedResponse = {
                     task: "conversation",
                     result: responseContent,
-                    agent: "assistant"
+                    department: "assistant"
                   };
                 }
 
@@ -223,13 +276,14 @@ export default defineWebSocketHandler({
 
                 // Send the validated response to the client
                 peer.send(JSON.stringify(responseMessage));
-              } catch (error) {
+              } catch (err) {
+                const error = err as Error;
                 console.error("[WebSocket] Validation Error:", error);
                 peer.send(
                   JSON.stringify({
                     type: 'error',
                     message: "Invalid response format",
-                    details: error.message
+                    details: error.message || String(error)
                   })
                 );
               }
@@ -244,12 +298,13 @@ export default defineWebSocketHandler({
           timestamp: new Date().toISOString()
         }));
       }
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error;
       console.error("[WebSocket] Error processing message:", error);
       peer.send(JSON.stringify({
         type: 'error',
         message: "Internal server error",
-        details: error.message
+        details: error.message || String(error)
       }));
     }
   },
@@ -259,14 +314,19 @@ export default defineWebSocketHandler({
     // Clean up resources when the peer disconnects
     peerThreads.delete(peer.id);
     peerMessages.delete(peer.id);
+    peerChatIds.delete(peer.id);
+    peerUserIds.delete(peer.id);
+    peerApiKeys.delete(peer.id);
+    peerWorkspaceIds.delete(peer.id);
   },
 
-  async error(peer, error) {
+  async error(peer, err) {
+    const error = err as Error;
     console.error(`[WebSocket] Error for peer ${peer.id}:`, error);
     peer.send(JSON.stringify({
       type: 'error',
       message: "WebSocket error",
-      details: error.message
+      details: error.message || String(error)
     }));
   },
 });

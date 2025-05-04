@@ -33,8 +33,18 @@
             ]"
           >
             <!-- Regular text message -->
-            <div v-if="!message.hasResults" class="text-sm">
+            <div v-if="!message.hasResults && !message.documentArtifact" class="text-sm">
               {{ message.text }}
+            </div>
+
+            <!-- Document artifact message -->
+            <div v-else-if="message.documentArtifact" class="text-sm">
+              <div class="mb-3">{{ message.text }}</div>
+              <DocumentPreview
+                :document="message.documentArtifact"
+                @view="openDocument(message.documentArtifact)"
+                @copy="copyDocumentContent(message.documentArtifact)"
+              />
             </div>
 
             <!-- Message with search results -->
@@ -180,6 +190,15 @@
       </div>
     </div>
   </NeumorphicCard>
+
+  <!-- Document Modal -->
+  <DocumentModal
+    v-model="showDocumentModal"
+    :document="selectedDocument"
+    @update="updateDocument"
+    @polish="requestDocumentPolish"
+    @suggest="requestDocumentSuggestions"
+  />
 </template>
 
 <script setup lang="ts">
@@ -187,14 +206,28 @@ import { ref, onMounted, watch, nextTick } from 'vue';
 import NeumorphicCard from '~/components/neumorphic/Card.vue';
 import NeumorphicButton from '~/components/neumorphic/Button.vue';
 import NeumorphicInput from '~/components/neumorphic/Input.vue';
+import DocumentPreview from '~/components/chat/DocumentPreview.vue';
+import DocumentModal from '~/components/chat/DocumentModal.vue';
 import { useChat } from '~/composables/useChat';
 import { useChatAgency } from '~/composables/useChatAgency';
 import type { ChatMessage } from '~/types/chat';
+import type { DocumentArtifact } from '~/types/documents';
 
 // Chat state
 const newMessage = ref('');
 const messagesContainer = ref<HTMLElement | null>(null);
 const connectionStatus = ref<string>('Connecting...');
+
+// Document state
+const showDocumentModal = ref(false);
+const selectedDocument = ref<DocumentArtifact>({
+  id: '',
+  title: '',
+  content: '',
+  format: 'markdown',
+  createdAt: new Date(),
+  updatedAt: new Date()
+});
 
 // Get chat composable
 const { messages, isLoading, sendMessage: sendChatMessage, error } = useChat();
@@ -215,6 +248,12 @@ watch(() => connectionState.value.isConnected, (isConnected) => {
 const sendMessage = async () => {
   if (!newMessage.value.trim() || isLoading.value) return;
 
+  // Check if the message is a command
+  if (parseCommands(newMessage.value)) {
+    newMessage.value = '';
+    return;
+  }
+
   await sendChatMessage(newMessage.value);
   newMessage.value = '';
 };
@@ -233,6 +272,83 @@ watch(() => messages.value.length, async () => {
   }
 });
 
+// Document-related methods
+const openDocument = (document: DocumentArtifact) => {
+  selectedDocument.value = { ...document };
+  showDocumentModal.value = true;
+};
+
+const copyDocumentContent = async (document: DocumentArtifact) => {
+  try {
+    await navigator.clipboard.writeText(document.content);
+    console.log('Document content copied to clipboard');
+    // You could add a toast notification here
+  } catch (error) {
+    console.error('Failed to copy document content:', error);
+  }
+};
+
+const updateDocument = (document: DocumentArtifact) => {
+  // Find the message with this document and update it
+  const messageIndex = messages.value.findIndex(
+    (msg) => msg.documentArtifact && msg.documentArtifact.id === document.id
+  );
+
+  if (messageIndex !== -1) {
+    messages.value[messageIndex].documentArtifact = { ...document };
+
+    // Send update to server
+    sendDocumentUpdate(document);
+  }
+};
+
+const requestDocumentPolish = (document: DocumentArtifact) => {
+  // Send a message to request document polishing
+  sendChatMessage(`/document polish ${document.id}`);
+  showDocumentModal.value = false;
+};
+
+const requestDocumentSuggestions = (document: DocumentArtifact) => {
+  // Send a message to request document suggestions
+  sendChatMessage(`/document suggest ${document.id}`);
+  showDocumentModal.value = false;
+};
+
+const sendDocumentUpdate = (document: DocumentArtifact) => {
+  // This would be implemented in useChatAgency.ts
+  // For now, we'll just log it
+  console.log('Sending document update:', document);
+};
+
+// Parse commands in the message input
+const parseCommands = (text: string): boolean => {
+  // Document creation command: /document create [title]
+  const createMatch = text.match(/^\/document create (.+)$/i);
+  if (createMatch) {
+    const title = createMatch[1];
+    sendChatMessage(`Creating a new document titled "${title}"...`);
+    return true;
+  }
+
+  // Document editing command: /document edit [id]
+  const editMatch = text.match(/^\/document edit (.+)$/i);
+  if (editMatch) {
+    const id = editMatch[1];
+    const message = messages.value.find(
+      (msg) => msg.documentArtifact && msg.documentArtifact.id === id
+    );
+
+    if (message && message.documentArtifact) {
+      openDocument(message.documentArtifact);
+    } else {
+      sendChatMessage(`Could not find a document with ID ${id}`);
+    }
+    return true;
+  }
+
+  return false;
+};
+
 // Scroll to bottom on mount
 onMounted(() => {
   if (messagesContainer.value) {
@@ -243,7 +359,7 @@ onMounted(() => {
   if (messages.value.length === 0) {
     messages.value.push({
       id: 'welcome',
-      text: 'Hello! I\'m your AI assistant for Partners in Biz. I can help you find potential business partners, search profiles, or get recommendations. How can I assist you today?',
+      text: 'Hello! I\'m your AI assistant for Partners in Biz. I can help you find potential business partners, search profiles, or get recommendations. I can also create and edit documents for you. Try typing "/document create [title]" to create a new document.',
       sender: 'ai',
       timestamp: new Date()
     });

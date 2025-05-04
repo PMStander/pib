@@ -1,9 +1,10 @@
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onUnmounted } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import { useWebSocket } from '@vueuse/core';
 import { useFirebaseAuth } from './useFirebaseAuth';
 import { useAppState } from './useAppState';
-import type { ChatMessage } from '~/types/chat';
+import { useChatSession } from './useChatSession';
+import type { ChatMessage, ChatPrivacy } from '~/types/chat';
 
 export interface ChatAgencyConfig {
   provider: string;
@@ -21,15 +22,17 @@ export interface ChatAgencyConfig {
 
 export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain' }) => {
   // Get auth state
-  const { isAuthenticated, user } = useFirebaseAuth();
+  const { user } = useFirebaseAuth();
   const appState = useAppState();
-  
+  const chatSession = useChatSession();
+
   // Chat state
   const messages = useState<ChatMessage[]>('chat-messages', () => []);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
   const systemInstruction = ref<string>('You are an AI assistant for Partners in Biz, a platform that helps businesses find partners and collaborators. Help users find potential business partners, search profiles, and get recommendations.');
-  
+  const chatId = ref<string | null>(null);
+
   // Connection state
   const connectionState = ref({
     isConnected: false,
@@ -38,7 +41,7 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
   });
 
   // WebSocket setup
-  const { data, status, send, open, close } = useWebSocket('/api/chat/main', {
+  const { data, send, open, close } = useWebSocket('/api/chat/main', {
     autoReconnect: true,
     heartbeat: {
       message: 'ping',
@@ -66,7 +69,8 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
           },
           customInstructions: config.customInstructions || '',
           userId: user.value?.uid || 'anonymous',
-          workspace: appState.currentWorkspace?.value?.id || null
+          workspace: appState.userWorkspaces.value[0]?.id || null,
+          chatId: chatId.value
         }
       }));
     },
@@ -84,17 +88,17 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
   // Process incoming WebSocket messages
   watch(data, (newData) => {
     if (!newData) return;
-    
+
     try {
       const response = JSON.parse(newData);
       console.log('[useChatAgency] Received message:', response);
-      
+
       // Handle different message types
       switch (response.type) {
         case 'message':
           if (response.data?.message) {
             const aiMessage = response.data.message;
-            
+
             // Add AI message to chat
             addAIMessage(
               aiMessage.content || aiMessage.text,
@@ -102,28 +106,28 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
               aiMessage.businessResults,
               aiMessage.preferenceResults
             );
-            
+
             isLoading.value = false;
           }
           break;
-          
+
         case 'system':
           console.log('[useChatAgency] System message:', response.message);
           break;
-          
+
         case 'error':
           console.error('[useChatAgency] Error message:', response.message, response.details);
           error.value = response.message;
           isLoading.value = false;
-          
+
           // Add error message to chat
           addAIMessage(`I'm sorry, I encountered an error: ${response.message}`);
           break;
-          
+
         case 'state_update':
           console.log('[useChatAgency] State update:', response.data);
           break;
-          
+
         default:
           console.log('[useChatAgency] Unknown message type:', response.type);
       }
@@ -140,24 +144,24 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
       sender: 'user',
       timestamp: new Date()
     };
-    
+
     messages.value.push(message);
     return message;
   };
-  
+
   // Add an AI message
   const addAIMessage = (
-    text: string, 
+    text: string,
     profileResults?: any[],
     businessResults?: any[],
     preferenceResults?: any[]
   ): ChatMessage => {
     const hasResults = !!(
-      (profileResults && profileResults.length > 0) || 
-      (businessResults && businessResults.length > 0) || 
+      (profileResults && profileResults.length > 0) ||
+      (businessResults && businessResults.length > 0) ||
       (preferenceResults && preferenceResults.length > 0)
     );
-    
+
     const message: ChatMessage = {
       id: uuidv4(),
       text,
@@ -168,27 +172,55 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
       businessResults,
       preferenceResults
     };
-    
+
     messages.value.push(message);
     return message;
   };
-  
+
   // Send a message via WebSocket
   const sendMessage = async (text: string): Promise<void> => {
     if (!text.trim() || isLoading.value) return;
-    
+
     try {
       isLoading.value = true;
       error.value = null;
-      
+
+      // Create a chat session if this is the first message
+      if (!chatId.value && messages.value.length === 0) {
+        console.log('[useChatAgency] Creating new chat session...');
+        const newChatId = await chatSession.createChatSession('New Chat', 'PRIVATE');
+        if (newChatId) {
+          chatId.value = newChatId;
+          console.log(`[useChatAgency] Created new chat session: ${newChatId}`);
+
+          // Update the chat session in the server state
+          send(JSON.stringify({
+            type: 'set_chat_id',
+            data: {
+              chatId: newChatId
+            }
+          }));
+        } else {
+          console.error('[useChatAgency] Failed to create chat session');
+          error.value = 'Failed to create chat session';
+          isLoading.value = false;
+          return;
+        }
+      }
+
       // Add user message to chat
-      addUserMessage(text);
-      
+      const userMessage = addUserMessage(text);
+
+      // Save message to database if we have a chat ID
+      if (chatId.value) {
+        await chatSession.addMessageToChatSession(chatId.value, userMessage);
+      }
+
       // Check connection
       if (!connectionState.value.isConnected) {
         console.log('[useChatAgency] WebSocket not connected, attempting to reconnect...');
         open();
-        
+
         // Wait for connection
         await new Promise((resolve) => {
           const checkConnection = setInterval(() => {
@@ -196,9 +228,9 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
               clearInterval(checkConnection);
               resolve(true);
             }
-            
+
             connectionState.value.reconnectAttempts++;
-            
+
             if (connectionState.value.reconnectAttempts > 5) {
               clearInterval(checkConnection);
               throw new Error('Failed to connect to chat server');
@@ -206,7 +238,7 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
           }, 1000);
         });
       }
-      
+
       // Send message via WebSocket
       send(JSON.stringify({
         type: 'message',
@@ -219,29 +251,30 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
             type: 'sent',
             time: new Date().toLocaleTimeString(),
             attachments: []
-          }
+          },
+          chatId: chatId.value
         }
       }));
-      
+
     } catch (err: any) {
       console.error('[useChatAgency] Error sending message:', err);
       error.value = err.message || 'Failed to send message';
       isLoading.value = false;
-      
+
       // Add error message to chat
       addAIMessage(`I'm sorry, I encountered an error while sending your message: ${error.value}`);
     }
   };
-  
+
   // Clear chat history
   const clearChat = (): void => {
     messages.value = [];
   };
-  
+
   // Set custom system instruction
   const setSystemInstruction = (instruction: string): void => {
     systemInstruction.value = instruction;
-    
+
     // If connected, send updated instruction
     if (connectionState.value.isConnected) {
       send(JSON.stringify({
@@ -252,14 +285,14 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
       }));
     }
   };
-  
+
   // Clean up on component unmount
   onUnmounted(() => {
     if (connectionState.value.isConnected) {
       close();
     }
   });
-  
+
   return {
     // State
     messages,
@@ -267,7 +300,8 @@ export const useChatAgency = (config: ChatAgencyConfig = { provider: 'langchain'
     error,
     connectionState,
     systemInstruction,
-    
+    chatId,
+
     // Methods
     sendMessage,
     clearChat,
