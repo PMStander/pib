@@ -1,14 +1,13 @@
-# Active Context: Server-Side Data Management Integration
+# Active Context: Server-Side Vector Search with Cloud Functions
 
 ## Context
 This document tracks the current work focus and state of the "Partners in Biz" project.
 
 ## Current Focus
-- Integrating server-side data management for all CRUD operations
-- Ensuring proper authentication token flow from client to server
-- Implementing vector search capabilities through server API
-- Ensuring proper development environment setup with Firebase emulators
-- Resolving authentication and data persistence issues
+- Implementing server-side vector search using Firebase Cloud Functions
+- Testing and optimizing vector search for profiles, businesses, and partner preferences
+- Enhancing AI chat interface to leverage vector search capabilities
+- Implementing embedding generation using Google's Vertex AI
 - Implementing secure LLM key management system
 - Creating UI components for managing LLM keys
 - Integrating with multiple LLM providers
@@ -25,10 +24,14 @@ This document tracks the current work focus and state of the "Partners in Biz" p
 - Login, signup, and password reset functionality is working
 - Protected routes with authentication middleware are implemented
 - Basic dashboard for authenticated users is in place
-- Firebase DataConnect schema has been designed for users, workspaces, and profiles
-- DataConnect composable has been implemented for data access
-- GraphQL queries and mutations have been defined in dataconnect/connector directory
-- DataConnect connector code has been generated using the Firebase CLI
+- Migrated from Firebase DataConnect to Firestore for data storage
+- Implemented Firestore schema for users, workspaces, profiles, and other entities
+- Created useFirestore composable for data access with Firestore
+- Updated useDataConnect as a compatibility layer that uses useFirestore internally
+- Implemented vector search using Firestore's findNearest method
+- Created Cloud Functions for server-side vector search
+- Implemented client-side composable for interacting with Cloud Functions
+- Added fallback mechanisms for when Cloud Functions are not available
 - Form components have been refactored into dedicated components
 - Fixed readonly warnings in NeumorphicInput component
 - Created reusable modal component for consistent UI
@@ -72,40 +75,174 @@ This document tracks the current work focus and state of the "Partners in Biz" p
 - Added support for OpenAI, Anthropic, Gemini, Ollama, and XAI
 
 ## Next Steps
-1. Integrate LLM key management with chat interface:
+1. Deploy and test Cloud Functions:
+   - Deploy the Cloud Functions to Firebase
+   - Test the embedding generation with real data
+   - Optimize the embedding generation process
+   - Add more comprehensive testing for the Cloud Functions
+
+2. Integrate LLM key management with chat interface:
    - Connect the chat interface to use the configured LLM providers
    - Implement fallback mechanisms when keys are not available
    - Add provider selection in the chat interface
    - Implement streaming responses for supported providers
 
-2. Enhance AI chat interface:
+3. Enhance AI chat interface:
    - Improve NLP capabilities with more sophisticated techniques
    - Add support for follow-up questions and conversation context
    - Implement more advanced response generation with better explanations
    - Add support for more complex queries and entity extraction
    - Integrate with a real NLP service for better query understanding
 
-3. Enhance LLM key management:
+4. Enhance LLM key management:
    - Implement key validation before saving
    - Add key usage analytics to track API usage
    - Consider adding key rotation and expiration features
    - Implement more robust error handling for encryption/decryption failures
 
-4. Implement workspace detail page:
+5. Implement workspace detail page:
    - Create workspace detail view
    - Add member management functionality
    - Implement workspace settings
    - Create business profile management
 
-5. Prepare for production deployment:
+6. Prepare for production deployment:
    - Set up CI/CD pipeline
    - Configure production environment
    - Implement error tracking and monitoring
    - Optimize performance and bundle size
 
 ## Last Updated
-- Date: May 7, 2024
-- Session: Server API Integration for Database Operations
+- Date: May 10, 2024
+- Session: Fix Signup Process and Workspace Display Issues
+
+## Session Summary (2024-05-10)
+In this session, we fixed issues with the signup process and workspace creation/display, and updated the Cloud Functions code to use mock embeddings until Vertex AI integration is properly implemented.
+
+### Key Accomplishments:
+- Fixed the signup process by creating a new useSessionServer composable and updating the server-side session endpoints
+- Fixed workspace creation and display issues by improving the useFirestore.ts composable and server-side API endpoints
+- Updated the Cloud Functions code to use mock embeddings for now
+- Added extensive logging throughout the codebase to help with debugging
+- Improved error handling and edge case management in the server-side API endpoints
+
+### Technical Details:
+- Created a new useSessionServer.ts composable for managing server-side sessions
+- Updated the signup.vue and login.vue files to use the new composable
+- Fixed the server-side session endpoints for setting and clearing sessions
+- Added checks to avoid creating duplicate user records
+- Updated the fetchUserWorkspaces function to properly handle workspace memberships
+- Updated the createWorkspace function to properly create workspaces
+- Updated the dashboard.vue file to properly fetch and display workspaces
+- Added a handler for the userId filter in the server-side API
+- Added more logging to the read.post.ts and write.post.ts files
+- Fixed the workspace_id requirement in the write.post.ts file
+- Improved the document creation process in the write.post.ts file
+
+### Implementation Approach:
+- Analyzed the existing code to understand the issues
+- Created a new composable for server-side session management
+- Added extensive logging to help with debugging
+- Updated the server-side API endpoints to be more robust
+- Fixed both client-side and server-side issues
+- Improved error handling and edge case management
+
+### Next Steps:
+1. Deploy and test the Cloud Functions with the mock embeddings
+2. Implement proper Vertex AI integration for embedding generation
+3. Add comprehensive testing for the signup process and workspace creation
+4. Improve error handling and user feedback during signup and workspace creation
+5. Consider adding more validation to the server-side API endpoints
+
+## Session Summary (2024-05-09)
+In this session, we implemented actual embedding generation using Google's Vertex AI in the Cloud Functions. We replaced the mock implementation with a real Vertex AI integration while maintaining fallback capabilities.
+
+### Key Accomplishments:
+- Implemented Vertex AI embedding generation in the generateEmbeddings Cloud Function
+- Added proper error handling with fallback to mock embeddings when Vertex AI fails
+- Created a new generateAndStore function that combines embedding generation and document storage
+- Added detailed documentation and comments explaining the implementation
+
+### Technical Details:
+- Used the @google-cloud/aiplatform package to interact with Vertex AI
+- Implemented the textembedding-gecko@003 model for high-quality text embeddings
+- Added proper error handling and fallback mechanisms
+- Created a combined function for generating embeddings and storing documents in one operation
+
+### Implementation Approach:
+- Analyzed existing code and examples in the codebase
+- Implemented Vertex AI integration with proper error handling
+- Added fallback to mock embeddings when Vertex AI fails
+- Created a new utility function for combined operations
+- Added detailed documentation and comments
+
+### Next Steps:
+1. Deploy the Cloud Functions to Firebase
+2. Test the embedding generation with real data
+3. Optimize the embedding generation process
+4. Add more comprehensive testing for the Cloud Functions
+
+## Session Summary (2024-05-08 - Part 2)
+In this session, we implemented server-side vector search using Firebase Cloud Functions. We created three Cloud Functions:
+
+1. **vectorSearch**: Performs vector search using Firestore's findNearest method
+2. **generateEmbeddings**: Generates embeddings for text (currently using a mock implementation)
+3. **storeWithEmbeddings**: Stores documents with embeddings in Firestore
+
+We also created a client-side composable (useCloudFunctions.ts) for interacting with these Cloud Functions and updated the useVectorSearch composable to use the Cloud Functions with fallback to the client-side implementation.
+
+### Key Accomplishments:
+- Implemented server-side vector search using Cloud Functions
+- Created a client-side composable for interacting with Cloud Functions
+- Added fallback mechanisms for when Cloud Functions are not available
+- Added detailed comments explaining how to implement embedding generation with Vertex AI
+
+### Technical Details:
+- Used the Firebase Admin SDK in Cloud Functions to access Firestore's findNearest method
+- Created a mock implementation for embedding generation that can be replaced with Vertex AI
+- Added proper error handling and fallback mechanisms
+- Maintained backward compatibility with the existing vector search implementation
+
+### Implementation Approach:
+- Created Cloud Functions for vector search, embedding generation, and document storage
+- Created a client-side composable for interacting with the Cloud Functions
+- Updated the useVectorSearch composable to use the Cloud Functions with fallback
+- Added detailed comments explaining how to implement embedding generation with Vertex AI
+
+### Next Steps:
+1. Deploy the Cloud Functions to Firebase
+2. Test the vector search implementation with real data
+3. Implement actual embedding generation using Vertex AI
+4. Add more comprehensive testing for the Cloud Functions
+
+## Session Summary (2024-05-08 - Part 1)
+In this session, we completed the migration from Firebase DataConnect to Firestore by updating the vector search implementation and removing remaining DataConnect dependencies.
+
+### Key Accomplishments:
+1. Updated the vector search implementation in server/api/data/read.post.ts to use Firestore's findNearest method
+2. Updated the useVectorSearch.ts composable to use Firestore instead of DataConnect
+3. Removed DataConnect dependencies from package.json
+4. Removed DataConnect-related scripts from package.json
+5. Updated documentation to reflect the migration to Firestore
+
+### Technical Details:
+- Implemented proper vector search using Firestore's findNearest method with cosine similarity
+- Added type assertions in useVectorSearch.ts to handle the transition from DataConnect types to Firestore types
+- Maintained backward compatibility with existing code
+- Ensured proper error handling for vector search operations
+
+### Implementation Approach:
+- Analyzed the existing vector search implementation to understand its structure
+- Updated the vectorSearch function to use Firestore's findNearest method
+- Updated the useVectorSearch.ts composable to use the new implementation
+- Removed all direct dependencies on DataConnect
+- Updated documentation to reflect the changes
+
+### Next Steps:
+1. Test the vector search implementation with real data
+2. Optimize vector search performance
+3. Enhance the AI chat interface to better leverage vector search capabilities
+4. Consider implementing more advanced vector search features
 
 ## Session Summary (2024-05-07)
 In this session, we successfully updated the `useFirestore.ts` composable to use server API endpoints instead of direct Firestore access. This architectural improvement enhances security by ensuring all database operations go through the server API.
@@ -207,27 +344,42 @@ In this session, we fixed authentication issues in the chat page and workspaces 
    - Added proper loading states and error handling
 
 ## Current State
-The application has been successfully updated to use server API endpoints for all database operations instead of direct Firestore access. This architectural improvement enhances security by ensuring all database operations go through the server API. The server-side data management system is set up with endpoints for CRUD operations (`/api/data/write`, `/api/data/read`, `/api/data/update`) and includes embedding generation for vector search. The Firebase Authentication system works correctly to create users, and the authentication token is now properly passed to the server for authenticated operations.
+The application has been fully migrated from Firebase DataConnect to Firestore for data storage and vector search capabilities. All database operations now go through server API endpoints (`/api/data/write`, `/api/data/read`, `/api/data/update`) which enhances security by ensuring proper authentication and validation.
+
+Vector search has been implemented in two ways:
+1. **Client-side**: Using a placeholder implementation in the server API that works with the client-side SDK
+2. **Server-side**: Using Firebase Cloud Functions that leverage the Admin SDK's findNearest method
+
+The server-side implementation provides proper vector search capabilities using Firestore's findNearest method with cosine similarity, allowing for semantic search across profiles, businesses, and partner preferences. The client-side implementation serves as a fallback when Cloud Functions are not available.
+
+We've also implemented a client-side composable (useCloudFunctions.ts) for interacting with the Cloud Functions and updated the useVectorSearch composable to use the Cloud Functions with fallback to the client-side implementation. All DataConnect dependencies and scripts have been removed from the project.
 
 ## Next Steps
-1. Test the updated functionality:
-   - Verify that user creation works correctly through the server API
-   - Ensure profiles and workspaces are created properly
-   - Test the entire authentication flow from signup to login
-   - Verify that vector search functionality works correctly
+1. Deploy and test Cloud Functions:
+   - Deploy the Cloud Functions to Firebase
+   - Test the vector search implementation with real data
+   - Implement actual embedding generation using Vertex AI
+   - Add more comprehensive testing for the Cloud Functions
 
-2. Improve error handling and user experience:
-   - Add comprehensive error handling for server API responses
-   - Implement loading states for all API calls
+2. Enhance vector search capabilities:
+   - Optimize vector search performance and relevance
+   - Implement more advanced vector search features like filtering and faceting
+   - Create a test suite for vector search functionality
+   - Add support for hybrid search (combining vector and keyword search)
+
+3. Enhance AI chat interface:
+   - Improve integration with vector search capabilities
+   - Add support for more complex queries and entity extraction
+   - Implement conversation context and follow-up questions
+   - Add better response formatting and visualization
+
+4. Improve error handling and user experience:
+   - Add comprehensive error handling for vector search operations
+   - Implement loading states and progress indicators
    - Add retry mechanisms for failed API calls
    - Improve error messages for better user experience
 
-3. Improve Firebase emulator integration:
-   - Add a startup script to ensure all emulators are running
-   - Create better error handling for when emulators are not available
-   - Add documentation for setting up the development environment
-
-4. Integrate LLM key management with chat interface:
+5. Integrate LLM key management with chat interface:
    - Connect the chat interface to use the configured LLM providers
    - Implement fallback mechanisms when keys are not available
    - Add provider selection in the chat interface
